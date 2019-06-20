@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:dt="http://www.thymeleaf.org/dandelion/datatables">
+
+<head lang="en" th:fragment="head">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+     <link rel="shortcut icon" href="../static/img/logo-app-2.png" th:href="@{/img/logo-app-2.png}" />
+    
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" media="screen"/>
+    <link rel="stylesheet" href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}"/>
+    
+    <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" />
+    
+    <link href="../static/css/dataTables.bootstrap4.min.css" th:href="@{/css/dataTables.bootstrap4.min.css}" rel="stylesheet" />
+    <link href="../static/css/dataTables.bootstrap4.min.css" th:href="@{/css/sweet-alert.css}" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+   
+    
+    <!-- fonts -->
+        <link rel="stylesheet" href="../static/font/glyphicons-halflings-regular.svg" th:href="@{/font/glyphicons-halflings-regular.svg}" />
+        <link rel="stylesheet" href="../static/font/glyphicons-halflings-regular.woff" th:href="@{/font/glyphicons-halflings-regular.woff}" />
+        <link rel="stylesheet" href="../static/font/glyphicons-halflings-regular.ttf" th:href="@{/font/glyphicons-halflings-regular.ttf}" />
+        <link rel="stylesheet" href="../static/font/glyphicons-halflings-regular.eot" th:href="@{/font/glyphicons-halflings-regular.eot}" />
+    <!-- /**/ fonts -->
+   
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+   <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css" />
+   <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+   
+   <script src="../static/js/jquery.dataTables.min.js" th:src="@{/js/jquery.dataTables.min.js}"></script>
+	<script src="../static/js/dataTables.bootstrap4.min.js" th:src="@{/js/dataTables.bootstrap4.min.js}"></script>
+	
+	<script src="../static/js/sweet-alert.min.js" type="text/javascript" th:src="@{/js/sweet-alert.min.js}"></script>
+	<script src="../static/js/SweetAlert.js" type="text/javascript" th:src="@{/js/SweetAlert.js}"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js" ></script>
+ 
+  <style type="text/css">
+        .img-user{
+    width:350px;
+    height:200px;
+}
+
+.jumbotron label {
+    font-size:12px;    
+}
+
+.reg-icon{
+    color:#337ab7;
+    font-weight:bold;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    color: #fff;
+    background-color: #337ab7;
+}
+
+.prj-name{
+    font-weight:bold;
+    color:#337ab7;
+    
+  .help-block{
+    color:red;  
+}
+
+.valid-error{
+    color:red;  
+}
+
+                                        
+    </style>
+       
+     <script th:inline="javascript">
+			$(document).ready(function() {
+			    $('#list-contacts').DataTable({			    		
+			    		
+			    		       'bSort': true, //possibilité de trier
+			    		       'aoColumns': [
+			    		             { sWidth: "15%", bSearchable: true, bSortable: true }, //largeur colonne si la colonne doit être objet de rech et si objet de tri
+			    		             { sWidth: "15%", bSearchable: true, bSortable: true },
+			    		             { sWidth: "15%", bSearchable: true, bSortable: true },
+			    		             { sWidth: "15%", bSearchable: true, bSortable: true },
+			    		             { sWidth: "15%", bSearchable: true, bSortable: true },
+			    		             { sWidth: "15%", bSearchable: true, bSortable: true },
+			    		       ],
+			    		       //dom: 'Bfrtip',
+			    		        buttons: [
+			    		            'copy', 'csv', 'excel', 'pdf', 'print'
+			    		        ],
+			    		      // "scrollY":        "200px", //scroller en horizontal
+			    		      // "scrollCollapse": false, //	Permettre à la table de réduire en hauteur lorsqu'un nombre limité de lignes sont affichées. va avec SCROLL
+			    		       "info":           true, //si info
+			    		       "paging":         true, //si pagination
+			    		       //gestion de la langue d'affichage de datatable
+			    		       language: {
+			    		           processing:     "Traitement en cours...",
+			    		           search:         "Rechercher&nbsp;:",
+			    		           lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
+			    		           info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+			    		           infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+			    		           infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+			    		           infoPostFix:    "",
+			    		           loadingRecords: "Chargement en cours...",
+			    		           zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+			    		           emptyTable:     "Aucune donnée disponible dans le tableau",
+			    		           paginate: {
+			    		               first:      "Premier",
+			    		               previous:   "Pr&eacute;c&eacute;dent",
+			    		               next:       "Suivant",
+			    		               last:       "Dernier"
+			    		           },
+			    		           aria: {
+			    		               sortAscending:  ": activer pour trier la colonne par ordre croissant",
+			    		               sortDescending: ": activer pour trier la colonne par ordre décroissant"
+			    		           }
+			    		       }
+			    		   
+			    
+			});
+			} );
+	 </script>
+	 
+	    <script th:inline="javascript">
+	    </script>
+	 
+
+    <script type="text/javascript">
+    /*suppression avec alert*/
+        function deleteContact(id) {
+            debugger;
+            swal({
+                title: "Êtes vous sûr?",
+                text: "Cette action supprimera définitevement la donnée",
+                type: "warning",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                confirmButtonText: "Supprimer",
+                confirmButtonColor: "#ec6c62",
+                cancelButtonText: "Annuler"
+            },
+                function () {
+                    $.ajax({
+                        url: "/CONTACTMANAGER/contact/delete",
+                        data:{"id": id},
+                        type: "GET"
+                    })
+                        .done(function (data) {
+                            sweetAlert
+                                ({
+                                    title: "Suppression",
+                                    text: "Suppression effectuée avec succès!",
+                                    type: "success"
+                                },
+                                    function () {
+                                        window.location.href = "/CONTACTMANANGER/contacts";
+                                    });
+                        })
+                        .error(function (data) {           
+                            sweetAlert
+                                ({
+                                    title: "Erreur",
+                                    text: "Une erreur est survenue, suppression impossible!",
+                                    type: "error"
+                                });
+                        });
+                });
+            }
+    </script>
+    
+	 
+</head>
+
+<body>
+
+</body>
+
+</html>
