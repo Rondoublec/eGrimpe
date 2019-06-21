@@ -43,8 +43,5 @@ public class GenreServiceHelper {
 	public Genre getByCode(String code) {
 		return repository.findByCode(code);
 	}
-	
-	
-	
 
 }

@@ -57,13 +57,16 @@
 					  </div>
 					     <div class="panel-body">
 					      <form th:object="${employee}" th:action="@{/employee/save}" action="#" method="post">
-					         <input type="text" th:field="*{empName}" class="form-control" placeholder="Employee Name"/>
-					         <div style="clear:both; display:block;height:10px;"></div>
-					         <input type="text" th:field="*{empDesignation}" class="form-control" placeholder="Employee Designation"/>
-					         <div style="clear:both; display:block;height:10px;"></div>
-					         <input type="text" th:field="*{empSalary}" class="form-control" placeholder="Employee Salary (000.00)"/>
-					         <div style="clear:both; display:block;height:10px;"></div>
-					         <input type="submit" class="btn btn-danger pull-right" value="Save">
+							  <input type="text" th:field="*{empName}" class="form-control" placeholder="Employee Name"/>
+							  <div style="clear:both; display:block;height:10px;"></div>
+							  <div><th:if="${#fields.hasErrors('empName')}" th:errors="*{empName}"></div>
+							  <input type="text" th:field="*{empDesignation}" class="form-control" placeholder="Employee Designation"/>
+							  <div style="clear:both; display:block;height:10px;"></div>
+							  <div><th:if="${#fields.hasErrors('empDesignation')}" th:errors="*{empDesignation}"></div>
+							  <input type="text" th:field="*{empSalary}" class="form-control" placeholder="Employee Salary (000.00)"/>
+							  <div style="clear:both; display:block;height:10px;"></div>
+							  <div><th:if="${#fields.hasErrors('empSalary')}" th:errors="*{empSalary}"></div>
+							  <input type="submit" class="btn btn-danger pull-right" value="Save">
 					       </form>
 					      </div>
 					          

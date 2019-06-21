@@ -1,12 +1,14 @@
 package fr.rbo.archijee.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fr.rbo.archijee.model.Employee;
 import fr.rbo.archijee.service.EmployeeServiceInterface;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -30,15 +34,25 @@ public class EmployeeController {
 	
 	@GetMapping("/employee")
 	public String savePage(Model model) {
-		model.addAttribute("employee", new Employee());
-		model.addAttribute("allEmployees", (ArrayList<Employee>)employeeServiceInterface.getAllEmployees());
+		Employee employeeForm = new Employee();
+		model.addAttribute("employee", employeeForm);
+//		model.addAttribute("employee", new Employee();
+
+		Collection<Employee> myEmployeesList = employeeServiceInterface.getAllEmployees();
+		model.addAttribute("allEmployees", myEmployeesList);
+//		model.addAttribute("allEmployees", (ArrayList<Employee>)employeeServiceInterface.getAllEmployees());
+
 		return "employee";
 	}
 	
 	@PostMapping("/employee/save")
-	public String saveEmployee(@ModelAttribute("employee") Employee employee,
+	public String saveEmployee(@ModelAttribute("employee") @Valid Employee employee , BindingResult bindingResult,
 			final RedirectAttributes redirectAttributes) {
-		
+
+		if (bindingResult.hasErrors()) {
+			return "employee"; // Formulaire en cours sur lequel on veut rester
+		}
+
 		if(employeeServiceInterface.saveEmployee(employee)!=null) {
 			redirectAttributes.addFlashAttribute("saveEmployee", "success");
 		} else {
@@ -72,8 +86,14 @@ public class EmployeeController {
 	}
 	
 	@RequestMapping(value = "/employee/update", method = RequestMethod.POST)
-	public String updateEmployee(@ModelAttribute("editEmployee") Employee editEmployee,
+	public String updateEmployee(@ModelAttribute("editEmployee") @Valid Employee editEmployee, BindingResult bindingResult,
 			final RedirectAttributes redirectAttributes) {
+
+		// Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
+		if (bindingResult.hasErrors()) {
+			return "editEmployeePage"; // Formulaire sur lequel on veut rester
+		}
+
 		if(employeeServiceInterface.editEmployee(editEmployee)!=null) {
 			redirectAttributes.addFlashAttribute("edit", "success");
 		} else {

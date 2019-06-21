@@ -29,18 +29,24 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+
 	@Email(message = "*eMail invalide")
 	@NotEmpty(message = "*eMail obligatoire")
 	private String email;
+
 	@Length(min = 5, message = "*Votre mot de passe doit comporter 5 caractères au minimum")
 	@NotEmpty(message = "*Mot de passe obligatoire")
 	@Transient
 	private String password;
+
 	@NotEmpty(message = "*Prénom obligatoire")
 	private String name;
+
 	@NotEmpty(message = "*Nom obligatoire")
 	private String lastName;
+
 	private boolean active;
+
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
