@@ -1,14 +1,18 @@
-<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Gestion des spots</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <title>eGrimpe - Gestion des spots</title>
     <meta charset="UTF-8">
 </head>
+
 <body>
-<div layout:fragment="content">
+<!-- menu de l'application dans le header -->
+<div th:include="mon-header.html"/>
 
     <div class="row">
-        <div class="col-md-offset-3 col-md-6">
+        <div class="col-md-offset-2 col-md-6">
 
             <!-- Save Alert Messages -->
             <div th:if="${saveSpot eq 'unsuccess'}">
@@ -58,6 +62,7 @@
                     <form th:object="${spot}" th:action="@{/spot/save}" action="#" method="post">
                         <input type="text" th:field="*{nomSpot}" class="form-control" placeholder="nomSpot"/>
                         <div style="clear:both;display:block;height:10px;"></div>
+                        <div><th:if="${#fields.hasErrors('nomSpot')}" th:errors="*{nomSpot}"></div>
                         <input type="text" th:field="*{interet}" class="form-control" placeholder="interet"/>
                         <div style="clear:both;display:block;height:10px;"></div>
                         <input type="text" th:field="*{presentation}" class="form-control" placeholder="presentation"/>
@@ -95,7 +100,7 @@
     </div>
 
     <div class="row"  style="margin-bottom:50px;">
-        <div class="col-md-offset-2 col-md-8">
+        <div class="col-md-offset-1 col-md-8">
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <h3 class="panel-title">Tous les spots</h3>
@@ -158,6 +163,8 @@
             </div>
         </div>
     </div>
-</div>
+
+<div th:include="mon-footer.html"/>
+
 </body>
 </html>

@@ -1,0 +1,47 @@
+.spacer40 {
+	margin-top:40px;
+}
+
+.red {
+	color:red;
+}
+
+#elcapitain{
+	background-image: url("../images/elcapitan.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100vh;
+	color : #ffffff;
+	position: center;
+}
+#yosemit{
+	background-image: url("../images/yosemit.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100vh;
+	color : #ffffff;
+	position: center;
+}
+#ducati01{
+	background-image: url("../images/ducat01.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	height: 100vh;
+	color : #ffffff;
+	position: center;
+}
+#ducati02{
+	 background-image: url("../images/ducat02.png");
+	 background-repeat: no-repeat;
+	 background-size: cover;
+	 height: 100vh;
+	 color : #ffffff;
+	 position: center;
+ }
+
+#pave-central{
+	margin-top: 15%;
+	color: #5c5c5c !important;
+	background-color: whitesmoke;
+	opacity: 0.75;
+}

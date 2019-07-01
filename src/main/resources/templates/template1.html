@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Titre template 1</title>
+	<link rel="stylesheet" type="text/css"
+		  href="../static/css/bootstrap.min.css"
+		  th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css"
+		  href="../static/css/myStyle.css"
+		  th:href="@{/css/myStyle.css}" />
+</head>
+<body>
+
+<header>
+	<div class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<ul class="nav navbar-nav">
+				<li><a th:href="@{/}">Accueil</a></li>
+				<li><a th:href="@{/spot}">Les spots</a></li>
+				<li><a th:href="@{/topo}">Les topos</a></li>
+				<li><a th:href="@{/admin}">...</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a th:href="@{/registration}">S'inscire</a></li>
+				<li><a th:href="@{/login}">Se connecter</a></li>
+				<li><a th:href="@{/logout}">Logout</a></li>
+			</ul>
+		</div>
+	</div>
+</header>
+
+<section layout:fragment="content"></section>
+
+<footer class="navbar-fixed-bottom">
+	<small>R&eacute;my Bourdoncle 2019</small>
+</footer>
+
+</body>
+</html>

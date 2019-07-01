@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Partie gauche -->
+        <ul class="nav navbar-nav">
+            <li><a href="/home"><img th:src="@{images/egrimpe.png}" class="img-responsive center-block" width="50" height="50" alt="Accueil" /></a></li>
+            <li><a sec:authorize="isAuthenticated()" href="/spot">Les spots</a></li>
+            <li><a sec:authorize="isAuthenticated()" href="/topo">Les topos</a></li>
+            <li><a sec:authorize="isAuthenticated()" href="/adm1n">...</a></li>
+        </ul>
+        <!-- Partie droite -->
+        <ul class="nav navbar-nav navbar-right">
+            <li><a sec:authorize="isAuthenticated()">Bienvenue <span sec:authentication="name">Username</span><span class="sr-only">(current)</span></a><li>
+            <li><a sec:authorize="isAnonymous()" href="/registration">S'inscire</a></li>
+            <li><a sec:authorize="isAnonymous()" href="/login">Se connecter</a></li>
+            <li><a sec:authorize="isAuthenticated()" href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
