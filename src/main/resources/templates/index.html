@@ -16,28 +16,37 @@
 <div class="d-flex p-2 bd-highlight" id="elcapitain">
 	<div class="container">
 
-	<div class="col-md-6">
-		<div class="panel panel-primary">
-			<div class="panel-heading">Client</div>
-			<div class="panel-body">
-				<form th:action="@{/rechercherspot}" method="get">
-					<div>
-						<label>Recherche:</label> <input type="text" name="champsRecherche"
-														 th:value="${zoneRecherche}" />
-						<button type="submit" class="btn btn-primary">Ok</button>
-					</div>
-				</form>
-				<div class="text-danger" th:if="${exception}"
-					 th:text="${exception.message}"></div>
+	<div class="row" style="margin-top:80px;margin-bottom:50px;">
+
+		<div class="col-md-6 table-bordered">
+			bloc 1
+		</div>
+<!--
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">Client</div>
+				<div class="panel-body">
+					<form th:action="@{/rechercherspot}" method="get">
+						<div>
+							<label>Recherche:</label> <input type="text" name="champsRecherche"
+															 th:value="${zoneRecherche}" />
+							<button type="submit" class="btn btn-primary">Ok</button>
+						</div>
+					</form>
+					<div class="text-danger" th:if="${exception}"
+						 th:text="${exception.message}"></div>
+				</div>
 			</div>
 		</div>
+-->
+		<div class="col-md-6 table-bordered">
+			bloc 2
+		</div>
+
 	</div>
 
-	<div class="col-md-6">
 	</div>
 
-
-	</div>
 </div>
 
 <div th:include="mon-footer.html"/>

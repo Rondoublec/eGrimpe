@@ -3,6 +3,8 @@ package fr.rbo.service;
 import java.util.Collection;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.Null;
+import java.sql.Timestamp;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,7 @@ public class SpotServiceImplementation implements SpotServiceInterface{
 
     public Spot saveSpot(Spot spot) {
         // TODO Auto-generated method stub
+        spot.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
         return spotRepository.save(spot);
     }
 
@@ -39,6 +42,7 @@ public class SpotServiceImplementation implements SpotServiceInterface{
 
     public Spot editSpot(Spot spot) {
         // TODO Auto-generated method stub
+        spot.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
         return spotRepository.save(spot);
     }
 

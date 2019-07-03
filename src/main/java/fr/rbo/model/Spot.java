@@ -21,7 +21,7 @@ public class Spot implements Serializable {
     @Column(nullable = true)
     private int interet;
 
-    @Column(name = "dateDeMiseAJour", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable = false, updatable = false)
+    @Column(name = "dateDeMiseAJour", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP") //, insertable = false, updatable = false)
     private Date dateDeMiseAJour;
 
     @Column(length = 500)

@@ -32,15 +32,19 @@ public class SpotController {
 
 
     @GetMapping("/spot")
-    public String savePage(Model model) {
-        Spot spotForm = new Spot();
-        model.addAttribute("spot", spotForm);
-//        model.addAttribute("spot", new Spot());
-
+    public String afficheSpots(Model model) {
         Collection<Spot> mySpotsList = spotServiceInterface.getAllSpots();
         model.addAttribute("allSpots", mySpotsList);
 //        model.addAttribute("allSpots", (ArrayList<Spot>)spotServiceInterface.getAllSpots());
-        return "spot";
+        return "spot-list";
+    }
+
+    @GetMapping("/spot/add")
+    public String addSpot(Model model) {
+        Spot spotForm = new Spot();
+        model.addAttribute("editSpot", spotForm);
+        model.addAttribute("mode", "create");
+        return "spot-edit";
     }
 
     @PostMapping("/spot/save")
@@ -49,7 +53,7 @@ public class SpotController {
 
         // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
         if (bindingResult.hasErrors()) {
-            return "spot"; // Formulaire en cours sur lequel on veut rester
+            return "spot-add"; // Formulaire en cours sur lequel on veut rester
         }
 
         if(spotServiceInterface.saveSpot(spot)!=null) {
@@ -75,7 +79,8 @@ public class SpotController {
             Spot editSpot = spotServiceInterface.findSpot(spotId);
             if(editSpot!=null) {
                 model.addAttribute("editSpot", editSpot);
-                return "edit-spot-page";
+                model.addAttribute("mode", "update");
+                return "spot-edit";
             } else {
                 redirectAttributes.addFlashAttribute("status","notfound");
             }
@@ -84,13 +89,13 @@ public class SpotController {
         return "redirect:/spot";
     }
 
-    @RequestMapping(value = "/spot/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/spot/sav", method = RequestMethod.POST)
     public String updateSpot(@ModelAttribute("editSpot") @Valid Spot editSpot, BindingResult bindingResult,
                              final RedirectAttributes redirectAttributes) {
 
         // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
         if (bindingResult.hasErrors()) {
-            return "edit-spot-page"; // Formulaire sur lequel on veut rester
+            return "spot-edit"; // Formulaire sur lequel on veut rester
         }
 
         if(spotServiceInterface.editSpot(editSpot)!=null) {

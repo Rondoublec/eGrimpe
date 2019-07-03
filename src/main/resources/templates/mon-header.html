@@ -2,11 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
-<nav class="navbar navbar-inverse">
+<nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <!-- Partie gauche -->
         <ul class="nav navbar-nav">
+            <li><a href="/home"><div id="egrimpe50"></div></a></li>
+            <!--
             <li><a href="/home"><img th:src="@{images/egrimpe.png}" class="img-responsive center-block" width="50" height="50" alt="Accueil" /></a></li>
+            -->
             <li><a sec:authorize="isAuthenticated()" href="/spot">Les spots</a></li>
             <li><a sec:authorize="isAuthenticated()" href="/topo">Les topos</a></li>
             <li><a sec:authorize="isAuthenticated()" href="/adm1n">...</a></li>
