@@ -9,9 +9,9 @@
 
 <body>
 <!-- menu de l'application dans le header -->
-<div th:include="mon-header.html"/>
+<div th:insert="mon-header.html"/>
 
-    <div class="row"  style="margin-top:80px;margin-bottom:50px;">
+    <div class="row"  style="margin-top:100px;margin-bottom:10px;">
 
         <div class="col-md-offset-1 col-md-6">
             <!-- Save Alert Messages -->
@@ -57,32 +57,32 @@
         </div>
 
         <div class="col-md-12">
-            <div class="panel panel-success">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Tous les spots</h3>
+                    <h3 class="panel-title">Liste des spots</h3>
                 </div>
                 <div class="panel-body">
-                    <a th:href="@{/spot/add}"><span class="glyphicon glyphicon-save">Créer</span></a> &nbsp; &nbsp;
-                    <table class="table table-bordered">
+
+                    <a th:href="@{/spot/add}"><span class="btn btn-primary">Créer</span></a> &nbsp; &nbsp;
+
+                    <table class="table table-striped">
                         <thead>
-                        <tr class="btn-success">
-                            <th>idSpot</th>
-                            <th>nomSpot</th>
-                            <th>interet</th>
-                            <th>dateDeMiseAJour</th>
-                            <th>presentation</th>
-                            <th>hauteurMin</th>
-                            <th>hauteurMax</th>
-                            <th>roche</th>
-                            <th>cotationMin</th>
-                            <th>cotationMax</th>
-                            <th>labelAmi</th>
-                            <th>codePostalSpot</th>
-                            <th>communeSpot</th>
-                            <th>massif</th>
-                            <th>orientation</th>
-                            <th>acces</th>
-                            <th>cartographie</th>
+                        <tr class="btn-default">
+                            <th>R&eacute;f&eacute;rence</th>
+                            <th>Nom</th>
+                            <th>Int&eacute;r&ecirc;t</th>
+                            <th>Pr&eacute;sentation</th>
+                            <th>Altitude Min / Max</th>
+                            <th>Roche</th>
+                            <th>Cotation Min / Max</th>
+                            <th>Lab&eacute;lis&eacute;</th>
+                            <th>Code postal</th>
+                            <th>Commune</th>
+                            <th>Massif</th>
+                            <th>Orientation</th>
+                            <th>Acc&egrave;s</th>
+                            <th>Cartographie</th>
+                            <th>Date de mise &agrave; jour</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -93,13 +93,10 @@
                             <td th:text="${spot.idSpot}"></td>
                             <td th:text="${spot.nomSpot}"></td>
                             <td th:text="${spot.interet}"></td>
-                            <td th:text="${spot.dateDeMiseAJour}"></td>
                             <td th:text="${spot.presentation}"></td>
-                            <td th:text="${spot.hauteurMin}"></td>
-                            <td th:text="${spot.hauteurMax}"></td>
+                            <td th:text="${spot.hauteurMin} + ' / ' + ${spot.hauteurMax}"></td>
                             <td th:text="${spot.roche}"></td>
-                            <td th:text="${spot.cotationMin}"></td>
-                            <td th:text="${spot.cotationMax}"></td>
+                            <td th:text="${spot.cotationMin} + ' / ' + ${spot.cotationMax}"></td>
                             <td th:text="${spot.labelAmi}"></td>
                             <td th:text="${spot.codePostalSpot}"></td>
                             <td th:text="${spot.communeSpot}"></td>
@@ -107,7 +104,9 @@
                             <td th:text="${spot.orientation}"></td>
                             <td th:text="${spot.acces}"></td>
                             <td th:text="${spot.cartographie}"></td>
+                            <td th:text="${spot.dateDeMiseAJour}"></td>
                             <td align="center">
+                                <a th:href="@{/spot/secteur/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-eye-open">Afficher</span></a> &nbsp; &nbsp;
                                 <a th:href="@{/spot/edit/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-edit">Modifier</span></a> &nbsp; &nbsp;
                                 <a th:href="@{/spot/delete/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-trash">Supprimer</span></a>
                             </td>
@@ -121,7 +120,7 @@
         </div>
     </div>
 
-<div th:include="mon-footer.html"/>
+<div th:insert="mon-footer.html"/>
 
 </body>
 </html>

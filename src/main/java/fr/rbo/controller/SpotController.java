@@ -1,26 +1,29 @@
 package fr.rbo.controller;
 
 import java.util.Collection;
+import java.util.Set;
 
+import fr.rbo.model.Role;
 import fr.rbo.model.Spot;
+import fr.rbo.model.Commentaire;
+import fr.rbo.model.User;
+import fr.rbo.service.SpotServiceImpl;
+import fr.rbo.service.SpotServiceInterface;
+import fr.rbo.service.UserServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import fr.rbo.service.SpotServiceInterface;
-
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 
 @Controller
 public class SpotController {
@@ -29,7 +32,8 @@ public class SpotController {
 
     @Autowired
     SpotServiceInterface spotServiceInterface;
-
+    @Autowired
+    private UserServiceInterface userServiceInterface;
 
     @GetMapping("/spot")
     public String afficheSpots(Model model) {
@@ -41,19 +45,97 @@ public class SpotController {
 
     @GetMapping("/spot/add")
     public String addSpot(Model model) {
-        Spot spotForm = new Spot();
-        model.addAttribute("editSpot", spotForm);
-        model.addAttribute("mode", "create");
-        return "spot-edit";
+        Spot addSpot = new Spot();
+        model.addAttribute("spot", addSpot);
+//        model.addAttribute("mode", "create");
+        return "spot-form";
+    }
+
+    @RequestMapping(value = "/spot/delete/{spotId}", method = RequestMethod.GET)
+    public String RemoveSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
+                                 Model model) {
+        if(spotServiceInterface.deleteSpot(spotId)) {
+            redirectAttributes.addFlashAttribute("deletion", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("deletion", "unsuccess");
+        }
+        return "redirect:/spot";
+    }
+
+    @RequestMapping(value = "/spot/edit/{spotId}", method = RequestMethod.GET)
+    public String EditSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
+                             Model model) {
+        Spot editSpot = spotServiceInterface.findSpot(spotId);
+        if(editSpot!=null) {
+            model.addAttribute("spot", editSpot);
+            return "spot-form";
+        } else {
+            redirectAttributes.addFlashAttribute("status","notfound");
+        }
+        return "redirect:/spot";
+    }
+
+    @RequestMapping(value = "/spot/secteur/{spotId}", method = RequestMethod.GET)
+    public String detailSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
+                           Model model, HttpSession httpSession) {
+        Spot monSpot = spotServiceInterface.findSpot(spotId);
+        long idSpot = monSpot.getIdSpot();
+        if (idSpot > 0){
+            log.info("idSpot > 0 = " + idSpot);
+        } else {
+            log.info("idSpot < 0 = " + idSpot);
+        }
+        if(monSpot != null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String mailUser = auth.getName();
+            User user = userServiceInterface.findUserByEmail(mailUser);
+            if (user != null) {
+                model.addAttribute("user", user);
+            } else {
+                User utilisateurNouveau = new User();
+                model.addAttribute("user", utilisateurNouveau);
+            }
+            model.addAttribute("membre", false);
+            model.addAttribute("spot", monSpot);
+            Commentaire commentaire = new Commentaire();
+            model.addAttribute("commentaire",commentaire);
+            return "spot-secteur";
+        } else {
+            redirectAttributes.addFlashAttribute("status","notfound");
+        }
+        return "redirect:/spot";
+    }
+
+    @PostMapping(value = "/secteurs/ajoutCommentaire")
+    public String ajouterCommentaireSubmit(Model model, @Valid @ModelAttribute("commentaire") Commentaire commentaire,
+                                           BindingResult bindingResult, @RequestParam("spotId") Long spotId,
+                                           @RequestParam("email") String email, HttpSession httpSession) {
+
+        log.info("Ajout commentaire");
+
+        if (bindingResult.hasErrors()){
+            /** Garder la liste des secteurs de l'utilisateur */
+            majModelSecteur(model,spotId,httpSession);
+            commentaire.setMessage("");
+            model.addAttribute("commentaire",commentaire);
+            return "spot-secteur";
+        } else {
+            spotServiceInterface.ajoutCommentaire(commentaire,spotId,email);
+            majModelSecteur(model,spotId,httpSession);
+            Commentaire com = new Commentaire();
+            model.addAttribute("commentaire",com);
+            return "spot-secteur";
+        }
     }
 
     @PostMapping("/spot/save")
-    public String saveSpot(@ModelAttribute("spot") @Valid Spot spot, BindingResult bindingResult,
+    public String saveSpot(@ModelAttribute("spot") @Valid Spot spot,
+                           BindingResult bindingResult,
                            final RedirectAttributes redirectAttributes) {
 
         // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
         if (bindingResult.hasErrors()) {
-            return "spot-add"; // Formulaire en cours sur lequel on veut rester
+            return "spot-form"; // Formulaire en cours sur lequel on veut rester
         }
 
         if(spotServiceInterface.saveSpot(spot)!=null) {
@@ -65,44 +147,30 @@ public class SpotController {
         return "redirect:/spot";
     }
 
-    @RequestMapping(value = "/spot/{operation}/{spotId}", method = RequestMethod.GET)
-    public String editRemoveSpot(@PathVariable("operation") String operation,
-                                 @PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
-                                 Model model) {
-        if(operation.equals("delete")) {
-            if(spotServiceInterface.deleteSpot(spotId)) {
-                redirectAttributes.addFlashAttribute("deletion", "success");
-            } else {
-                redirectAttributes.addFlashAttribute("deletion", "unsuccess");
+    private void majModelSecteur (Model model, Long spotId, HttpSession httpSession) {
+        boolean ami = false;
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        String nom = auth.getName();
+        User user = userServiceInterface.findUserByEmail(nom);
+
+        if (user != null) {
+            httpSession.setAttribute("utilisateurSession", user);
+            Set<Role> roles = user.getRoles();
+            for (Role role : roles) {
+                if (role.getRole().equals("ROLE_AMI_ESCALADE")) { ami = true;}
             }
-        } else if(operation.equals("edit")){
-            Spot editSpot = spotServiceInterface.findSpot(spotId);
-            if(editSpot!=null) {
-                model.addAttribute("editSpot", editSpot);
-                model.addAttribute("mode", "update");
-                return "spot-edit";
-            } else {
-                redirectAttributes.addFlashAttribute("status","notfound");
-            }
-        }
-
-        return "redirect:/spot";
-    }
-
-    @RequestMapping(value = "/spot/sav", method = RequestMethod.POST)
-    public String updateSpot(@ModelAttribute("editSpot") @Valid Spot editSpot, BindingResult bindingResult,
-                             final RedirectAttributes redirectAttributes) {
-
-        // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
-        if (bindingResult.hasErrors()) {
-            return "spot-edit"; // Formulaire sur lequel on veut rester
-        }
-
-        if(spotServiceInterface.editSpot(editSpot)!=null) {
-            redirectAttributes.addFlashAttribute("edit", "success");
+            model.addAttribute("ami", ami);
+            model.addAttribute("user", user);
+            model.addAttribute("roles", roles);
         } else {
-            redirectAttributes.addFlashAttribute("edit", "unsuccess");
+            User userVide = new User();
+            model.addAttribute("user", userVide);
         }
-        return "redirect:/spot";
+
+        Spot spot = spotServiceInterface.findSpot(spotId);
+        model.addAttribute("spot", spot);
     }
+
 }

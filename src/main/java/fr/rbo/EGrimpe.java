@@ -25,7 +25,7 @@ public class EGrimpe implements CommandLineRunner{
 	}
 
 	public void run(String... args) throws Exception {
-		log.info("args : ", args);
+		log.info("args : " +  args);
 		/*
 		User user = new User();
 		user.setName("ADMIN");

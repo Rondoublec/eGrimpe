@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <title>eGrimpe - Détails d'un spot</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<!-- menu de l'application dans le header -->
+<div th:insert="mon-header.html"></div>
+
+<div class="container">
+
+    <div class="row" style="margin-top:100px;margin-bottom:10px;">
+        <div class="col-md-ofspot.idSpotfset-1 col-md-11">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span th:text="'D&eacute;tails du spot N° ' + ${spot.idSpot}"></span>
+                    </h3>
+                </div>
+
+                <section class="table-responsive">
+                    <table class="table table-striped table-bordered table-responsive">
+                        <tr>
+                            <th>Nom</th>
+                            <td th:text="${spot.nomSpot}"></td>
+                        </tr>
+                        <tr>
+                            <th>Int&eacute;r&ecirc;t</th>
+                            <td th:text="${spot.interet}"></td>
+                        </tr>
+                        <tr>
+                            <th>Pr&eacute;sentation</th>
+                            <td th:text="${spot.presentation}"></td>
+                        </tr>
+                        <tr>
+                            <th>Altitude Min / Max</th>
+                            <td th:text="${spot.hauteurMin} + ' / ' + ${spot.hauteurMax}"></td>
+                        </tr>
+                        <tr>
+                            <th>Roche</th>
+                            <td th:text="${spot.roche}"></td>
+                        </tr>
+                        <tr>
+                            <th>Cotation Min / Max</th>
+                            <td th:text="${spot.cotationMin} + ' / ' + ${spot.cotationMax}"></td>
+                        <tr>
+                            <th>Lab&eacute;lis&eacute;</th>
+                            <td th:text="${spot.labelAmi}"></td>
+                        </tr>
+                        <tr>
+                            <th>Code postal</th>
+                            <td th:text="${spot.codePostalSpot}"></td>
+                        </tr>
+                        <tr>
+                            <th>Commune</th>
+                            <td th:text="${spot.communeSpot}"></td>
+                        </tr>
+                        <tr>
+                            <th>Massif</th>
+                            <td th:text="${spot.massif}"></td>
+                        </tr>
+                        <tr>
+                            <th>Orientation</th>
+                            <td th:text="${spot.orientation}"></td>
+                        </tr>
+                        <tr>
+                            <th>Acc&egrave;s</th>
+                            <td th:text="${spot.acces}"></td>
+                        </tr>
+                        <tr>
+                            <th>Cartographie</th>
+                            <td th:text="${spot.cartographie}"></td>
+                        </tr>
+                        <tr>
+                            <th>Date de mise &agrave; jour</th>
+                            <td th:text="${spot.dateDeMiseAJour}"></td>
+                        </tr>
+                    </table>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-4" style="margin-bottom:10px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3>Commentaires</h3>
+            </div>
+            <div class="panel" th:each="commentaire : ${spot.getCommentaires()}">
+                <span th:if="${membre} != true">
+                    <div class="panel-heading">
+                        <small th:utext="${commentaire.userCommentaire.email} + ' le : ' + ${commentaire.dateDeMiseAJour}">auteur
+                        date
+                        </small>
+                    </div>
+                    <div th:utext="${commentaire.message}">...</div>
+                </span>
+                <span th:if="${membre} == true">
+                        <form action="#" th:action="@{/secteurs/modifCommentaire}" th:object="${commentaire}" method="post">
+                            <div class="panel-heading">
+                                <small th:utext="${commentaire.userCommentaire.email} + ' le : ' + ${commentaire.dateDeMiseAJour}">auteur
+                                date
+                                </small>
+                            </div>
+                            <div th:utext="${commentaire.message}">...</div>
+                            <input type ="text" th:field="${commentaire.message}" id="message">
+                            <input type="hidden" th:value="${commentaire.id}" name="id"/>
+                            <input type="hidden" th:value="${spot.idSpot}" name="idSite"/>
+                            <input type="hidden" th:value="${user.email}" name="email"/>
+                            <button type="submit" class="btn btn-secondary">Modifier</button>
+                        </form>
+                        <form action="#" th:action="@{/secteurs/supprCommentaire}" th:object="${commentaire}" method="post">
+                            <input type="hidden" th:value="${commentaire.id}" name="idCommentaire"/>
+                            <input type="hidden" th:value="${spot.idSpot}" name="idSite"/>
+                            <input type="hidden" th:value="${user.email}" name="email"/>
+                            <button type="submit" class="btn btn-secondary">Supprimer</button>
+                        </form>
+                </span>
+            </div>
+            <span th:if="${user.email} != null">
+                <form data-toggle="validator" role="form" th:object="${commentaire}" th:action="@{/secteurs/ajoutCommentaire}" method="post">
+                <div class="form-group">
+                    <label for="message">Commentaire</label>
+                    <input type="text" class="form-control" th:field="*{message}" id="message" required="required"/>
+                    <p th:if="${#fields.hasErrors('message')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{message}"></p>
+                </div>
+                    <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
+                    <input type="hidden" th:value="${user.email}" name="email"/>
+                    <button type="submit" class="btn btn-secondary">Ecrire un commentaire</button>
+                </form>
+            </span>
+            <span th:if="${user.email} == null">
+                <form th:action="@{/login}" method="get">
+		            <button class="btn btn-md btn-warning btn-block" type="Submit">Pour &eacute;crire un commentaire vous devez &ecirc;tre authentifi&eacute; </button>
+	            </form>
+            </span>
+        </div>
+    </div>
+
+
+</div>
+
+<div th:insert="mon-footer.html"/>
+
+</body>
+</html>

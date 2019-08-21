@@ -23,23 +23,23 @@ public class LoginForm implements Serializable{
     private String password;
 
     public String getUsername() {
-        log.info("getUsername", username);
+        log.info("getUsername : " + username);
         return username;
     }
     
     public void setUsername(String username) {
         this.username = username;
-        log.info("setUsername", username);
+        log.info("setUsername : " + username);
     }
 
     public String getPassword() {
-        log.info("getPassword", password);
+        log.info("getPassword : " + password);
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
-        log.info("setPassword", password);
+        log.info("setPassword : " + password);
     }
 }
 

@@ -11,16 +11,17 @@
 
 <body>
 <!-- menu de l'application dans le header -->
-<div th:include="mon-header.html"/>
+<div th:insert="mon-header.html"/>
 
-<div class="d-flex p-2 bd-highlight" id="elcapitain">
+<div class="d-flex p-2 bd-highlight" style="margin-top:50px;" id="elcapitain">
 	<div class="container">
 
-	<div class="row" style="margin-top:80px;margin-bottom:50px;">
-
+	<div class="row" style="margin-top:100px;margin-bottom:10px;">
+<!--
 		<div class="col-md-6 table-bordered">
 			bloc 1
 		</div>
+-->
 <!--
 		<div class="col-md-6">
 			<div class="panel panel-primary">
@@ -39,9 +40,11 @@
 			</div>
 		</div>
 -->
+<!--
 		<div class="col-md-6 table-bordered">
 			bloc 2
 		</div>
+-->
 
 	</div>
 
@@ -49,7 +52,7 @@
 
 </div>
 
-<div th:include="mon-footer.html"/>
+<div th:insert="mon-footer.html"/>
 
 </body>
 </html>

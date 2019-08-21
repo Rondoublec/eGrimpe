@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -14,14 +15,14 @@ public class Spot implements Serializable {
     @Column(name = "idSpot", nullable = false, unique = true)
     private Long idSpot;
 
-    @NotBlank (message = "Le nom du spot est obligatoire.")
+    @NotBlank (message = "ERREUR : Le nom du spot est obligatoire.")
     @Column(nullable = false, length = 40)
     private String nomSpot;
 
     @Column(nullable = true)
     private int interet;
 
-    @Column(name = "dateDeMiseAJour", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP") //, insertable = false, updatable = false)
+    @Column(name = "dateDeMiseAJour", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date dateDeMiseAJour;
 
     @Column(length = 500)
@@ -62,6 +63,28 @@ public class Spot implements Serializable {
 
     @Column(length = 50)
     private String cartographie;
+
+    @OneToMany(mappedBy="spot")
+    private List<Commentaire> commentaires;
+
+    @OneToMany(mappedBy="spot")
+    private List<Secteur> secteurs;
+
+    public List<Secteur> getSecteurs() {
+        return secteurs;
+    }
+
+    public void setSecteurs(List<Secteur> secteurs) {
+        this.secteurs = secteurs;
+    }
+
+    public List<Commentaire> getCommentaires() {
+        return commentaires;
+    }
+
+    public void setCommentaires(List<Commentaire> commentaires) {
+        this.commentaires = commentaires;
+    }
 
     public Long getIdSpot() {
         return idSpot;

@@ -3,8 +3,9 @@ package fr.rbo.service;
 import java.util.Collection;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.Null;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,16 +14,26 @@ import org.springframework.stereotype.Service;
 
 import fr.rbo.model.Spot;
 import fr.rbo.repository.SpotRepository;
+import fr.rbo.model.Commentaire;
+import fr.rbo.repository.CommentaireRepository;
+import fr.rbo.model.User;
+import fr.rbo.repository.UserRepository;
 
 
 @Service
 @Transactional
-public class SpotServiceImplementation implements SpotServiceInterface{
+public class SpotServiceImpl implements SpotServiceInterface{
 
-    private static final Logger log = LoggerFactory.getLogger(SpotServiceImplementation.class);
+    private static final Logger log = LoggerFactory.getLogger(SpotServiceImpl.class);
 
     @Autowired
     protected SpotRepository spotRepository;
+    @Autowired
+    private UserServiceInterface userServiceInterface;
+    @Autowired
+    private CommentaireRepository commentaireRepository;
+    @Autowired
+    SpotServiceInterface spotServiceInterface;
 
     public Spot saveSpot(Spot spot) {
         // TODO Auto-generated method stub
@@ -57,5 +68,17 @@ public class SpotServiceImplementation implements SpotServiceInterface{
         return spotRepository.getOne(spotId);
     }
 
+    public void ajoutCommentaire(Commentaire commentaire,  Long spotId, String email) {
+        Spot spot = spotServiceInterface.findSpot(spotId);
+        User user = userServiceInterface.findUserByEmail(email);
+        commentaire.setUserCommentaire(user);
+        commentaire.setSpot(spot);
+        commentaire.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
+        commentaireRepository.save(commentaire);
+        List<Commentaire> commentaires = spot.getCommentaires();
+        commentaires.add(commentaire);
+        spot.setCommentaires(commentaires);
+        spotRepository.save(spot);
+    }
 
 }

@@ -9,11 +9,11 @@
 
     <body>
     <!-- menu de l'application dans le header -->
-    <div th:include="mon-header.html"/>
+    <div th:insert="mon-header.html"/>
 
     <div class="container">
 
-        <div class="row" style="margin-top:80px;margin-bottom:50px;">
+        <div class="row" style="margin-top:100px;margin-bottom:10px;">
 
             <div class="col-md-offset-1 col-md-6">
                 <!-- Save Alert Messages -->
@@ -45,24 +45,28 @@
                 </div>
             </div>
 
-            <div class="col-md-offset-1 col-md-11">
-                <div class="panel panel-success">
+            <div class="col-md-ofspot.idSpotfset-1 col-md-11">
+                <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Les informations du spot</h3>
+                        <h3 class="panel-title">
+                            <div th:if="${spot.idSpot != null}">
+                                Mettre &agrave; jour les informations du spot
+                            </div>
+                            <div th:if="${spot.idSpot == null}">
+                                Ajouter un spot
+                            </div>
+                        </h3>
                     </div>
-                    <form th:object="${editSpot}" th:action="@{/spot/save}" action="#" method="post">
+
+                    <form th:object="${spot}" th:action="@{/spot/save}" action="#" method="post">
                     <div class="panel-body">
                           <div class="col-md-6 table-bordered">
-                            <div th:if="${mode eq 'update'}">
-                                <div>MISE A JOUR</div>
-                                <input type="hidden" th:field="*{idSpot}"/>
-                            </div>
-                            <div th:if="${mode eq 'create'}">
-                                  <div>CREATION</div>
-                            </div>
+                            <input type="hidden" th:field="*{idSpot}"/>
+
                             <input type="text" th:field="*{nomSpot}" class="form-control" placeholder="nomSpot"/>
-                            <p th:if="${#fields.hasErrors('nomSpot')}" th:errors="*{nomSpot}"> pas bon !</p>
+                            <p th:if="${#fields.hasErrors('nomSpot')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{nomSpot}"></p>
                             <div style="clear:both;display:block;height:10px;"></div>
+
                             <input type="text" th:field="*{interet}" class="form-control" placeholder="interet"/>
                             <div style="clear:both;display:block;height:10px;"></div>
                             <input type="text" th:field="*{presentation}" class="form-control" placeholder="presentation"/>
@@ -100,9 +104,8 @@
                     </div>
 
                     <div class="panel-footer">
-                        <a th:href="@{/spot}" class="btn btn-success">Retour</a>
-                        <input type="reset" class="btn btn-warning" value="Annuler">
-                        <input type="submit" class="btn btn-danger pull-right" value="Enregistrer">
+                        <a th:href="@{/spot}" class="btn btn-default">Retour &agrave; la liste des spots</a>
+                        <input type="submit" class="btn btn-default pull-right" value="Enregistrer">
                     </div>
 
                     </form>
@@ -113,7 +116,7 @@
 
     </div>
 
-    <div th:include="mon-footer.html"/>
+    <div th:insert="mon-footer.html"/>
 
     </body>
 </html>

@@ -3,7 +3,7 @@ package fr.rbo.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import fr.rbo.service.UserService;
+import fr.rbo.service.UserServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +24,14 @@ public class LoginController {
 	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
-	private UserService userService;
+	private UserServiceInterface userServiceInterface;
 
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public ModelAndView login(Model model){
 		log.info("/login GET");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("login");
-		log.info("modelAndView", modelAndView.getViewName());
+		log.info("modelAndView : " + modelAndView.getViewName());
 		return modelAndView;
 	}
 	
@@ -43,8 +43,8 @@ public class LoginController {
 		User user = new User();
 		modelAndView.addObject("user", user);
 		modelAndView.setViewName("registration");
-		log.info("user : ", user.getName(), " ", user.getLastName());
-		log.info("modelAndView", modelAndView.getViewName());
+		log.info("user : " + user.getName() + " et " + user.getLastName());
+		log.info("modelAndView : " + modelAndView.getViewName());
 		return modelAndView;
 	}
 
@@ -53,7 +53,7 @@ public class LoginController {
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		log.info("/registration GET : createNewUser");
 		ModelAndView modelAndView = new ModelAndView();
-		User userExists = userService.findUserByEmail(user.getEmail());
+		User userExists = userServiceInterface.findUserByEmail(user.getEmail());
 		if (userExists != null) {
 			bindingResult
 					.rejectValue("email", "error.user",
@@ -62,12 +62,12 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 			modelAndView.setViewName("registration");
 		} else {
-			userService.saveUser(user);
+			userServiceInterface.saveUser(user);
 			modelAndView.addObject("successMessage", "User has been registered successfully");
 			modelAndView.addObject("user", new User());
 			modelAndView.setViewName("registration");
 		}
-		log.info("modelAndView", modelAndView.getViewName());
+		log.info("modelAndView : " + modelAndView.getViewName());
 		return modelAndView;
 	}
 	
@@ -88,7 +88,7 @@ public class LoginController {
 		}
 		else
 		{
-			user = userService.findUserByEmail(auth.getName());
+			user = userServiceInterface.findUserByEmail(auth.getName());
 		}
 		modelAndView.addObject("userName", "Bienvenue " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
 		//modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
@@ -101,7 +101,7 @@ public class LoginController {
 			modelAndView.setViewName("index");
 		}
 
-		log.info("modelAndView", modelAndView.getViewName());
+		log.info("modelAndView : " + modelAndView.getViewName());
 		return modelAndView;
 	}
 	
