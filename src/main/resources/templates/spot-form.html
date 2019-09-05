@@ -15,7 +15,7 @@
 
         <div class="row" style="margin-top:100px;margin-bottom:10px;">
 
-            <div class="col-md-offset-1 col-md-6">
+            <div class="col-md-6">
                 <!-- Save Alert Messages -->
                 <div th:if="${saveSpot eq 'unsuccess'}">
                     <div class="alert alert-danger alert-dismissible" role="alert">
@@ -50,57 +50,118 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             <div th:if="${spot.idSpot != null}">
-                                Mettre &agrave; jour les informations du spot
+                                Mettre &agrave; jour les informations de &nbsp; <b th:utext="${spot.nomSpot}">Mon spot</b>
+                                (derni&egrave;re mise &agrave; jour &nbsp; <span th:text="${spot.dateDeMiseAJour}"></span>)
                             </div>
                             <div th:if="${spot.idSpot == null}">
-                                Ajouter un spot
+                                Ajouter un nouveau spot
                             </div>
                         </h3>
                     </div>
 
                     <form th:object="${spot}" th:action="@{/spot/save}" action="#" method="post">
                     <div class="panel-body">
-                          <div class="col-md-6 table-bordered">
+                          <div class="col-md-12 table-bordered">
                             <input type="hidden" th:field="*{idSpot}"/>
-
-                            <input type="text" th:field="*{nomSpot}" class="form-control" placeholder="nomSpot"/>
-                            <p th:if="${#fields.hasErrors('nomSpot')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{nomSpot}"></p>
-                            <div style="clear:both;display:block;height:10px;"></div>
-
-                            <input type="text" th:field="*{interet}" class="form-control" placeholder="interet"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{presentation}" class="form-control" placeholder="presentation"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{hauteurMin}" class="form-control" placeholder="hauteurMin"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{hauteurMax}" class="form-control" placeholder="hauteurMax"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{roche}" class="form-control" placeholder="roche"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{cotationMin}" class="form-control" placeholder="cotationMin"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{cotationMax}" class="form-control" placeholder="cotationMax"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
+                              <table class="table table-bordered table-responsive">
+                              <tr>
+                                  <th>Nom</th>
+                                  <td>
+                                      <input type="text" th:field="*{nomSpot}" class="form-control" placeholder="nomSpot"/>
+                                      <p th:if="${#fields.hasErrors('nomSpot')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{nomSpot}"></p>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Pr&eacute;sentation</th>
+                                  <td>
+                                      <textarea type="textarea" th:field="*{presentation}" class="form-control" placeholder="presentation"></textarea>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Code postal</th>
+                                  <td>
+                                      <input type="text" th:field="*{codePostalSpot}" class="form-control" placeholder="codePostalSpot"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Commune</th>
+                                  <td>
+                                      <input type="text" th:field="*{communeSpot}" class="form-control" placeholder="communeSpot"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Massif</th>
+                                  <td>
+                                      <input type="text" th:field="*{massif}" class="form-control" placeholder="massif"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Orientation</th>
+                                  <td>
+                                      <input type="text" th:field="*{orientation}" class="form-control" placeholder="orientation"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Roche</th>
+                                  <td>
+                                      <input type="text" th:field="*{roche}" class="form-control" placeholder="roche"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                      </td>
+                              </tr>
+                              <tr>
+                                  <th>Altitude Min. / Max.</th>
+                                  <td>
+                                      <input type="text" th:field="*{hauteurMin}" class="form-control" placeholder="hauteurMin"/>
+                                      <div style="clear:both;display:block;height:5px;"></div>
+                                      <input type="text" th:field="*{hauteurMax}" class="form-control" placeholder="hauteurMax"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Cotation Min. / Max.</th>
+                                  <td>
+                                      <input type="text" th:field="*{cotationMin}" class="form-control" placeholder="cotationMin"/>
+                                      <div style="clear:both;display:block;height:5px;"></div>
+                                      <input type="text" th:field="*{cotationMax}" class="form-control" placeholder="cotationMax"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Acc&egrave;s</th>
+                                  <td>
+                                      <input type="text" th:field="*{acces}" class="form-control" placeholder="acces"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <th>Int&eacute;r&ecirc;t</th>
+                                  <td>
+                                      <input type="text" th:field="*{interet}" class="form-control" placeholder="interet"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                              </td>
+                              </tr>
+                              <tr>
+                                  <th>Lab&eacute;lis&eacute;</th>
+                                  <td>
+                                      <input type="text" th:field="*{labelAmi}" class="form-control" placeholder="labelAmi"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                      </td>
+                              </tr>
+                              <tr>
+                                  <th>Cartographie</th>
+                                  <td>
+                                      <input type="text" th:field="*{cartographie}" class="form-control" placeholder="cartographie"/>
+                                      <div style="clear:both;display:block;height:10px;"></div>
+                                  </td>
+                              </tr>
+                          </table>
                           </div>
-                          <div class="col-md-6 table-bordered">
-                            <input type="text" th:field="*{labelAmi}" class="form-control" placeholder="labelAmi"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{codePostalSpot}" class="form-control" placeholder="codePostalSpot"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{communeSpot}" class="form-control" placeholder="communeSpot"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{massif}" class="form-control" placeholder="massif"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{orientation}" class="form-control" placeholder="orientation"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{acces}" class="form-control" placeholder="acces"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <input type="text" th:field="*{cartographie}" class="form-control" placeholder="cartographie"/>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                            <label th:text="*{dateDeMiseAJour}"></label>
-                            <div style="clear:both;display:block;height:10px;"></div>
-                          </div>
-
                     </div>
 
                     <div class="panel-footer">

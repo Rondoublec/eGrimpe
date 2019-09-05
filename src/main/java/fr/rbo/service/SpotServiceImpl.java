@@ -80,5 +80,22 @@ public class SpotServiceImpl implements SpotServiceInterface{
         spot.setCommentaires(commentaires);
         spotRepository.save(spot);
     }
+    @Override
+    public void modifCommentaire(Commentaire commentaire, Long spotId, String email) {
+        Spot spot = spotServiceInterface.findSpot(spotId);
+        Commentaire commModifie = commentaireRepository.findById(commentaire.getId());
+        commModifie.setMessage(commentaire.getMessage());
+        commModifie.setUserCommentaire(userServiceInterface.findUserByEmail(email));
+        commModifie.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
+        commentaireRepository.save(commModifie);
+        spotRepository.save(spot);
+    }
+    @Override
+    public void supprCommentaire(int idCommentaire, Long spotId) {
+        Spot spot = spotServiceInterface.findSpot(spotId);
+        Commentaire commentaire=commentaireRepository.findById(idCommentaire);
+        commentaireRepository.delete(commentaire);
+        spotRepository.save(spot);
+    }
 
 }

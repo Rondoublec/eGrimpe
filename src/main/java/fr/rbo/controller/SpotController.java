@@ -86,8 +86,11 @@ public class SpotController {
             log.info("idSpot < 0 = " + idSpot);
         }
         if(monSpot != null) {
+            model.addAttribute("spot", monSpot);
+
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String mailUser = auth.getName();
+
             User user = userServiceInterface.findUserByEmail(mailUser);
             if (user != null) {
                 model.addAttribute("user", user);
@@ -95,10 +98,11 @@ public class SpotController {
                 User utilisateurNouveau = new User();
                 model.addAttribute("user", utilisateurNouveau);
             }
-            model.addAttribute("membre", false);
-            model.addAttribute("spot", monSpot);
-            Commentaire commentaire = new Commentaire();
-            model.addAttribute("commentaire",commentaire);
+            model.addAttribute("membre", estMembre(user));
+
+            Commentaire Commentaire = new Commentaire();
+            model.addAttribute("commentaire",Commentaire);
+
             return "spot-secteur";
         } else {
             redirectAttributes.addFlashAttribute("status","notfound");
@@ -106,28 +110,60 @@ public class SpotController {
         return "redirect:/spot";
     }
 
-    @PostMapping(value = "/secteurs/ajoutCommentaire")
+    @PostMapping(value = "/spot/addComment")
     public String ajouterCommentaireSubmit(Model model, @Valid @ModelAttribute("commentaire") Commentaire commentaire,
                                            BindingResult bindingResult, @RequestParam("spotId") Long spotId,
                                            @RequestParam("email") String email, HttpSession httpSession) {
 
-        log.info("Ajout commentaire");
+        log.info("Ajouter un commentaire");
 
         if (bindingResult.hasErrors()){
             /** Garder la liste des secteurs de l'utilisateur */
             majModelSecteur(model,spotId,httpSession);
             commentaire.setMessage("");
             model.addAttribute("commentaire",commentaire);
-            return "spot-secteur";
         } else {
             spotServiceInterface.ajoutCommentaire(commentaire,spotId,email);
             majModelSecteur(model,spotId,httpSession);
             Commentaire com = new Commentaire();
             model.addAttribute("commentaire",com);
-            return "spot-secteur";
         }
+        return "spot-secteur";
     }
+    @PostMapping(value = "/spot/updateComment")
+    public String modifCommentaireSubmit(Model model, @Valid @ModelAttribute("commentaire") Commentaire commentaire,
+                                         BindingResult result, @RequestParam("spotId") Long spotId,
+                                         @RequestParam("email") String email, HttpSession httpSession) {
 
+        log.info("Modification du commentaire par " + email);
+
+        if (result.hasErrors()){
+            /** Garder la liste des secteurs de l'utilisateur */
+            majModelSecteur(model,spotId,httpSession);
+            commentaire.setMessage("");
+            model.addAttribute("commentaire",commentaire);
+        } else {
+            spotServiceInterface.modifCommentaire(commentaire,spotId, email);
+            majModelSecteur(model,spotId,httpSession);
+            Commentaire com = new Commentaire();
+            model.addAttribute("commentaire",com);
+        }
+        return "spot-secteur";
+    }
+    @PostMapping(value = "/spot/deleteComment")
+    public String supprCommentaireSubmit(Model model, @RequestParam("idCommentaire") int idCommentaire,
+                                         @RequestParam("spotId") Long spotId,
+                                         @RequestParam("email") String email, HttpSession httpSession) {
+
+        log.info("Suppression du commentaire par " + email);
+
+        spotServiceInterface.supprCommentaire(idCommentaire,spotId);
+        majModelSecteur(model,spotId,httpSession);
+        Commentaire com = new Commentaire();
+        model.addAttribute("commentaire",com);
+        return "spot-secteur";
+
+    }
     @PostMapping("/spot/save")
     public String saveSpot(@ModelAttribute("spot") @Valid Spot spot,
                            BindingResult bindingResult,
@@ -148,7 +184,6 @@ public class SpotController {
     }
 
     private void majModelSecteur (Model model, Long spotId, HttpSession httpSession) {
-        boolean ami = false;
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
@@ -157,13 +192,9 @@ public class SpotController {
 
         if (user != null) {
             httpSession.setAttribute("utilisateurSession", user);
-            Set<Role> roles = user.getRoles();
-            for (Role role : roles) {
-                if (role.getRole().equals("ROLE_AMI_ESCALADE")) { ami = true;}
-            }
-            model.addAttribute("ami", ami);
+            model.addAttribute("membre", estMembre(user));
             model.addAttribute("user", user);
-            model.addAttribute("roles", roles);
+            model.addAttribute("roles", user.getRoles());
         } else {
             User userVide = new User();
             model.addAttribute("user", userVide);
@@ -171,6 +202,15 @@ public class SpotController {
 
         Spot spot = spotServiceInterface.findSpot(spotId);
         model.addAttribute("spot", spot);
+    }
+
+    private boolean estMembre (User user) {
+        boolean membre = false;
+        Set<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            if (role.getRole().equals("MEMBRE")) { membre = true;}
+        }
+        return membre;
     }
 
 }

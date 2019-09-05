@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+        <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+        <title>eGrimpe - Modification des informations d'un spot</title>
+        <meta charset="UTF-8">
+    </head>
+
+    <body>
+    <!-- menu de l'application dans le header -->
+    <div th:insert="mon-header.html"/>
+
+    <div class="container">
+
+        <div class="row" style="margin-top:100px;margin-bottom:10px;">
+
+            <div class="col-md-offset-1 col-md-6">
+                <!-- Save Alert Messages -->
+                <div th:if="${saveSpot eq 'unsuccess'}">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <strong>Erreur!</strong>saveSpot (spot-edit) - Spot non mis &agrave; jour.
+                    </div>
+                </div>
+                <div th:if="${saveSpot eq 'success'}">
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <strong>Success!</strong>saveSpot (spot-edit) - Spot mis &agrave; jour.
+                    </div>
+                </div>
+                <!-- Edit Alert Message -->
+                <div th:if="${status eq 'notfound'}">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <strong>Erreur !</strong>status (spot-edit) - Spot invalide.
+                    </div>
+                </div>
+                <div th:if="${edit eq 'unsuccess'}">
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <strong>Erreur !</strong>edit (spot-edit) - Spot non r&eacute;cup&eacute;r&eacute;.
+                    </div>
+                </div>
+                <div th:if="${edit eq 'success'}">
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <strong>OK !</strong>edit (spot-edit) - Spot r&eacute;cup&eacute;r&eacute; avec succ&egrave;s.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-ofspot.idSpotfset-1 col-md-11">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <div th:if="${spot.idSpot != null}">
+                                Mettre &agrave; jour les informations du spot
+                            </div>
+                            <div th:if="${spot.idSpot == null}">
+                                Ajouter un spot
+                            </div>
+                        </h3>
+                    </div>
+
+                    <form th:object="${spot}" th:action="@{/spot/save}" action="#" method="post">
+                    <div class="panel-body">
+                          <div class="col-md-6 table-bordered">
+                            <input type="hidden" th:field="*{idSpot}"/>
+                              <input type="text" th:field="*{nomSpot}" class="form-control" placeholder="nomSpot"/>
+                              <p th:if="${#fields.hasErrors('nomSpot')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{nomSpot}"></p>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{presentation}" class="form-control" placeholder="presentation"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{codePostalSpot}" class="form-control" placeholder="codePostalSpot"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{communeSpot}" class="form-control" placeholder="communeSpot"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{massif}" class="form-control" placeholder="massif"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{orientation}" class="form-control" placeholder="orientation"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{roche}" class="form-control" placeholder="roche"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{hauteurMin}" class="form-control" placeholder="hauteurMin"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{hauteurMax}" class="form-control" placeholder="hauteurMax"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{cotationMin}" class="form-control" placeholder="cotationMin"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{cotationMax}" class="form-control" placeholder="cotationMax"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{acces}" class="form-control" placeholder="acces"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{interet}" class="form-control" placeholder="interet"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{labelAmi}" class="form-control" placeholder="labelAmi"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              <input type="text" th:field="*{cartographie}" class="form-control" placeholder="cartographie"/>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                              Derni&egrave;re mise &agrave; jour<label th:text="*{dateDeMiseAJour}"></label>
+                              <div style="clear:both;display:block;height:10px;"></div>
+                          </div>
+
+                    </div>
+
+                    <div class="panel-footer">
+                        <a th:href="@{/spot}" class="btn btn-default">Retour &agrave; la liste des spots</a>
+                        <input type="submit" class="btn btn-default pull-right" value="Enregistrer">
+                    </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:insert="mon-footer.html"/>
+
+    </body>
+</html>

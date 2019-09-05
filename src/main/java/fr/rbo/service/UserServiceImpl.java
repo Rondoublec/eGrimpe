@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserServiceInterface, UserDetailsService
 		user.setActive(true);
 		HashSet<Role> roles = new HashSet<Role>();
 		Role role = new Role();
-		role.setRole("ADMIN");
+		role.setRole("USER");
 		roles.add(role);
 		user.setRoles(roles);
 		userRepository.save(user);

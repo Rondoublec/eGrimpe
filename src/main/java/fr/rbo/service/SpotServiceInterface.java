@@ -12,6 +12,28 @@ public interface SpotServiceInterface {
     public Spot editSpot(Spot spot);
     public Spot findSpot(Long spotId);
     public Collection<Spot> getAllSpots();
+
+    /**
+     * ajouter un commentaire à un site
+     * @param commentaire
+     * @param spotId
+     * @param email
+     */
     public void ajoutCommentaire(Commentaire commentaire, Long spotId, String email);
+
+    /**
+     * modifier le message du commentaire
+     * @param commentaire (message modifié)
+     * @param spotId
+     * @param email
+     */
+    void modifCommentaire(Commentaire commentaire, Long spotId, String email);
+
+    /**
+     * supprimer le commentaire
+     * @param idCommentaire
+     * @param spotId
+     */
+    void supprCommentaire(int idCommentaire, Long spotId);
 
 }
