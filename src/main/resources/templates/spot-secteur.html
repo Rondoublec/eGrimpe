@@ -21,7 +21,6 @@
                         <b th:utext="${spot.nomSpot}">Mon spot</b>&nbsp;<span th:text="'(id.' + ${spot.idSpot} + ')'">(id.12)</span>
                     </h3>
                 </div>
-
                 <section class="table-responsive">
                     <table class="table table-striped table-bordered table-responsive">
                         <tr>
@@ -78,7 +77,36 @@
                         </tr>
                     </table>
                 </section>
-
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Les secteurs</h3>
+                </div>
+                <section class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Date de mise à jour</th>
+                            <th>Détails du secteur</th>
+                        </tr>
+                        <tr th:each="secteur : ${spot.getSecteurs()}">
+                            <td th:utext="${secteur.nom}">...</td>
+                            <td th:utext="${secteur.description}">...</td>
+                            <td th:utext="${secteur.dateMaj}">...</td>
+                            <td>
+                                <a th:href="@{/voies(Spot=${spot.id},idSecteur=${secteur.id})}">
+                                    <input type="hidden" th:value="${spot.idSpot}" name="Spot"/>
+                                    <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
+                                    <button type="submit" class="btn-link"><span class="glyphicon glyphicon-eye-open">Afficher</span></button>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+            </div>
+            <div class="btn-group">
+                <a th:href="@{/ajoutsecteur(Spot=${spot.idSpot})}" class="btn btn-primary active">Ajouter un secteur</a>
             </div>
         </div>
         <div class="col-md-6">
@@ -104,21 +132,27 @@
                     <small th:utext="' (Par : ' + ${commentaire.userCommentaire.email} + ' le : ' + ${commentaire.dateDeMiseAJour} + ')'"> (Par toto le 12)</small>
                 </span>
                 <span th:if="${membre} == true">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th>
                         <form action="#" th:action="@{/spot/updateComment}" th:object="${commentaire}" method="post">
                             <b th:utext="${commentaire.message}">BlaBla</b>
                             <small th:utext="' (Par : ' + ${commentaire.userCommentaire.email} + ' le : ' + ${commentaire.dateDeMiseAJour} + ')'"> (Par toto le 12)</small>
+                            <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-edit">Modifier</span></button>
                             <textarea type="textarea" class="form-control" th:field="${commentaire.message}" id="message"></textarea>
                             <input type="hidden" th:value="${commentaire.id}" name="id"/>
                             <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                             <input type="hidden" th:value="${user.email}" name="email"/>
-                            <button type="submit" class="btn btn-secondary">Modifier</button>
                         </form>
                         <form action="#" th:action="@{/spot/deleteComment}" th:object="${commentaire}" method="post">
                             <input type="hidden" th:value="${commentaire.id}" name="idCommentaire"/>
                             <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                             <input type="hidden" th:value="${user.email}" name="email"/>
-                            <button type="submit" class="btn btn-secondary">Supprimer</button>
+                            <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-trash">Supprimer</span></button>
                         </form>
+                            </th>
+                        </tr>
+                    </table>
                 </span>
             </div>
             <span th:if="${user.email} == null">

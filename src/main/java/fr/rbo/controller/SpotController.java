@@ -99,7 +99,6 @@ public class SpotController {
                 model.addAttribute("user", utilisateurNouveau);
             }
             model.addAttribute("membre", estMembre(user));
-
             Commentaire Commentaire = new Commentaire();
             model.addAttribute("commentaire",Commentaire);
 
@@ -206,9 +205,13 @@ public class SpotController {
 
     private boolean estMembre (User user) {
         boolean membre = false;
-        Set<Role> roles = user.getRoles();
-        for (Role role : roles) {
-            if (role.getRole().equals("MEMBRE")) { membre = true;}
+        if (user != null) {
+            Set<Role> roles = user.getRoles();
+            for (Role role : roles) {
+                if (role.getRole().equals("MEMBRE")) {
+                    membre = true;
+                }
+            }
         }
         return membre;
     }
