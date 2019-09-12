@@ -2,6 +2,7 @@ package fr.rbo.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Spot implements Serializable {
     private Long idSpot;
 
     @NotBlank (message = "ERREUR : Le nom du spot est obligatoire.")
+    @Size(max = 40, message = "ERREUR : Le nom du spot ne doit pas faire plus de 40 caractères")
     @Column(nullable = false, length = 40)
     private String nomSpot;
 

@@ -3,17 +3,12 @@ package fr.rbo.controller;
 import java.util.Collection;
 import java.util.Set;
 
-import fr.rbo.model.Role;
-import fr.rbo.model.Spot;
-import fr.rbo.model.Commentaire;
-import fr.rbo.model.User;
-import fr.rbo.service.SpotServiceImpl;
+import fr.rbo.model.*;
 import fr.rbo.service.SpotServiceInterface;
 import fr.rbo.service.UserServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -81,9 +76,9 @@ public class SpotController {
         Spot monSpot = spotServiceInterface.findSpot(spotId);
         long idSpot = monSpot.getIdSpot();
         if (idSpot > 0){
-            log.info("idSpot > 0 = " + idSpot);
+            log.debug("idSpot > 0 = " + idSpot);
         } else {
-            log.info("idSpot < 0 = " + idSpot);
+            log.debug("idSpot < 0 = " + idSpot);
         }
         if(monSpot != null) {
             model.addAttribute("spot", monSpot);
@@ -109,6 +104,60 @@ public class SpotController {
         return "redirect:/spot";
     }
 
+    @GetMapping("/spot/addSecteur")
+    public String ajoutSecteur(Model model,@RequestParam("idSpot") Long idSpot) {
+
+        /* Création d'un secteur */
+        log.debug("addsecteur "  + idSpot);
+        Secteur secteur = new Secteur();
+        model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
+        model.addAttribute("secteur", secteur);
+
+        return "secteur-form";
+    }
+
+    @PostMapping(value = "/spot/addSecteur")
+    public String proposerSecteurSubmit(Model model, @Valid @ModelAttribute("secteur") Secteur secteur,
+                                        BindingResult result, @RequestParam("idSpot") Long idSpot,
+                                        HttpSession httpSession) {
+
+        log.debug("submit du formulaire secteur");
+        log.debug("addsecteur create secteur "  + idSpot);
+
+        if (result.hasErrors()){
+            log.debug("erreur du validation du formulaire secteur");
+            model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
+            return "secteur-form";
+        } else {
+            if(spotServiceInterface.ajoutSecteur(idSpot, secteur)!=null) {
+                model.addAttribute("result", "success");
+                model.addAttribute("resultext", "Secteur enregistré avec succès");
+            } else {
+                model.addAttribute("result", "unsuccess");
+                model.addAttribute("resultext", "Secteur non enregistrés, contactez l'informatique");
+            }
+            majModelSecteur(model,idSpot,httpSession);
+            Commentaire com = new Commentaire();
+            model.addAttribute("commentaire",com);
+            return "spot-secteur";
+
+        }
+    }
+
+    @PostMapping(value = "/spot/deleteSecteur")
+    public String supprSecteurSubmit(Model model, @RequestParam("idSecteur") int idSecteur,
+                                         @RequestParam("spotId") Long spotId,
+                                         @RequestParam("email") String email, HttpSession httpSession) {
+
+        log.info("Suppression du secreur " + idSecteur + " par " + email);
+        spotServiceInterface.supprSecteur(idSecteur,spotId);
+        majModelSecteur(model,spotId,httpSession);
+        Commentaire com = new Commentaire();
+        model.addAttribute("commentaire",com);
+        return "spot-secteur";
+
+    }
+
     @PostMapping(value = "/spot/addComment")
     public String ajouterCommentaireSubmit(Model model, @Valid @ModelAttribute("commentaire") Commentaire commentaire,
                                            BindingResult bindingResult, @RequestParam("spotId") Long spotId,
@@ -117,6 +166,7 @@ public class SpotController {
         log.info("Ajouter un commentaire");
 
         if (bindingResult.hasErrors()){
+            log.warn("Commentaire non valide");
             /** Garder la liste des secteurs de l'utilisateur */
             majModelSecteur(model,spotId,httpSession);
             commentaire.setMessage("");
@@ -139,7 +189,6 @@ public class SpotController {
         if (result.hasErrors()){
             /** Garder la liste des secteurs de l'utilisateur */
             majModelSecteur(model,spotId,httpSession);
-            commentaire.setMessage("");
             model.addAttribute("commentaire",commentaire);
         } else {
             spotServiceInterface.modifCommentaire(commentaire,spotId, email);

@@ -5,19 +5,19 @@ import java.util.Collection;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
+import fr.rbo.model.Secteur;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.rbo.model.Spot;
-import fr.rbo.repository.SpotRepository;
-import fr.rbo.model.Commentaire;
-import fr.rbo.repository.CommentaireRepository;
 import fr.rbo.model.User;
-import fr.rbo.repository.UserRepository;
+import fr.rbo.model.Spot;
+import fr.rbo.model.Commentaire;
+import fr.rbo.repository.SpotRepository;
+import fr.rbo.repository.CommentaireRepository;
+import fr.rbo.repository.SecteurRepository;
 
 
 @Service
@@ -32,6 +32,8 @@ public class SpotServiceImpl implements SpotServiceInterface{
     private UserServiceInterface userServiceInterface;
     @Autowired
     private CommentaireRepository commentaireRepository;
+    @Autowired
+    private SecteurRepository secteurRepository;
     @Autowired
     SpotServiceInterface spotServiceInterface;
 
@@ -95,6 +97,31 @@ public class SpotServiceImpl implements SpotServiceInterface{
         Spot spot = spotServiceInterface.findSpot(spotId);
         Commentaire commentaire=commentaireRepository.findById(idCommentaire);
         commentaireRepository.delete(commentaire);
+        spotRepository.save(spot);
+    }
+
+    @Override
+    public Spot ajoutSecteur(Long spotId, Secteur secteur) {
+//        Spot spot = spotRepository.findById(spotId);
+        Spot spot = spotServiceInterface.findSpot(spotId);
+        Secteur secteurEnreg = new Secteur();
+        secteurEnreg.setSpot(spot);
+        secteurEnreg.setDescription(secteur.getDescription());
+        secteurEnreg.setNom(secteur.getNom());
+        secteurEnreg.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
+        secteurRepository.save(secteurEnreg);
+        List<Secteur> secteurs = spot.getSecteurs();
+        secteurs.add(secteurEnreg);
+        spot.setSecteurs(secteurs);
+//        spotRepository.save(spot);
+        return spotRepository.save(spot);
+    }
+
+    @Override
+    public void supprSecteur(int idSecteur, Long spotId) {
+        Spot spot = spotServiceInterface.findSpot(spotId);
+        Secteur secteur=secteurRepository.findById(idSecteur);
+        secteurRepository.delete(secteur);
         spotRepository.save(spot);
     }
 

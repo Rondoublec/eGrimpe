@@ -1,6 +1,7 @@
 package fr.rbo.service;
 
 import fr.rbo.model.Commentaire;
+import fr.rbo.model.Secteur;
 import fr.rbo.model.Spot;
 
 import java.util.Collection;
@@ -36,4 +37,18 @@ public interface SpotServiceInterface {
      */
     void supprCommentaire(int idCommentaire, Long spotId);
 
+    /**
+     * Ajouter un secteur à un site
+     * @param spotId
+     * @param secteur
+     * @return
+     */
+    public Spot ajoutSecteur(Long spotId, Secteur secteur);
+
+    /**
+     * supprimer le secteur
+     * @param idSecteur
+     * @param spotId
+     */
+    void supprSecteur(int idSecteur, Long spotId);
 }

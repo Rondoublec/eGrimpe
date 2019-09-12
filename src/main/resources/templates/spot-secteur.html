@@ -14,6 +14,21 @@
 <div class="container">
 
     <div class="row" style="margin-top:100px;margin-bottom:10px;">
+
+        <div class="col-md-7">
+            <!-- Save Alert Messages -->
+            <div th:if="${result eq 'unsuccess'}">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <b th:utext="${resultext}">text si OK</b>
+                </div>
+            </div>
+            <div th:if="${result eq 'success'}">
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <b th:utext="${resultext}">test si KO</b>
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -80,7 +95,9 @@
             </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3>Les secteurs</h3>
+                    <h3>Les secteurs
+                    <a th:href="@{/spot/addSecteur(idSpot=${spot.idSpot})}"><span class="btn btn-primary">Ajouter un secteur</span></a> &nbsp; &nbsp;
+                    </h3>
                 </div>
                 <section class="table-responsive">
                     <table class="table table-striped table-bordered">
@@ -93,20 +110,23 @@
                         <tr th:each="secteur : ${spot.getSecteurs()}">
                             <td th:utext="${secteur.nom}">...</td>
                             <td th:utext="${secteur.description}">...</td>
-                            <td th:utext="${secteur.dateMaj}">...</td>
+                            <td th:utext="${secteur.DateDeMiseAJour}">...</td>
                             <td>
-                                <a th:href="@{/voies(Spot=${spot.id},idSecteur=${secteur.id})}">
+                                <a th:href="@{/secteur/voie(Spot=${spot.idSpot},idSecteur=${secteur.id})}">
                                     <input type="hidden" th:value="${spot.idSpot}" name="Spot"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <button type="submit" class="btn-link"><span class="glyphicon glyphicon-eye-open">Afficher</span></button>
                                 </a>
+                                <form action="#" th:action="@{/spot/deleteSecteur}" th:object="${secteur}" method="post">
+                                    <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
+                                    <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
+                                    <input type="hidden" th:value="${user.email}" name="email"/>
+                                    <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-trash">Supprimer</span></button>
+                                </form>
                             </td>
                         </tr>
                     </table>
                 </section>
-            </div>
-            <div class="btn-group">
-                <a th:href="@{/ajoutsecteur(Spot=${spot.idSpot})}" class="btn btn-primary active">Ajouter un secteur</a>
             </div>
         </div>
         <div class="col-md-6">

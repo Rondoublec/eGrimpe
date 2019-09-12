@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Mousqueton</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+    <link th:href="@{/content/mousqueton.css}" href="../static/css/mousqueton.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div class="container container-fluid">
+    <div th:replace="fragments/general.html :: menu"></div>
+
+    <div class="col-sm-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+
+                <h1 class="align-content-center" th:utext="'Site : ' + ${site.nom}">...</h1>
+                <span class="align-content-center">
+                      <span th:if="${site.isOfficielAmiEscalade()} == true">
+                        <img class="d-inline-block align-top" th:src="@{images/ami.png}"
+                             alt="Officiel les amis de l'escalade"/>
+                      </span>
+                    </span>
+
+            </div>
+            <section class="table-responsive">
+                <table class="table table-striped table-bordered table-responsive">
+                    <tr>
+                        <th>Nom</th>
+                        <td th:utext="${site.nom}"></td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td th:utext="${site.description}"></td>
+                    </tr>
+                    <tr>
+                        <th>Lieu</th>
+                        <td th:utext="${site.lieu}"></td>
+                    </tr>
+                    <tr>
+                        <th>Cotations</th>
+                        <td th:utext="'Min:' + ${site.cotationMin} + ' Max:' + ${site.cotationMax}"></td>
+                    </tr>
+                    <tr>
+                        <th>Type Roche</th>
+                        <td th:utext="${site.typeRoche}"></td>
+                    </tr>
+                    <tr>
+                        <th>Ancrage</th>
+                        <td th:utext="${site.ancrage}"></td>
+                    </tr>
+                    <tr>
+                        <th>Relais</th>
+                        <td th:utext="${site.relais}"></td>
+                    </tr>
+                    <tr>
+                        <th>Altitude</th>
+                        <td th:utext="${site.altitude}"></td>
+                    </tr>
+                    <tr>
+                        <th>Orientation</th>
+                        <td th:utext="${site.orientation}"></td>
+                    </tr>
+                    <tr>
+                        <th>Date de MAJ</th>
+                        <td th:utext="${site.dateMaj}"></td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h2>Secteurs :</h2>
+            </div>
+            <section class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Date de mise à jour</th>
+                        <th>Détails du secteur</th>
+                    </tr>
+                    <tr th:each="secteur : ${site.getSecteurs()}">
+                        <td th:utext="${secteur.nom}">...</td>
+                        <td th:utext="${secteur.description}">...</td>
+                        <td th:utext="${secteur.dateMaj}">...</td>
+                        <td>
+                            <a th:href="@{/voies(idSite=${site.id},idSecteur=${secteur.id})}">
+                                <input type="hidden" th:value="${site.id}" name="idSite"/>
+                                <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
+                                <button type="submit" class="btn btn-success">Voir</button>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+        <div class="btn-group">
+            <a th:href="@{/ajoutsecteur(idSite=${site.id})}" class="btn btn-primary active">Ajouter un secteur à ce
+                site</a>
+        </div>
+        <span th:if="${ami} == true">
+                <span th:if="${site.isOfficielAmiEscalade()} == false">
+                    <form data-toggle="validator" role="form" th:object="${site}" th:action="@{/secteurs/modifAmi}"
+                          method="post">
+                        <input type="hidden" th:value="${site.id}" name="idSite"/>
+                        <button type="submit"
+                                class="btn btn-secondary">Rendre ce site Officiel "Les amis de l'escalade"</button>
+                    </form>
+                </span>
+                <span th:if="${site.isOfficielAmiEscalade()} == true">
+                    <form data-toggle="validator" role="form" th:object="${site}" th:action="@{/secteurs/modifAmi}"
+                          method="post">
+                        <input type="hidden" th:value="${site.id}" name="idSite"/>
+                        <button type="submit"
+                                class="btn btn-secondary">Invalider ce site "Les amis de l'escalade"</button>
+                    </form>
+                </span>
+            </span>
+    </div>
+    <div class="col-sm-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3>Commentaires</h3>
+            </div>
+            <div class="panel" th:each="commentaire : ${site.getCommentaires()}">
+                <span th:if="${ami} != true">
+                    <div class="panel-heading">
+                        <small th:utext="${commentaire.utilisateurCommentaire.email} + ' le : ' + ${commentaire.dateMaj}">auteur
+                        date
+                        </small>
+                    </div>
+                    <div th:utext="${commentaire.message}">...</div>
+                </span>
+                <span th:if="${ami} == true">
+                        <form action="#" th:action="@{/secteurs/modifCommentaire}" th:object="${commentaire}" method="post">
+                            <div class="panel-heading">
+                                <small th:utext="${commentaire.utilisateurCommentaire.email} + ' le : ' + ${commentaire.dateMaj}">auteur
+                                date
+                                </small>
+                            </div>
+                            <div th:utext="${commentaire.message}">...</div>
+                            <input type ="text" th:field="${commentaire.message}" id="message">
+                            <input type="hidden" th:value="${commentaire.id}" name="id"/>
+                            <input type="hidden" th:value="${site.id}" name="idSite"/>
+                            <input type="hidden" th:value="${utilisateur.email}" name="email"/>
+                            <button type="submit" class="btn btn-secondary">Modifier</button>
+                        </form>
+                        <form action="#" th:action="@{/secteurs/supprCommentaire}" th:object="${commentaire}" method="post">
+                            <input type="hidden" th:value="${commentaire.id}" name="idCommentaire"/>
+                            <input type="hidden" th:value="${site.id}" name="idSite"/>
+                            <input type="hidden" th:value="${utilisateur.email}" name="email"/>
+                            <button type="submit" class="btn btn-secondary">Supprimer</button>
+                        </form>
+                </span>
+            </div>
+            <span th:if="${utilisateur.email} != null">
+                <form data-toggle="validator" role="form" th:object="${commentaire}" th:action="@{/secteurs/ajoutCommentaire}" method="post">
+                <div class="form-group">
+                    <label for="message">Commentaire</label>
+                    <input type="text" class="form-control" th:field="*{message}" id="message" required="required"/>
+                </div>
+                    <input type="hidden" th:value="${site.id}" name="idSite"/>
+                    <input type="hidden" th:value="${utilisateur.email}" name="email"/>
+                    <button type="submit" class="btn btn-secondary">Ecrire un commentaire</button>
+                </form>
+            </span>
+            <span th:if="${utilisateur.email} == null">
+                <form th:action="@{/login}" method="get">
+		            <button class="btn btn-md btn-warning btn-block" type="Submit">Se connecter pour écrire un message</button>
+	            </form>
+            </span>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/general.html :: pied"></div>
+</div>
+</body>
+</html>
+

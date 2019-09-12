@@ -26,6 +26,12 @@ public class LoginController {
 	@Autowired
 	private UserServiceInterface userServiceInterface;
 
+
+	/**
+	 *
+	 * @param model
+	 * @return modelAndView
+	 */
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public ModelAndView login(Model model){
 		log.info("/login GET");
@@ -34,8 +40,11 @@ public class LoginController {
 		log.info("modelAndView : " + modelAndView.getViewName());
 		return modelAndView;
 	}
-	
-	
+
+	/**
+	 *
+	 * @return modelAndView
+	 */
 	@RequestMapping(value="/registration", method = RequestMethod.GET)
 	public ModelAndView registration(){
 		log.info("/registration GET");
