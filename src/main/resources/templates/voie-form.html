@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <title>eGrimpe - Modification des informations d'une voie</title>
+    <meta charset="UTF-8">
+</head>
+  <body>
+  <!-- menu de l'application dans le header -->
+  <div th:insert="mon-header.html"/>
+
+  <div class="container">
+
+      <div class="row" style="margin-top:100px;margin-bottom:10px;">
+
+          <div class="col-md-ofspot.idSpotfset-1 col-md-11">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                      <h3 class="panel-title">
+                          <div th:if="${voie.id != null}">
+                              Mettre &agrave; jour les informations de la voie &nbsp; <b th:utext="${voie.nom}">Ma voie</b>
+                              (derni&egrave;re mise &agrave; jour &nbsp; <span th:text="${voie.dateDeMiseAJour}"></span>)
+                          </div>
+                          <div th:if="${voie.id == null}">
+                              Ajouter une nouvelle voie
+                          </div>
+                      </h3>
+                  </div>
+
+                <form th:object="${voie}" th:action="@{/secteur/addVoie(idSpot=${spot.idSpot},idSecteur=${secteur.id})}" method="post" >
+                      <div class="panel-body">
+                          <div class="col-md-12 table-bordered">
+                              <table class="table table-bordered table-responsive">
+                                  <tr>
+                                      <th>Nom de la voie</th>
+                                      <td>
+                                          <input type="text" th:field="*{nom}" class="form-control" placeholder="nom"/>
+                                          <p th:if="${#fields.hasErrors('nom')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{nom}"></p>
+                                          <div style="clear:both;display:block;height:10px;"></div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <th>Description</th>
+                                      <td>
+                                          <textarea type="textarea" th:field="*{description}" class="form-control" placeholder="description"></textarea>
+                                          <p th:if="${#fields.hasErrors('description')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{description}"></p>
+                                          <div style="clear:both;display:block;height:10px;"></div>
+                                      </td>
+                                  </tr>
+                                  <tr>
+                                      <th>Cotation</th>
+                                      <td>
+                                          <input type="text" th:field="*{cotation}" class="form-control" placeholder="cotation"></input>
+                                          <p th:if="${#fields.hasErrors('cotation')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{cotation}"></p>
+                                          <div style="clear:both;display:block;height:10px;"></div>
+                                      </td>
+                                  </tr>
+                              </table>
+                          </div>
+                      </div>
+
+                      <div class="panel-footer">
+                          <a th:href="@{/secteur/voies(idSpot=${spot.idSpot},idSecteur=${secteur.id})}" class="btn btn-default">Retour</a>
+                          <input type="submit" class="btn btn-default pull-right" value="Enregistrer">
+                          <input type="hidden"  th:value="${spot.idSpot}" name="idSpot"/>
+                          <input type="hidden"  th:value="${secteur.id}" name="idSecteur"/>
+                      </div>
+
+                  </form>
+
+                </div>
+          </div>
+      </div>
+  </div>
+
+  <div th:insert="mon-footer.html"/>
+
+  </body>
+</html>

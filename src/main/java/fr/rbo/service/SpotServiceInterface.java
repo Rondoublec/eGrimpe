@@ -3,6 +3,7 @@ package fr.rbo.service;
 import fr.rbo.model.Commentaire;
 import fr.rbo.model.Secteur;
 import fr.rbo.model.Spot;
+import fr.rbo.model.Voie;
 
 import java.util.Collection;
 
@@ -51,4 +52,27 @@ public interface SpotServiceInterface {
      * @param spotId
      */
     void supprSecteur(int idSecteur, Long spotId);
+
+    /**
+     * chercher le secteur par id
+     * @param idSecteur
+     * @return Secteur
+     */
+    public Secteur getSecteur(int idSecteur);
+
+    /**
+     * ajouter une voie à un secteur
+     * @param idSecteur
+     * @param voie
+     * @return
+     */
+    public Secteur ajoutVoie(int idSecteur, Voie voie);
+
+    /**
+     * ramener une voie par id
+     * @param idVoie
+     * @return Voie
+     */
+    public Voie getVoie(int idVoie);
+
 }

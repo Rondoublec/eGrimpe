@@ -6,18 +6,17 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 
-import fr.rbo.model.Secteur;
+import fr.rbo.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.rbo.model.User;
-import fr.rbo.model.Spot;
-import fr.rbo.model.Commentaire;
 import fr.rbo.repository.SpotRepository;
 import fr.rbo.repository.CommentaireRepository;
 import fr.rbo.repository.SecteurRepository;
+import fr.rbo.repository.VoieRepository;
+import fr.rbo.repository.LongueurRepository;
 
 
 @Service
@@ -34,6 +33,10 @@ public class SpotServiceImpl implements SpotServiceInterface{
     private CommentaireRepository commentaireRepository;
     @Autowired
     private SecteurRepository secteurRepository;
+    @Autowired
+    private VoieRepository voieRepository;
+    @Autowired
+    private LongueurRepository longueurRepository;
     @Autowired
     SpotServiceInterface spotServiceInterface;
 
@@ -116,7 +119,6 @@ public class SpotServiceImpl implements SpotServiceInterface{
 //        spotRepository.save(spot);
         return spotRepository.save(spot);
     }
-
     @Override
     public void supprSecteur(int idSecteur, Long spotId) {
         Spot spot = spotServiceInterface.findSpot(spotId);
@@ -124,5 +126,28 @@ public class SpotServiceImpl implements SpotServiceInterface{
         secteurRepository.delete(secteur);
         spotRepository.save(spot);
     }
+    @Override
+    public Secteur getSecteur(int idSecteur) {
+        return secteurRepository.findById(idSecteur);
+    }
 
+    @Override
+    public Voie getVoie(int idVoie) {
+        return voieRepository.findById(idVoie);
+    }
+    @Override
+    public Secteur ajoutVoie(int idSecteur, Voie voie) {
+        Secteur secteur = secteurRepository.findById(idSecteur);
+        Voie voieEnreg = new Voie();
+        voieEnreg.setSecteur(secteur);
+        voieEnreg.setDescription(voie.getDescription());
+        voieEnreg.setNom(voie.getNom());
+        voieEnreg.setCotation(voie.getCotation());
+        voieEnreg.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
+        voieRepository.save(voieEnreg);
+        List<Voie> voies = secteur.getVoies();
+        voies.add(voieEnreg);
+        secteur.setVoies(voies);
+        return secteurRepository.save(secteur);
+    }
 }

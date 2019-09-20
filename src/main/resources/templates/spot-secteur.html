@@ -28,12 +28,11 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3>
-                        <b th:utext="${spot.nomSpot}">Mon spot</b>&nbsp;<span th:text="'(id.' + ${spot.idSpot} + ')'">(id.12)</span>
+                        <span>Spot : </span><b th:utext="${spot.nomSpot}">Mon spot</b>&nbsp;<span th:text="'(r&eacute;f&eacute;rence ' + ${spot.idSpot} + ')'">(r&eacute;f&eacute;rence 12)</span>
                     </h3>
                 </div>
                 <section class="table-responsive">
@@ -112,7 +111,7 @@
                             <td th:utext="${secteur.description}">...</td>
                             <td th:utext="${secteur.DateDeMiseAJour}">...</td>
                             <td>
-                                <a th:href="@{/secteur/voie(Spot=${spot.idSpot},idSecteur=${secteur.id})}">
+                                <a th:href="@{/secteur/voies(idSpot=${spot.idSpot},idSecteur=${secteur.id})}">
                                     <input type="hidden" th:value="${spot.idSpot}" name="Spot"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <button type="submit" class="btn-link"><span class="glyphicon glyphicon-eye-open">Afficher</span></button>
@@ -182,6 +181,9 @@
             </span>
         </div>
     </div>
+
+    </div>
+
 </div>
 
 

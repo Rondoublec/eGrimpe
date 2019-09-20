@@ -3,6 +3,7 @@ package fr.rbo.model;
 import javax.validation.constraints.NotBlank;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,13 +15,17 @@ public class Voie implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotBlank (message = "ERREUR : Le nom de la voie est obligatoire.")
+    @Size(max = 40, message = "ERREUR : Le nom de la voie ne doit pas faire plus de 40 caractères")
     @Column(nullable = false, length = 40)
     @NotBlank
     private String nom;
 
+    @Size(max = 200, message = "ERREUR : La description ne doit pas faire plus de 200 caractères")
     @Column(length = 200)
     private String description;
 
+    @NotBlank (message = "ERREUR : La cotation est obligatoire.")
     @Column(nullable = false, length = 2)
     private String cotation;
 
