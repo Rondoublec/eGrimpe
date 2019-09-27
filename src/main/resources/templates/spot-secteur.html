@@ -33,6 +33,7 @@
                 <div class="panel-heading">
                     <h3>
                         <span>Spot : </span><b th:utext="${spot.nomSpot}">Mon spot</b>&nbsp;<span th:text="'(r&eacute;f&eacute;rence ' + ${spot.idSpot} + ')'">(r&eacute;f&eacute;rence 12)</span>
+                        <a href="/spot" class="glyphicon glyphicon-share-alt">Retour</a>
                     </h3>
                 </div>
                 <section class="table-responsive">
@@ -104,7 +105,7 @@
                             <th>Nom</th>
                             <th>Description</th>
                             <th>Date de mise à jour</th>
-                            <th>Détails du secteur</th>
+                            <th align="center"><span class="glyphicon glyphicon-option-horizontal"></span></th>
                         </tr>
                         <tr th:each="secteur : ${spot.getSecteurs()}">
                             <td th:utext="${secteur.nom}">...</td>
@@ -116,12 +117,14 @@
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <button type="submit" class="btn-link"><span class="glyphicon glyphicon-eye-open">Afficher</span></button>
                                 </a>
+                              <span th:if="${membre} == true">
                                 <form action="#" th:action="@{/spot/deleteSecteur}" th:object="${secteur}" method="post">
                                     <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <input type="hidden" th:value="${user.email}" name="email"/>
                                     <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-trash">Supprimer</span></button>
                                 </form>
+                              </span>
                             </td>
                         </tr>
                     </table>

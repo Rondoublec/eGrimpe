@@ -132,10 +132,6 @@ public class SpotServiceImpl implements SpotServiceInterface{
     }
 
     @Override
-    public Voie getVoie(int idVoie) {
-        return voieRepository.findById(idVoie);
-    }
-    @Override
     public Secteur ajoutVoie(int idSecteur, Voie voie) {
         Secteur secteur = secteurRepository.findById(idSecteur);
         Voie voieEnreg = new Voie();
@@ -150,4 +146,43 @@ public class SpotServiceImpl implements SpotServiceInterface{
         secteur.setVoies(voies);
         return secteurRepository.save(secteur);
     }
+    @Override
+    public Voie getVoie(int idVoie) {
+        return voieRepository.findById(idVoie);
+    }
+    @Override
+    public void supprVoie(int idVoie, int idSecteur) {
+        Secteur secteur=secteurRepository.findById(idSecteur);
+        Voie voie=voieRepository.findById(idVoie);
+        voieRepository.delete(voie);
+        secteurRepository.save(secteur);
+    }
+
+    @Override
+    public Voie ajoutLongueur(int idVoie, Longueur longueur) {
+        Voie voie = voieRepository.findById(idVoie);
+        Longueur longueurEnreg = new Longueur();
+        longueurEnreg.setVoie(voie);
+        longueurEnreg.setDescription(longueur.getDescription());
+        longueurEnreg.setNom(longueur.getNom());
+        longueurEnreg.setCotation(longueur.getCotation());
+        longueurEnreg.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
+        longueurRepository.save(longueurEnreg);
+        List<Longueur> longueurs = voie.getLongueurs();
+        longueurs.add(longueurEnreg);
+        voie.setLongueurs(longueurs);
+        return voieRepository.save(voie);
+    }
+    @Override
+    public Longueur getLongueur(int idLongueur) {
+        return longueurRepository.findById(idLongueur);
+    }
+    @Override
+    public void supprLongueur(int idLongueur, int idVoie) {
+        Voie voie=voieRepository.findById(idVoie);
+        Longueur longueur=longueurRepository.findById(idLongueur);
+        longueurRepository.delete(longueur);
+        voieRepository.save(voie);
+    }
+
 }

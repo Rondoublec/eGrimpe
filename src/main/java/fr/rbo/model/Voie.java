@@ -26,6 +26,7 @@ public class Voie implements Serializable {
     private String description;
 
     @NotBlank (message = "ERREUR : La cotation est obligatoire.")
+    @Size(max = 2, message = "ERREUR : La cotation ne doit pas faire plus de 2 caractères")
     @Column(nullable = false, length = 2)
     private String cotation;
 

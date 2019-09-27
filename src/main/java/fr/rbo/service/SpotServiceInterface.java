@@ -1,12 +1,12 @@
 package fr.rbo.service;
 
-import fr.rbo.model.Commentaire;
-import fr.rbo.model.Secteur;
-import fr.rbo.model.Spot;
-import fr.rbo.model.Voie;
+import fr.rbo.model.*;
 
 import java.util.Collection;
 
+/**
+ * Documenter en premier les classes puis ensuite faire les méthode "non évidentes, ne pas documenter les get / set)
+ */
 public interface SpotServiceInterface {
 
     public Spot saveSpot(Spot spot);
@@ -29,14 +29,14 @@ public interface SpotServiceInterface {
      * @param spotId
      * @param email
      */
-    void modifCommentaire(Commentaire commentaire, Long spotId, String email);
+    public void modifCommentaire(Commentaire commentaire, Long spotId, String email);
 
     /**
      * supprimer le commentaire
      * @param idCommentaire
      * @param spotId
      */
-    void supprCommentaire(int idCommentaire, Long spotId);
+    public void supprCommentaire(int idCommentaire, Long spotId);
 
     /**
      * Ajouter un secteur à un site
@@ -69,10 +69,38 @@ public interface SpotServiceInterface {
     public Secteur ajoutVoie(int idSecteur, Voie voie);
 
     /**
+     * supprimer le voie
+     * @param idVoie
+     * @param idSecteur
+     */
+    public void supprVoie(int idVoie, int idSecteur);
+
+    /**
      * ramener une voie par id
      * @param idVoie
      * @return Voie
      */
     public Voie getVoie(int idVoie);
 
+    /**
+     * ajouter une longueur à une voie
+     * @param idVoie
+     * @param Longueur
+     * @return
+     */
+    public Voie ajoutLongueur(int idVoie, Longueur Longueur);
+
+    /**
+     * supprimer le voie
+     * @param idLongueur
+     * @param idVoie
+     */
+    public void supprLongueur(int idLongueur, int idVoie);
+
+    /**
+     * ramener une voie par id
+     * @param idLongueur
+     * @return Longueur
+     */
+    public Longueur getLongueur(int idLongueur);
 }

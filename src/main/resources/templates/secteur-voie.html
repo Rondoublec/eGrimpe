@@ -50,6 +50,7 @@
                 <div class="panel-heading">
                     <h3>
                         <span>Secteur : </span><b th:utext="${secteur.nom}">Mon secteur</b>&nbsp;<span th:text="'(r&eacute;f&eacute;rence ' + ${secteur.id} + ')'">(r&eacute;f&eacute;rence 24)</span>
+                        <a th:href="@{/spot/secteur/{id}(id=${spot.idSpot})}" class="glyphicon glyphicon-share-alt">Retour</a>
                     </h3>
                 </div>
                 <section class="table-responsive">
@@ -73,7 +74,7 @@
                             <th>Description</th>
                             <th>Cotation</th>
                             <th>Date de mise à jour</th>
-                            <th>Détails de la voie</th>
+                            <th align="center"><span class="glyphicon glyphicon-option-horizontal"></span></th>
                         </tr>
                         <tr th:each="voie : ${secteur.getVoies()}">
                             <td th:utext="${voie.nom}">...</td>
@@ -87,13 +88,15 @@
                                     <input type="hidden"  th:value="${voie.id}" name="idVoie"/>
                                     <button type="submit" class="btn-link"><span class="glyphicon glyphicon-eye-open">Afficher</span></button>
                                 </a>
-                                <form action="#" th:action="@{/spot/secteur/deleteVoie}" th:object="${voie}" method="post">
+                              <span th:if="${membre} == true">
+                                <form action="#" th:action="@{/secteur/deleteVoie}" th:object="${voie}" method="post">
                                     <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <input type="hidden" th:value="${voie.id}" name="idVoie"/>
                                     <input type="hidden" th:value="${user.email}" name="email"/>
                                     <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-trash">Supprimer</span></button>
                                 </form>
+                              </span>
                             </td>
                         </tr>
                     </table>

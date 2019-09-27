@@ -13,8 +13,8 @@ public class Longueur implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @NotBlank(message = "ERREUR : Le nom de la voie est obligatoire.")
-    @Size(max = 40, message = "ERREUR : Le nom de la voie ne doit pas faire plus de 40 caractères")
+    @NotBlank(message = "ERREUR : Le nom de la longueur est obligatoire.")
+    @Size(max = 40, message = "ERREUR : Le nom de la longueur ne doit pas faire plus de 40 caractères")
     @Column(nullable = false, length = 40)
     private String nom;
 
@@ -22,6 +22,7 @@ public class Longueur implements Serializable {
     @Column(length = 200)
     private String description;
 
+    @Size(max = 2, message = "ERREUR : La cotation ne doit pas faire plus de 2 caractères")
     @Column(length = 2)
     private String cotation;
 
@@ -61,6 +62,10 @@ public class Longueur implements Serializable {
 
     public void setVoie(Voie voie) {
         this.voie = voie;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     public Date getDateDeMiseAJour() {

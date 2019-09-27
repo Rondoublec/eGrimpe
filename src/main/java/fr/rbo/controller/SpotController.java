@@ -34,6 +34,10 @@ public class SpotController {
     public String afficheSpots(Model model) {
         Collection<Spot> mySpotsList = spotServiceInterface.getAllSpots();
         model.addAttribute("allSpots", mySpotsList);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String mailUser = auth.getName();
+        User user = userServiceInterface.findUserByEmail(mailUser);
+        model.addAttribute("membre", estMembre(user));
 //        model.addAttribute("allSpots", (ArrayList<Spot>)spotServiceInterface.getAllSpots());
         return "spot-list";
     }
@@ -70,72 +74,6 @@ public class SpotController {
         return "redirect:/spot";
     }
 
-    @GetMapping("/secteur/voies")
-    public String affichelesVoies(Model model, @RequestParam("idSpot") Long idSpot,
-                                  @RequestParam("idSecteur") int idSecteur,
-                                  HttpSession httpSession) {
-        log.debug("affiche les voies du secteur");
-        Spot spot = spotServiceInterface.findSpot(idSpot);
-        Secteur secteur = spotServiceInterface.getSecteur(idSecteur);
-        majModelSecteur(model,idSpot,httpSession);
-//        model.addAttribute("spot", spot);
-        model.addAttribute("secteur", secteur);
-        return "secteur-voie";
-    }
-
-    @GetMapping("/secteur/addVoie")
-    public String ajoutVoie(Model model,@RequestParam("idSpot") Long idSpot,@RequestParam("idSecteur") int idSecteur) {
-        /* Création d'une voie */
-        log.debug("addvoie "  + idSpot + " & Secteur " + idSecteur);
-        Voie voie = new Voie();
-        model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
-        model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
-        model.addAttribute("voie", voie);
-        return "voie-form";
-    }
-
-    @PostMapping(value = "/secteur/addVoie")
-    public String proposerVoieSubmit(Model model, @Valid @ModelAttribute("voie") Voie voie,
-                                        BindingResult result, @RequestParam("idSpot") Long idSpot,
-                                        @RequestParam("idSecteur") int idSecteur,
-                                        HttpSession httpSession) {
-
-        log.debug("submit du formulaire voie");
-        log.debug("addvoie create voie "  + idSpot + " & Secteur " + idSecteur);
-
-        if (result.hasErrors()){
-            log.debug("erreur du validation du formulaire secteur");
-            model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
-            model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
-            return "voie-form";
-        } else {
-            if(spotServiceInterface.ajoutVoie(idSecteur, voie)!=null) {
-                model.addAttribute("result", "success");
-                model.addAttribute("resultext", "Voie enregistrée avec succès");
-            } else {
-                model.addAttribute("result", "unsuccess");
-                model.addAttribute("resultext", "Voie non enregistrée, contactez l'informatique");
-            }
-            majModelSecteur(model,idSpot,httpSession);
-//            model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
-            model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
-            return "secteur-voie";
-
-        }
-    }
-
-    @GetMapping("/voie/longueurs")
-    public String affichelesLongueurs(Model model, @RequestParam("idSpot") Long idSpot,@RequestParam("idSecteur") int idSecteur,@RequestParam("idVoie") int idVoie) {
-        log.debug("affiche les longuers de la voie");
-        Spot spot = spotServiceInterface.findSpot(idSpot);
-        Secteur secteur = spotServiceInterface.getSecteur(idSecteur);
-        Voie voie = spotServiceInterface.getVoie(idVoie);
-        model.addAttribute("spot", spot);
-        model.addAttribute("secteur", secteur);
-        model.addAttribute("voie",voie);
-        return "voie-longueur";
-    }
-
     @GetMapping("/spot/secteur/{spotId}")
     public String detailSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
                            Model model, HttpSession httpSession) {
@@ -169,7 +107,6 @@ public class SpotController {
         }
         return "redirect:/spot";
     }
-
     @GetMapping("/spot/addSecteur")
     public String ajoutSecteur(Model model,@RequestParam("idSpot") Long idSpot) {
 
@@ -181,14 +118,13 @@ public class SpotController {
 
         return "secteur-form";
     }
-
     @PostMapping(value = "/spot/addSecteur")
     public String proposerSecteurSubmit(Model model, @Valid @ModelAttribute("secteur") Secteur secteur,
                                         BindingResult result, @RequestParam("idSpot") Long idSpot,
                                         HttpSession httpSession) {
 
         log.debug("submit du formulaire secteur");
-        log.debug("addsecteur create secteur "  + idSpot);
+        log.debug("addsecteur create spot "  + idSpot);
 
         if (result.hasErrors()){
             log.debug("erreur du validation du formulaire secteur");
@@ -202,26 +138,24 @@ public class SpotController {
                 model.addAttribute("result", "unsuccess");
                 model.addAttribute("resultext", "Secteur non enregistré, contactez l'informatique");
             }
-            majModelSecteur(model,idSpot,httpSession);
+            majModel(model,idSpot,httpSession);
             Commentaire com = new Commentaire();
             model.addAttribute("commentaire",com);
             return "spot-secteur";
 
         }
     }
-
     @PostMapping(value = "/spot/deleteSecteur")
     public String supprSecteurSubmit(Model model, @RequestParam("idSecteur") int idSecteur,
                                          @RequestParam("spotId") Long spotId,
                                          @RequestParam("email") String email, HttpSession httpSession) {
 
-        log.info("Suppression du secreur " + idSecteur + " par " + email);
+        log.info("Suppression du secteur " + idSecteur + " par " + email);
         spotServiceInterface.supprSecteur(idSecteur,spotId);
-        majModelSecteur(model,spotId,httpSession);
+        majModel(model,spotId,httpSession);
         Commentaire com = new Commentaire();
         model.addAttribute("commentaire",com);
         return "spot-secteur";
-
     }
 
     @PostMapping(value = "/spot/addComment")
@@ -234,12 +168,12 @@ public class SpotController {
         if (bindingResult.hasErrors()){
             log.warn("Commentaire non valide");
             /** Garder la liste des secteurs de l'utilisateur */
-            majModelSecteur(model,spotId,httpSession);
+            majModel(model,spotId,httpSession);
             commentaire.setMessage("");
             model.addAttribute("commentaire",commentaire);
         } else {
             spotServiceInterface.ajoutCommentaire(commentaire,spotId,email);
-            majModelSecteur(model,spotId,httpSession);
+            majModel(model,spotId,httpSession);
             Commentaire com = new Commentaire();
             model.addAttribute("commentaire",com);
         }
@@ -254,11 +188,11 @@ public class SpotController {
 
         if (result.hasErrors()){
             /** Garder la liste des secteurs de l'utilisateur */
-            majModelSecteur(model,spotId,httpSession);
+            majModel(model,spotId,httpSession);
             model.addAttribute("commentaire",commentaire);
         } else {
             spotServiceInterface.modifCommentaire(commentaire,spotId, email);
-            majModelSecteur(model,spotId,httpSession);
+            majModel(model,spotId,httpSession);
             Commentaire com = new Commentaire();
             model.addAttribute("commentaire",com);
         }
@@ -272,7 +206,7 @@ public class SpotController {
         log.info("Suppression du commentaire par " + email);
 
         spotServiceInterface.supprCommentaire(idCommentaire,spotId);
-        majModelSecteur(model,spotId,httpSession);
+        majModel(model,spotId,httpSession);
         Commentaire com = new Commentaire();
         model.addAttribute("commentaire",com);
         return "spot-secteur";
@@ -296,8 +230,142 @@ public class SpotController {
 
         return "redirect:/spot";
     }
+    @GetMapping("/secteur/voies")
+    public String affichelesVoies(Model model, @RequestParam("idSpot") Long idSpot,
+                                  @RequestParam("idSecteur") int idSecteur,
+                                  HttpSession httpSession) {
+        log.debug("affiche les voies du secteur");
+        Spot spot = spotServiceInterface.findSpot(idSpot);
+        Secteur secteur = spotServiceInterface.getSecteur(idSecteur);
+        majModel(model,idSpot,httpSession);
+        model.addAttribute("secteur", secteur);
+        return "secteur-voie";
+    }
+    @GetMapping("/secteur/addVoie")
+    public String ajoutVoie(Model model,@RequestParam("idSpot") Long idSpot,@RequestParam("idSecteur") int idSecteur) {
+        /* Création d'une voie */
+        log.debug("addvoie "  + idSpot + " & Secteur " + idSecteur);
+        Voie voie = new Voie();
+        model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
+        model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
+        model.addAttribute("voie", voie);
+        return "voie-form";
+    }
+    @PostMapping(value = "/secteur/addVoie")
+    public String proposerVoieSubmit(Model model, @Valid @ModelAttribute("voie") Voie voie,
+                                     BindingResult result, @RequestParam("idSpot") Long idSpot,
+                                     @RequestParam("idSecteur") int idSecteur,
+                                     HttpSession httpSession) {
 
-    private void majModelSecteur (Model model, Long spotId, HttpSession httpSession) {
+        log.debug("submit du formulaire voie");
+        log.debug("addvoie create spot "  + idSpot + " & Secteur " + idSecteur);
+
+        if (result.hasErrors()){
+            log.debug("erreur du validation du formulaire voie");
+            model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
+            model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
+            return "voie-form";
+        } else {
+            if(spotServiceInterface.ajoutVoie(idSecteur, voie)!=null) {
+                model.addAttribute("result", "success");
+                model.addAttribute("resultext", "Voie enregistrée avec succès");
+            } else {
+                model.addAttribute("result", "unsuccess");
+                model.addAttribute("resultext", "Voie non enregistrée, contactez l'informatique");
+            }
+            majModel(model,idSpot,httpSession);
+//            model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
+            model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
+            return "secteur-voie";
+
+        }
+    }
+    @PostMapping(value = "/secteur/deleteVoie")
+    public String supprVoieSubmit(Model model, @RequestParam("idVoie") int idVoie,
+                                  @RequestParam("idSecteur") int idSecteur,
+                                  @RequestParam("spotId") Long spotId,
+                                  @RequestParam("email") String email, HttpSession httpSession) {
+
+        log.info("Suppression de la voie " + idVoie + " par " + email);
+        spotServiceInterface.supprVoie(idVoie,idSecteur);
+        majModel(model,spotId,httpSession);
+        Secteur secteur = spotServiceInterface.getSecteur(idSecteur);
+        model.addAttribute("secteur", secteur);
+        return "secteur-voie";
+    }
+
+    @GetMapping("/voie/longueurs")
+    public String affichelesLongueurs(Model model, @RequestParam("idSpot") Long idSpot,
+                                      @RequestParam("idSecteur") int idSecteur,@RequestParam("idVoie") int idVoie,
+                                      HttpSession httpSession) {
+        log.debug("affiche les longuers de la voie");
+        Spot spot = spotServiceInterface.findSpot(idSpot);
+        Secteur secteur = spotServiceInterface.getSecteur(idSecteur);
+        Voie voie = spotServiceInterface.getVoie(idVoie);
+        majModel(model,idSpot,httpSession);
+        model.addAttribute("secteur", secteur);
+        model.addAttribute("voie",voie);
+        return "voie-longueur";
+    }
+    @GetMapping("/voie/addLongueur")
+    public String ajoutLongueur(Model model,@RequestParam("idSpot") Long idSpot,
+                                @RequestParam("idSecteur") int idSecteur,@RequestParam("idVoie") int idVoie) {
+        /* Création d'une longueur */
+        log.debug("addlongueur "  + idSpot + " & Secteur " + idSecteur + " & Voie " + idVoie);
+        Longueur longueur = new Longueur();
+        model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
+        model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
+        model.addAttribute("voie", spotServiceInterface.getVoie(idVoie));
+        model.addAttribute("longueur", longueur);
+        return "longueur-form";
+    }
+    @PostMapping(value = "/voie/addLongueur")
+    public String proposerLongueurSubmit(Model model, @Valid @ModelAttribute("longueur") Longueur longueur,
+                                         BindingResult result, @RequestParam("idSpot") Long idSpot,
+                                         @RequestParam("idSecteur") int idSecteur,
+                                         @RequestParam("idVoie") int idVoie,
+                                         HttpSession httpSession) {
+
+        log.info("submit du formulaire longueur");
+        log.debug("addlongueur create spot "  + idSpot + " & Secteur " + idSecteur  + " & Voie " + idVoie);
+
+        if (result.hasErrors()){
+            log.debug("erreur du validation du formulaire longueur");
+            model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
+            model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
+            model.addAttribute("voie", spotServiceInterface.getVoie(idVoie));
+            return "longueur-form";
+        } else {
+            if(spotServiceInterface.ajoutLongueur(idVoie, longueur)!=null) {
+                model.addAttribute("result", "success");
+                model.addAttribute("resultext", "Longueur enregistrée avec succès");
+            } else {
+                model.addAttribute("result", "unsuccess");
+                model.addAttribute("resultext", "Longueur non enregistrée, contactez l'informatique");
+            }
+            majModel(model,idSpot,httpSession);
+            model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
+            model.addAttribute("voie", spotServiceInterface.getVoie(idVoie));
+            return "voie-longueur";
+
+        }
+    }
+    @PostMapping(value = "/voie/deleteLongueur")
+    public String supprLongueurSubmit(Model model, @RequestParam("idLongueur") int idLongueur,
+                                      @RequestParam("idVoie") int idVoie,
+                                      @RequestParam("idSecteur") int idSecteur,
+                                      @RequestParam("spotId") Long spotId,
+                                      @RequestParam("email") String email, HttpSession httpSession) {
+
+        log.info("Suppression e la longueur " + idLongueur + " par " + email);
+        spotServiceInterface.supprLongueur(idLongueur,idVoie);
+        majModel(model,spotId,httpSession);
+        model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));
+        model.addAttribute("voie", spotServiceInterface.getVoie(idVoie));
+        return "voie-longueur";
+    }
+
+    private void majModel(Model model, Long spotId, HttpSession httpSession) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
