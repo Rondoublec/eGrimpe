@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <script src="../static/js/myJS.js" th:src="@{/js/myJS.js}"></script>
     <title>eGrimpe - Détails du secteur</title>
     <meta charset="UTF-8">
 </head>
@@ -89,7 +90,8 @@
                                     <button type="submit" class="btn-link"><span class="glyphicon glyphicon-eye-open">Afficher</span></button>
                                 </a>
                               <span th:if="${membre} == true">
-                                <form action="#" th:action="@{/secteur/deleteVoie}" th:object="${voie}" method="post">
+                                <form action="#" th:action="@{/secteur/deleteVoie}" th:object="${voie}"
+                                      onSubmit="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?')"; method="post">
                                     <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <input type="hidden" th:value="${voie.id}" name="idVoie"/>
