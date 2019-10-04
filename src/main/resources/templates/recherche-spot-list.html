@@ -57,19 +57,19 @@
             </div>
         </div>
 
-        <div class="col-md-offset-1 col-md-10">
-        <form data-toggle="validator" role="form" th:object="${spotCherche}" th:action="@{/rechercherspot/recherche}" method="post" >
-            <legend>Recherche des spots selon vos critères</legend>
-            <button type="submit" class="btn btn-primary">Rechercher</button>
+        <div class="col-md-12">
+        <form data-toggle="validator" role="form" th:object="${spotCherche}" th:action="@{/spot/recherche}" method="post" >
             <table class="table table-striped">
                 <thead>
                 <tr class="btn-default">
+                    <th></th>
                     <th>Nom</th>
                     <th>Code postal</th>
                     <th>Commune</th>
                     <th>Site labellis&eacute;</th>
                 </tr>
                 <tr>
+                    <th><button type="submit" class="btn btn-primary">Rechercher</button></th>
                     <th><input type="text" class="form-control" th:field="*{nomSpot}" id="nomSpot"  /></th>
                     <th><input type="text" class="form-control" th:field="*{codePostalSpot}" id="codePostalSpot"  /></th>
                     <th><input type="text" class="form-control" th:field="*{communeSpot}" id="communeSpot"  /></th>
@@ -99,13 +99,14 @@
                             <th>Cotation Min / Max</th>
                             <th>Roche</th>
                             <th>Labellis&eacute;</th>
+                            <th align="center"> ... </th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:if="${#lists.isEmpty(spots)}" class="btn-warning">
+                        <tr th:if="${#lists.isEmpty(listSpots)}" class="btn-warning">
                             <td colspan="4" align="center">Il n'y a aucun spot trouvé !!!</td>
                         </tr>
-                        <tr th:each="spot : ${spots}">
+                        <tr th:each="spot : ${ListSpots}">
                             <td th:text="${spot.idSpot}"></td>
                             <td th:text="${spot.nomSpot}"></td>
                             <td th:text="${spot.codePostalSpot} + ' ' + ${spot.communeSpot}"></td>

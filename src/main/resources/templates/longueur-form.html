@@ -3,6 +3,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
     <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <script src="../static/js/myJS.js" th:src="@{/js/myJS.js}"></script>
     <title>eGrimpe - Modification des informations d'une longueur</title>
     <meta charset="UTF-8">
 </head>
@@ -43,7 +44,8 @@
                                 <tr>
                                     <th>Description</th>
                                     <td>
-                                        <textarea type="textarea" th:field="*{description}" class="form-control" placeholder="description"></textarea>
+                                        <textarea maxlength= "200" type="textarea" onkeyup="reste_a_saisir(this.maxLength,this.value);" th:field="*{description}" class="form-control" placeholder="description"></textarea>
+                                        <span id="caracteres">200</span> caractère(s) restant(s)
                                         <p th:if="${#fields.hasErrors('description')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{description}"></p>
                                         <div style="clear:both;display:block;height:10px;"></div>
                                     </td>

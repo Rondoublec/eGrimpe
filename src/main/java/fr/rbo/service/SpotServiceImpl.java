@@ -1,5 +1,6 @@
 package fr.rbo.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.transaction.Transactional;
@@ -7,16 +8,11 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import fr.rbo.model.*;
+import fr.rbo.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import fr.rbo.repository.SpotRepository;
-import fr.rbo.repository.CommentaireRepository;
-import fr.rbo.repository.SecteurRepository;
-import fr.rbo.repository.VoieRepository;
-import fr.rbo.repository.LongueurRepository;
 
 
 @Service
@@ -27,6 +23,8 @@ public class SpotServiceImpl implements SpotServiceInterface{
 
     @Autowired
     protected SpotRepository spotRepository;
+    @Autowired
+    protected SpotRepositoryInterface spotRepositoryInterface;
     @Autowired
     private UserServiceInterface userServiceInterface;
     @Autowired
@@ -183,6 +181,13 @@ public class SpotServiceImpl implements SpotServiceInterface{
         Longueur longueur=longueurRepository.findById(idLongueur);
         longueurRepository.delete(longueur);
         voieRepository.save(voie);
+    }
+
+    @Override
+    public List<Spot> chercheSpots(Spot spotCherche) {
+        List<Spot> spotsTrouve= new ArrayList<>();
+        spotsTrouve=spotRepositoryInterface.rechercheSpotMultiCriteres(spotCherche);
+        return spotsTrouve;
     }
 
 }

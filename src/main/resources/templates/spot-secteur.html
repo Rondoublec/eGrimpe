@@ -142,7 +142,8 @@
                 <div class="form-group">
                     <label for="message">Saisissez votre commentaire</label>
                     <button type="submit" class="btn btn-secondary">Enregistrer</button>
-                    <textarea type="textarea" class="form-control" th:field="*{message}" id="message" required="required"></textarea>
+                    <textarea maxlength= "120" type="textarea" onkeyup="reste_a_saisir(this.maxLength,this.value);"class="form-control" th:field="*{message}" id="message" required="required"></textarea>
+                    <span id="caracteres">120</span> caractère(s) restant(s)
                     <p th:if="${#fields.hasErrors('message')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{message}"></p>
                 </div>
                     <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
@@ -162,7 +163,7 @@
                             <b th:utext="${commentaire.message}">BlaBla</b>
                             <small th:utext="' (Par : ' + ${commentaire.userCommentaire.email} + ' le : ' + ${commentaire.dateDeMiseAJour} + ')'"> (Par toto le 12)</small>
                             <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-edit">Modifier</span></button>
-                            <textarea type="textarea" class="form-control" th:field="${commentaire.message}" id="message"></textarea>
+                            <textarea maxlength="120" type="textarea" class="form-control" th:field="${commentaire.message}" id="message"></textarea>
                             <input type="hidden" th:value="${commentaire.id}" name="id"/>
                             <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                             <input type="hidden" th:value="${user.email}" name="email"/>

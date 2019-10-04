@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
         <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+        <script src="../static/js/myJS.js" th:src="@{/js/myJS.js}"></script>
         <title>eGrimpe - Modification des informations d'un spot</title>
         <meta charset="UTF-8">
     </head>
@@ -75,7 +76,8 @@
                               <tr>
                                   <th>Pr&eacute;sentation</th>
                                   <td>
-                                      <textarea type="textarea" th:field="*{presentation}" class="form-control" placeholder="presentation"></textarea>
+                                      <textarea maxlength= "200" type="textarea" onkeyup="reste_a_saisir(this.maxLength,this.value);" th:field="*{presentation}" class="form-control" placeholder="presentation"></textarea>
+                                      <span id="caracteres">200</span> caractère(s) restant(s)
                                       <div style="clear:both;display:block;height:10px;"></div>
                                   </td>
                               </tr>
@@ -147,7 +149,7 @@
                               </td>
                               </tr>
                               <tr>
-                                  <th>Lab&eacute;lis&eacute;</th>
+                                  <th>Labellis&eacute;</th>
                                   <td>
                                       <input type="text" th:field="*{labelAmi}" class="form-control" placeholder="labelAmi"/>
                                       <div style="clear:both;display:block;height:10px;"></div>

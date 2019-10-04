@@ -6,3 +6,9 @@ function confirmer_suppression()
     else
     { return false; }
 }
+
+    function reste_a_saisir(nbCar,texte)
+    {
+        var restants=nbCar-texte.length;
+        document.getElementById('caracteres').innerHTML=restants;
+    }

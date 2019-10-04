@@ -1,6 +1,8 @@
 package fr.rbo.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import fr.rbo.model.*;
@@ -31,16 +33,43 @@ public class SpotController {
     private UserServiceInterface userServiceInterface;
 
     @GetMapping("/spot")
+    public String Spot1(Model model,
+                        HttpSession httpSession) {
+        log.debug("page rechercher les spots");
+        Spot spotCherche = new Spot();
+        Collection<Spot> listSpots = spotServiceInterface.getAllSpots();
+        model.addAttribute("spotCherche", spotCherche);
+        model.addAttribute("ListSpots", listSpots);
+        majModel(model,null,httpSession);
+//        model.addAttribute("membre", false);
+        return "recherche-spot-list";
+    }
+
+    @PostMapping(value = "/spot/recherche")
+    public String rechercherSpoteCherche (Model model, @ModelAttribute ("spotCherche") Spot spotCherche,
+                                          HttpSession httpSession) {
+        log.debug("lancement d'une recherche");
+        List<Spot> listSpots= spotServiceInterface.chercheSpots(spotCherche);
+        model.addAttribute("spotCherche", spotCherche);
+        model.addAttribute("ListSpots", listSpots);
+        majModel(model,null,httpSession);
+//        model.addAttribute("membre", false);
+        return "recherche-spot-list";
+    }
+
+/*
+    @GetMapping("/spotold")
     public String afficheSpots(Model model) {
         Collection<Spot> mySpotsList = spotServiceInterface.getAllSpots();
         model.addAttribute("allSpots", mySpotsList);
+// à garder en commentaire        model.addAttribute("allSpots", (ArrayList<Spot>)spotServiceInterface.getAllSpots());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String mailUser = auth.getName();
         User user = userServiceInterface.findUserByEmail(mailUser);
         model.addAttribute("membre", estMembre(user));
-//        model.addAttribute("allSpots", (ArrayList<Spot>)spotServiceInterface.getAllSpots());
         return "spot-list";
     }
+*/
 
     @GetMapping("/spot/add")
     public String addSpot(Model model) {
@@ -382,8 +411,10 @@ public class SpotController {
             model.addAttribute("user", userVide);
         }
 
-        Spot spot = spotServiceInterface.findSpot(spotId);
-        model.addAttribute("spot", spot);
+        if (spotId != null) {
+            Spot spot = spotServiceInterface.findSpot(spotId);
+            model.addAttribute("spot", spot);
+        }
     }
 
     private boolean estMembre (User user) {

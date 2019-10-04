@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class SpotRepositoryCustomImpl implements SpotRepositoryCustom {
+public class SpotRepositoryImpl implements SpotRepositoryInterface {
     final EntityManager em;
 
-    public SpotRepositoryCustomImpl(EntityManager em) {
+    public SpotRepositoryImpl(EntityManager em) {
         this.em = em;
     }
 

@@ -3,6 +3,7 @@ package fr.rbo.service;
 import fr.rbo.model.*;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Documenter en premier les classes puis ensuite faire les méthode "non évidentes, ne pas documenter les get / set)
@@ -103,4 +104,12 @@ public interface SpotServiceInterface {
      * @return Longueur
      */
     public Longueur getLongueur(int idLongueur);
+
+    /**
+     * recherche spot selon critères
+     * @param spotCherche objet qui contient les valeurs des critères de recherche
+     * @return Liste des spots correspondant aux critères
+     */
+    public List<Spot> chercheSpots(Spot spotCherche);
+
 }
