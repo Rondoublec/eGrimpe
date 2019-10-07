@@ -39,6 +39,9 @@
                 <section class="table-responsive">
                     <table class="table table-striped table-bordered table-responsive">
                         <tr>
+                            <div class="alert-info" th:if="${spot.labelAmi == true}"><b>Spot labellis&eacute; "Ami de l&rsquo;escalade"</b></div>
+                        </tr>
+                        <tr>
                             <td th:text="${spot.presentation}">Bla Bla Bla ...</td>
                         </tr>
                         <tr>

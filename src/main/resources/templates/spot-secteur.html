@@ -32,12 +32,19 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3>
-                        <span>Spot : </span><b th:utext="${spot.nomSpot}">Mon spot</b>&nbsp;<span th:text="'(r&eacute;f&eacute;rence ' + ${spot.idSpot} + ')'">(r&eacute;f&eacute;rence 12)</span>
+                        <span>Spot : </span><b th:utext="${spot.nomSpot}">Mon spot</b>&nbsp;
+                            <span th:text="'(r&eacute;f&eacute;rence ' + ${spot.idSpot} + ')'">(r&eacute;f&eacute;rence 12)</span>
                         <a href="/spot" class="glyphicon glyphicon-share-alt">Retour</a>
                     </h3>
                 </div>
                 <section class="table-responsive">
                     <table class="table table-striped table-bordered table-responsive">
+                        <tr>
+                            <div class="col-md-12 alert-info" th:if="${spot.labelAmi == true}">
+                                <b>Spot labellis&eacute; "Ami de l&rsquo;escalade"</b></div>
+                            <div class="col-md-12 alert-warning " th:if="${spot.labelAmi != true}">
+                                Spot non labellis&eacute; </div>
+                        </tr>
                         <tr>
                             <th>Pr&eacute;sentation</th>
                             <td th:text="${spot.presentation}"></td>
@@ -78,10 +85,12 @@
                             <th>Int&eacute;r&ecirc;t</th>
                             <td th:text="${spot.interet}"></td>
                         </tr>
+<!--
                         <tr>
                             <th>Lab&eacute;lis&eacute;</th>
                             <td th:text="${spot.labelAmi}"></td>
                         </tr>
+-->
                         <tr>
                             <th>Cartographie</th>
                             <td th:text="${spot.cartographie}"></td>

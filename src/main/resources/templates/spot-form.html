@@ -46,7 +46,7 @@
                 </div>
             </div>
 
-            <div class="col-md-ofspot.idSpotfset-1 col-md-11">
+            <div class="col-md-offset-1 col-md-11">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">
@@ -62,7 +62,26 @@
 
                     <form th:object="${spot}" th:action="@{/spot/save}" action="#" method="post">
                     <div class="panel-body">
-                          <div class="col-md-12 table-bordered">
+<!-- TODO DEBUT -->
+                        <div th:if="${membre != true}">
+                            <div class="col-md-12 alert-info" th:if="*{labelAmi == true}">
+                                <b>Spot labellis&eacute; "Ami de l&rsquo;escalade"</b></div>
+                            <div class="col-md-12 alert-warning " th:if="*{labelAmi != true}">
+                                Spot non labellis&eacute; </div>
+                        </div>
+                        <div th:if="${membre == true}">
+                            <div class="col-md-offset-6 col-md-6">
+                                <select type="select" class="form-control" size="1"  th:field="*{labelAmi}">
+                                    <option th:value="'false'" th:text="Non_Labellis&eacute;_Ami_de_l_escalade">
+                                        Non_Labellis&eacute;_Ami_de_l_escalade</option>
+                                    <option th:value="'true'"  th:text="Labellisation_Ami_de_l_escalade">
+                                        Labellisation_Ami_de_l_escalade</option>
+                                </select>
+                            </div>
+                            <div style="clear:both;display:block;height:10px;"></div>
+                        </div>
+<!-- TODO FIN -->
+                        <div class="col-md-12 table-bordered">
                             <input type="hidden" th:field="*{idSpot}"/>
                               <table class="table table-bordered table-responsive">
                               <tr>
@@ -148,6 +167,7 @@
                                       <div style="clear:both;display:block;height:10px;"></div>
                               </td>
                               </tr>
+<!--
                               <tr>
                                   <th>Labellis&eacute;</th>
                                   <td>
@@ -155,6 +175,7 @@
                                       <div style="clear:both;display:block;height:10px;"></div>
                                       </td>
                               </tr>
+-->
                               <tr>
                                   <th>Cartographie</th>
                                   <td>

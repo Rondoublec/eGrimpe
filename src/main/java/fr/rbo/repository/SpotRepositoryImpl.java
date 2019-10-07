@@ -37,7 +37,9 @@ public class SpotRepositoryImpl implements SpotRepositoryInterface {
         if (!spotCherche.getCommuneSpot().equals("")) {
             predicates.add(cb.like(spot.get("communeSpot"), "%" + spotCherche.getCommuneSpot() + "%"));
         }
-
+        if (spotCherche.isLabelAmi()) {
+            predicates.add(cb.equal(spot.get("labelAmi"), spotCherche.isLabelAmi()));
+        }
         if (!predicates.isEmpty()) {
             cq.where(predicates.toArray(new Predicate[0]));
         }

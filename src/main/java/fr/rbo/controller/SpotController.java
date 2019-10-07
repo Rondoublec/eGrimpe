@@ -1,6 +1,5 @@
 package fr.rbo.controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -33,27 +32,27 @@ public class SpotController {
     private UserServiceInterface userServiceInterface;
 
     @GetMapping("/spot")
-    public String Spot1(Model model,
+    public String Spot(Model model,
                         HttpSession httpSession) {
         log.debug("page rechercher les spots");
         Spot spotCherche = new Spot();
         Collection<Spot> listSpots = spotServiceInterface.getAllSpots();
+        String label = new String();
         model.addAttribute("spotCherche", spotCherche);
-        model.addAttribute("ListSpots", listSpots);
+        model.addAttribute("listSpots", listSpots);
         majModel(model,null,httpSession);
-//        model.addAttribute("membre", false);
         return "recherche-spot-list";
     }
 
     @PostMapping(value = "/spot/recherche")
-    public String rechercherSpoteCherche (Model model, @ModelAttribute ("spotCherche") Spot spotCherche,
+    public String SpoteRecherche (Model model, @ModelAttribute ("spotCherche") Spot spotCherche,
                                           HttpSession httpSession) {
         log.debug("lancement d'une recherche");
+        log.debug("labelAmi " + spotCherche.isLabelAmi());
         List<Spot> listSpots= spotServiceInterface.chercheSpots(spotCherche);
         model.addAttribute("spotCherche", spotCherche);
-        model.addAttribute("ListSpots", listSpots);
+        model.addAttribute("listSpots", listSpots);
         majModel(model,null,httpSession);
-//        model.addAttribute("membre", false);
         return "recherche-spot-list";
     }
 
@@ -72,10 +71,10 @@ public class SpotController {
 */
 
     @GetMapping("/spot/add")
-    public String addSpot(Model model) {
+    public String addSpot(Model model, HttpSession httpSession) {
         Spot addSpot = new Spot();
         model.addAttribute("spot", addSpot);
-//        model.addAttribute("mode", "create");
+        majModel(model,null,httpSession);
         return "spot-form";
     }
 
@@ -92,9 +91,10 @@ public class SpotController {
 
     @GetMapping("/spot/edit/{spotId}")
     public String EditSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
-                             Model model) {
+                             Model model, HttpSession httpSession) {
         Spot editSpot = spotServiceInterface.findSpot(spotId);
         if(editSpot!=null) {
+            majModel(model,null,httpSession);
             model.addAttribute("spot", editSpot);
             return "spot-form";
         } else {
@@ -242,12 +242,13 @@ public class SpotController {
 
     }
     @PostMapping("/spot/save")
-    public String saveSpot(@ModelAttribute("spot") @Valid Spot spot,
-                           BindingResult bindingResult,
+    public String saveSpot(Model model, @ModelAttribute("spot") @Valid Spot spot,
+                           BindingResult bindingResult, HttpSession httpSession,
                            final RedirectAttributes redirectAttributes) {
 
         // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
         if (bindingResult.hasErrors()) {
+            majModel(model,null,httpSession);
             return "spot-form"; // Formulaire en cours sur lequel on veut rester
         }
 
