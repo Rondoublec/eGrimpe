@@ -1,13 +1,13 @@
 package fr.rbo.repository;
 
-import fr.rbo.model.Spot;
+import fr.rbo.model.Topo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface SpotRepositoryInterface {
+public interface TopoRepositoryInterface {
 
-    List<Spot> rechercheSpot(Spot spotCherche);
+    List<Topo> rechercheTopo(Topo topoCherche);
 
 }

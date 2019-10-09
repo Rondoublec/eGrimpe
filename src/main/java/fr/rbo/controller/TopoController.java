@@ -1,27 +1,25 @@
 package fr.rbo.controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
-import fr.rbo.model.Spot;
+import fr.rbo.model.*;
+import fr.rbo.service.TopoServiceInterface;
+import fr.rbo.service.UserServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import fr.rbo.service.SpotServiceInterface;
-
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-
 
 @Controller
 public class TopoController {
@@ -29,76 +27,142 @@ public class TopoController {
     private static final Logger log = LoggerFactory.getLogger(TopoController.class);
 
     @Autowired
-    SpotServiceInterface spotServiceInterface;
-
+    TopoServiceInterface topoServiceInterface;
+    @Autowired
+    private UserServiceInterface userServiceInterface;
 
     @GetMapping("/topo")
-    public String savePage(Model model) {
-        Spot spotForm = new Spot();
-        model.addAttribute("spot", spotForm);
-//        model.addAttribute("spot", new Spot());
+    public String Topo(Model model,
+                       HttpSession httpSession) {
+        log.debug("page rechercher les topos");
+        Topo topoCherche = new Topo();
+        Collection<Topo> listTopos = topoServiceInterface.getAllTopos();
+        String label = new String();
+        model.addAttribute("topoCherche", topoCherche);
+        model.addAttribute("listTopos", listTopos);
+        majModel(model,null,httpSession);
+        return "recherche-topo-list";
+    }
 
-        Collection<Spot> mySpotsList = spotServiceInterface.getAllSpots();
-        model.addAttribute("allSpots", mySpotsList);
-//        model.addAttribute("allSpots", (ArrayList<Spot>)spotServiceInterface.getAllSpots());
-        return "topo";
+    @PostMapping(value = "/topo/recherche")
+    public String TopoeRecherche (Model model, @ModelAttribute ("topoCherche") Topo topoCherche,
+                                  HttpSession httpSession) {
+        log.debug("lancement d'une recherche");
+        List<Topo> listTopos= topoServiceInterface.chercheTopos(topoCherche);
+        model.addAttribute("topoCherche", topoCherche);
+        model.addAttribute("listTopos", listTopos);
+        majModel(model,null,httpSession);
+        return "recherche-topo-list";
+    }
+
+    @GetMapping("/topo/add")
+    public String addTopo(Model model, HttpSession httpSession) {
+        Topo addTopo = new Topo();
+        model.addAttribute("topo", addTopo);
+        majModel(model,null,httpSession);
+        return "topo-form";
+    }
+
+    @GetMapping("/topo/delete/{topoId}")
+    public String RemoveTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
+                             Model model) {
+        if(topoServiceInterface.deleteTopo(topoId)) {
+            redirectAttributes.addFlashAttribute("deletion", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("deletion", "unsuccess");
+        }
+        return "redirect:/topo";
+    }
+
+    @GetMapping("/topo/edit/{topoId}")
+    public String EditTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
+                           Model model, HttpSession httpSession) {
+        Topo editTopo = topoServiceInterface.findTopo(topoId);
+        if(editTopo!=null) {
+            majModel(model,null,httpSession);
+            model.addAttribute("topo", editTopo);
+            return "topo-form";
+        } else {
+            redirectAttributes.addFlashAttribute("status","notfound");
+        }
+        return "redirect:/topo";
+    }
+
+    @GetMapping("/topo/affiche/{topoId}")
+    public String AfficheTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
+                           Model model, HttpSession httpSession) {
+        Topo afficheTopo = topoServiceInterface.findTopo(topoId);
+        if(afficheTopo!=null) {
+            majModel(model,null,httpSession);
+            model.addAttribute("topo", afficheTopo);
+            return "topo";
+        } else {
+            redirectAttributes.addFlashAttribute("status","notfound");
+        }
+        return "redirect:/topo";
     }
 
     @PostMapping("/topo/save")
-    public String saveSpot(@ModelAttribute("spot") @Valid Spot spot, BindingResult bindingResult,
+    public String saveTopo(Model model, @ModelAttribute("topo") @Valid Topo topo,
+                           BindingResult bindingResult, HttpSession httpSession,
                            final RedirectAttributes redirectAttributes) {
 
         // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
         if (bindingResult.hasErrors()) {
-            return "topo"; // Formulaire en cours sur lequel on veut rester
+            majModel(model,null,httpSession);
+            return "topo-form"; // Formulaire en cours sur lequel on veut rester
         }
 
-        if(spotServiceInterface.saveSpot(spot)!=null) {
-            redirectAttributes.addFlashAttribute("saveSpot", "success");
+        if(topoServiceInterface.saveTopo(topo, recupUser(httpSession))!=null) {
+            redirectAttributes.addFlashAttribute("saveTopo", "success");
         } else {
-            redirectAttributes.addFlashAttribute("saveSpot", "unsuccess");
+            redirectAttributes.addFlashAttribute("saveTopo", "unsuccess");
         }
 
         return "redirect:/topo";
     }
 
-    @RequestMapping(value = "/topo/{operation}/{spotId}", method = RequestMethod.GET)
-    public String editRemoveSpot(@PathVariable("operation") String operation,
-                                 @PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
-                                 Model model) {
-        if(operation.equals("delete")) {
-            if(spotServiceInterface.deleteSpot(spotId)) {
-                redirectAttributes.addFlashAttribute("deletion", "success");
-            } else {
-                redirectAttributes.addFlashAttribute("deletion", "unsuccess");
-            }
-        } else if(operation.equals("edit")){
-            Spot editSpot = spotServiceInterface.findSpot(spotId);
-            if(editSpot!=null) {
-                model.addAttribute("editSpot", editSpot);
-                return "editTopoPage";
-            } else {
-                redirectAttributes.addFlashAttribute("status","notfound");
-            }
-        }
+    private User recupUser(HttpSession httpSession){
 
-        return "redirect:/topo";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userServiceInterface.findUserByEmail(auth.getName());
+
     }
 
-    @RequestMapping(value = "/topo/update", method = RequestMethod.POST)
-    public String updateSpot(@ModelAttribute("editSpot") @Valid Spot editSpot, BindingResult bindingResult,
-                             final RedirectAttributes redirectAttributes) {
+    private void majModel(Model model, Long topoId, HttpSession httpSession) {
 
-        // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
-        if (bindingResult.hasErrors()) {
-            return "editTopoPage"; // Formulaire sur lequel on veut rester
-        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if(spotServiceInterface.editSpot(editSpot)!=null) {
-            redirectAttributes.addFlashAttribute("edit", "success");
+        String nom = auth.getName();
+        User user = userServiceInterface.findUserByEmail(nom);
+
+        if (user != null) {
+            httpSession.setAttribute("utilisateurSession", user);
+            model.addAttribute("membre", estMembre(user));
+            model.addAttribute("user", user);
+            model.addAttribute("roles", user.getRoles());
         } else {
-            redirectAttributes.addFlashAttribute("edit", "unsuccess");
+            User userVide = new User();
+            model.addAttribute("user", userVide);
         }
-        return "redirect:/topo";
+
+        if (topoId != null) {
+            Topo topo = topoServiceInterface.findTopo(topoId);
+            model.addAttribute("topo", topo);
+        }
     }
+
+    private boolean estMembre (User user) {
+        boolean membre = false;
+        if (user != null) {
+            Set<Role> roles = user.getRoles();
+            for (Role role : roles) {
+                if (role.getRole().equals("MEMBRE")) {
+                    membre = true;
+                }
+            }
+        }
+        return membre;
+    }
+
 }

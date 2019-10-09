@@ -119,7 +119,7 @@
                         <tr th:each="secteur : ${spot.getSecteurs()}">
                             <td th:utext="${secteur.nom}">...</td>
                             <td th:utext="${secteur.description}">...</td>
-                            <td th:utext="${secteur.DateDeMiseAJour}">...</td>
+                            <td th:utext="${secteur.dateDeMiseAJour}">...</td>
                             <td>
                                 <a th:href="@{/secteur/voies(idSpot=${spot.idSpot},idSecteur=${secteur.id})}">
                                     <input type="hidden" th:value="${spot.idSpot}" name="Spot"/>

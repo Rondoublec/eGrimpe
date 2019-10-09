@@ -186,7 +186,7 @@ public class SpotServiceImpl implements SpotServiceInterface{
     @Override
     public List<Spot> chercheSpots(Spot spotCherche) {
         List<Spot> spotsTrouve= new ArrayList<>();
-        spotsTrouve=spotRepositoryInterface.rechercheSpotMultiCriteres(spotCherche);
+        spotsTrouve=spotRepositoryInterface.rechercheSpot(spotCherche);
         return spotsTrouve;
     }
 

@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,22 +15,26 @@ public class Topo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="idTopo", nullable = false, unique = true)
-    private int idTopo;
+    private Long idTopo;
 
+    @NotBlank (message = "ERREUR : Le nom de topo est obligatoire.")
+    @Size(max = 40, message = "ERREUR : Le nom du topo ne doit pas faire plus de 40 caractères")
     @Column(name = "nomTopo", length = 40, nullable = false)
-    @NotBlank
     private String nomTopo;
 
+    @NotBlank (message = "ERREUR : Le département est obligatoire.")
     @Column(name = "departementTopo", length = 3, nullable = false)
-    @NotBlank
     private String departementTopo;
 
+    @NotBlank (message = "ERREUR : Le code postal est obligatoire.")
     @Column(name = "codePostalTopo", length = 5, nullable = false)
     private String codePostalTopo;
 
+    @Size(max = 500, message = "ERREUR : La description ne doit pas faire plus de 500 caractères")
     @Column(name = "descriptionTopo", length = 500)
     private String descriptionTopo;
 
+    @Size(max = 40, message = "ERREUR : Le d'auteur ne doit pas faire plus de 40 caractères")
     @Column(name = "auteurTopo", length = 40)
     private String auteurTopo;
 
@@ -45,19 +50,19 @@ public class Topo implements Serializable {
     private Date dateFinEmpruntTopo;
 
     @ManyToOne
-    @JoinColumn(name="idPropriétaireTopo")
-    private User idPropriétaireTopo;
+    @JoinColumn(name="proprietaireTopo")
+    private User proprietaireTopo;
 
     @ManyToOne
-    @JoinColumn(name="idEmprunteurTopo")
-    private User idEmprunteurTopo;
+    @JoinColumn(name="emprunteurTopo")
+    private User emprunteurTopo;
 
 
-    public int getIdTopo() {
+    public Long getIdTopo() {
         return idTopo;
     }
 
-    public void setIdTopo(int idTopo) {
+    public void setIdTopo(Long idTopo) {
         this.idTopo = idTopo;
     }
 
@@ -109,7 +114,6 @@ public class Topo implements Serializable {
         this.disponibiliteTopo = disponibiliteTopo;
     }
 
-
     public Date getDateEmpruntTopo() {
         return dateEmpruntTopo;
     }
@@ -126,20 +130,20 @@ public class Topo implements Serializable {
         this.dateFinEmpruntTopo = dateFinEmpruntTopo;
     }
 
-    public User getIdPropriétaireTopo() {
-        return idPropriétaireTopo;
+    public User getProprietaireTopo() {
+        return proprietaireTopo;
     }
 
-    public void setIdPropriétaireTopo(User idPropriétaireTopo) {
-        this.idPropriétaireTopo = idPropriétaireTopo;
+    public void setProprietaireTopo(User proprietaireTopo) {
+        this.proprietaireTopo = proprietaireTopo;
     }
 
-    public User getIdEmprunteurTopo() {
-        return idEmprunteurTopo;
+    public User getEmprunteurTopo() {
+        return emprunteurTopo;
     }
 
-    public void setIdEmprunteurTopo(User idEmprunteurTopo) {
-        this.idEmprunteurTopo = idEmprunteurTopo;
+    public void setEmprunteurTopo(User emprunteurTopo) {
+        this.emprunteurTopo = emprunteurTopo;
     }
 
 }

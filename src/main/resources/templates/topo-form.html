@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <script src="../static/js/myJS.js" th:src="@{/js/myJS.js}"></script>
+    <title>eGrimpe - Modification des informations d'un topo</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<!-- menu de l'application dans le header -->
+<div th:insert="mon-header.html"></div>
+
+<div class="container">
+
+    <div class="row" style="margin-top:100px;margin-bottom:10px;">
+
+        <div class="col-md-6">
+            <!-- Save Alert Messages -->
+            <div th:if="${saveTopo eq 'unsuccess'}">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <strong>Erreur!</strong>saveTopo (topo-edit) - Topo non mis &agrave; jour.
+                </div>
+            </div>
+            <div th:if="${saveTopo eq 'success'}">
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <strong>Success!</strong>saveTopo (topo-edit) - Topo mis &agrave; jour.
+                </div>
+            </div>
+            <!-- Edit Alert Message -->
+            <div th:if="${status eq 'notfound'}">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <strong>Erreur !</strong>status (topo-edit) - Topo invalide.
+                </div>
+            </div>
+            <div th:if="${edit eq 'unsuccess'}">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <strong>Erreur !</strong>edit (topo-edit) - Topo non r&eacute;cup&eacute;r&eacute;.
+                </div>
+            </div>
+            <div th:if="${edit eq 'success'}">
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    <strong>OK !</strong>edit (topo-edit) - Topo r&eacute;cup&eacute;r&eacute; avec succ&egrave;s.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-offset-1 col-md-11">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <div th:if="${topo.idTopo != null}">
+                            Mettre &agrave; jour les informations de &nbsp; <b th:utext="${topo.nomTopo}">Ma topo</b>
+                            (propri&eacute;taire &nbsp; <span th:text="${topo.proprietaireTopo.getEmail()}"></span>)
+                        </div>
+                        <div th:if="${topo.idTopo == null}">
+                            Ajouter un nouveau topo
+                        </div>
+                    </h3>
+                </div>
+
+                <form th:object="${topo}" th:action="@{/topo/save}" action="#" method="post">
+                    <div class="panel-body">
+                        <!-- TODO DEBUT -->
+                        <div th:if="${membre != true}">
+                            <div class="col-md-12 alert-info" th:if="*{disponibiliteTopo == true}">
+                                <b>Topo disponible</b></div>
+                            <div class="col-md-12 alert-warning " th:if="*{disponibiliteTopo != true}">
+                                Topo non disponible</div>
+                        </div>
+                        <div th:if="${membre == true}">
+                            <div class="col-md-offset-6 col-md-6">
+                                <select type="select" class="form-control" size="1"  th:field="*{disponibiliteTopo}">
+                                    <option th:value="'false'" th:text="Non_disponible">
+                                        Non_disponible</option>
+                                    <option th:value="'true'"  th:text="Disponible">
+                                        Disponible</option>
+                                </select>
+                            </div>
+                            <div style="clear:both;display:block;height:10px;"></div>
+                        </div>
+                        <!-- TODO FIN -->
+                        <div class="col-md-12 table-bordered">
+                            <input type="hidden" th:field="*{idTopo}"/>
+                            <table class="table table-bordered table-responsive">
+                                <tr>
+                                    <th>Nom</th>
+                                    <td>
+                                        <input type="text" th:field="*{nomTopo}" class="form-control" placeholder="nomTopo"/>
+                                        <p th:if="${#fields.hasErrors('nomTopo')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{nomTopo}"></p>
+                                        <div style="clear:both;display:block;height:10px;"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>
+                                        <textarea maxlength= "500" type="textarea" onkeyup="reste_a_saisir(this.maxLength,this.value);" th:field="*{descriptionTopo}" class="form-control" placeholder="descriptionTopo"></textarea>
+                                        <p th:if="${#fields.hasErrors('descriptionTopo')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{descriptionTopo}"></p>
+                                        <span id="caracteres">500</span> caractère(s) restant(s)
+                                        <div style="clear:both;display:block;height:10px;"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>D&eacute;partement</th>
+                                    <td>
+                                        <input type="text" th:field="*{departementTopo}" class="form-control" placeholder="departementTopo"/>
+                                        <p th:if="${#fields.hasErrors('departementTopo')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{departementTopo}"></p>
+                                        <div style="clear:both;display:block;height:10px;"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Code postal</th>
+                                    <td>
+                                        <input type="text" th:field="*{codePostalTopo}" class="form-control" placeholder="codePostalTopo"/>
+                                        <p th:if="${#fields.hasErrors('codePostalTopo')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{codePostalTopo}"></p>
+                                        <div style="clear:both;display:block;height:10px;"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Auteur</th>
+                                    <td>
+                                        <input type="text" th:field="*{auteurTopo}" class="form-control" placeholder="auteurTopo"/>
+                                        <p th:if="${#fields.hasErrors('auteurTopo')}" class="alert alert-danger alert-dismissible" role="alert" th:errors="*{auteurTopo}"></p>
+                                        <div style="clear:both;display:block;height:10px;"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel-footer">
+                        <a th:href="@{/topo}" class="btn btn-default">Retour &agrave; la liste des topos</a>
+                        <input type="submit" class="btn btn-default pull-right" value="Enregistrer">
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:insert="mon-footer.html"/>
+
+</body>
+</html>

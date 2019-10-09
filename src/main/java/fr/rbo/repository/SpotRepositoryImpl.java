@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public class SpotRepositoryImpl implements SpotRepositoryInterface {
+
     final EntityManager em;
 
     public SpotRepositoryImpl(EntityManager em) {
@@ -20,7 +21,7 @@ public class SpotRepositoryImpl implements SpotRepositoryInterface {
     }
 
     @Override
-    public List<Spot> rechercheSpotMultiCriteres(Spot spotCherche) {
+    public List<Spot> rechercheSpot(Spot spotCherche) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Spot> cq = cb.createQuery(Spot.class);

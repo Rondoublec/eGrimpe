@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+    <script src="../static/js/myJS.js" th:src="@{/js/myJS.js}"></script>
+    <title>eGrimpe - Gestion des topos</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+<!-- menu de l'application dans le header -->
+<div th:insert="mon-header.html"/>
+
+<div class="row"  style="margin-top:100px;margin-bottom:10px;">
+
+    <div class="col-md-offset-1 col-md-6">
+        <!-- Save Alert Messages -->
+        <div th:if="${saveTopo eq 'unsuccess'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong>saveTopo (topo-list) - Topo non sauvegard&eacute;.
+            </div>
+        </div>
+        <div th:if="${saveTopo eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong>saveTopo (topo-list) - Topo sauvegard&eacute;.
+            </div>
+        </div>
+
+        <!-- Deletion Alert Messages -->
+        <div th:if="${deletion eq 'unsuccess'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong>deletion (topo-list) - Topo non supprim&eacute;.
+            </div>
+        </div>
+        <div th:if="${deletion eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong>deletion (topo-list) - Topo supprim&eacute;.
+            </div>
+        </div>
+
+        <!-- Edit Alert Message -->
+        <div th:if="${status eq 'notfound'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong>status (topo-list) - Topo invalide.
+            </div>
+        </div>
+        <div th:if="${edit eq 'unsuccess'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong>edit (topo-list) - Topo non r&eacute;cup&eacute;r&eacute;.
+            </div>
+        </div>
+        <div th:if="${edit eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong>edit (topo-list) - Topo r&eacute;cup&eacute;r&eacute; avec succ&egrave;s.
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <form data-toggle="validator" role="form" th:object="${topoCherche}" th:action="@{/topo/recherche}" method="post">
+            <table class="table table-striped">
+                <thead>
+                <tr class="btn-default">
+                    <th></th>
+                    <th>Nom</th>
+                    <th>Code postal</th>
+                    <th>Topo disponible</th>
+                </tr>
+                <tr>
+                    <th><button type="submit" class="btn btn-primary">Rechercher</button></th>
+                    <th><input type="text" class="form-control" th:field="*{nomTopo}" id="nomTopo"  /></th>
+                    <th><input type="text" class="form-control" th:field="*{codePostalTopo}" id="codePostalTopo"  /></th>
+                    <th>
+                        <input type="checkbox"  class="form-control" name="disponibiliteTopo" th:checked="*{disponibiliteTopo}"/>
+                    </th>
+                </tr>
+                </thead>
+            </table>
+        </form>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Liste des topos</h3>
+            </div>
+            <div class="panel-body">
+
+                <a th:href="@{/topo/add}"><span class="btn btn-primary">Créer</span></a> &nbsp; &nbsp;
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr class="btn-default">
+                        <th class="col-md-2">Nom</th>
+                        <th class="col-md-1">Code postal</th>
+                        <th class="col-md-4">Description</th>
+                        <th class="col-md-1">Propri&eacute;taire</th>
+                        <th class="col-md-1">Disponibilit&eacute;</th>
+                        <th class="col-md-1">Date emprunt</th>
+                        <th class="col-md-1">Emprunteur</th>
+                        <th class="col-md-1" align="center"> ... </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(listTopos)}" class="alert alert-info">
+                        <td colspan="4" align="center">Il n'y a aucune topo trouv&eacute;e !!!</td>
+                    </tr>
+                    <tr th:each="topo : ${listTopos}">
+                        <td th:text="${topo.nomTopo}"></td>
+                        <td th:text="${topo.codePostalTopo}"></td>
+                        <td th:text="${topo.descriptionTopo}"></td>
+                        <td th:text="${topo.proprietaireTopo.getEmail()}"></td>
+                        <td th:text="${topo.disponibiliteTopo}"></td>
+                        <td th:text="${topo.dateEmpruntTopo}"></td>
+                        <td>
+                        <span th:if="${topo.dateEmpruntTopo} != null"}
+                              th:text="${topo.emprunteurTopo.getEmail()}"></span>
+                        </td>
+                        <td align="center">
+                            <a th:href="@{/topo/affiche/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-eye-open">Afficher</span></a> &nbsp; &nbsp;
+                            <a th:href="@{/topo/edit/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>
+                            <span th:if="${membre} == true">
+                                    <a th:href="@{/topo/delete/{id}(id=${topo.idTopo})}"
+                                       onClick="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?');"><span class="glyphicon glyphicon-trash">Supprimer</span></a>
+                                </span>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="mon-footer.html"/>
+
+</body>
+</html>

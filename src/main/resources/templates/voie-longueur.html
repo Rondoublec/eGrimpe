@@ -69,6 +69,7 @@
                     <h3>
                         <span>Voie : </span><b th:utext="${voie.nom}">Ma voie</b>&nbsp;<span th:text="'(r&eacute;f&eacute;rence ' + ${voie.id} + ')'">(r&eacute;f&eacute;rence 36)</span>
                         <a th:href="@{/secteur/voies(idSpot=${spot.idSpot},idSecteur=${secteur.id})}" class="glyphicon glyphicon-share-alt">Retour</a>
+                    </h3>
                 </div>
                 <section class="table-responsive">
                     <table class="table table-striped table-bordered table-responsive">
@@ -97,7 +98,7 @@
                             <td th:utext="${longueur.nom}">...</td>
                             <td th:utext="${longueur.description}">...</td>
                             <td th:utext="${longueur.cotation}">...</td>
-                            <td th:utext="${longueur.DateDeMiseAJour}">...</td>
+                            <td th:utext="${longueur.dateDeMiseAJour}">...</td>
                             <td>
                               <span th:if="${membre} == true">
                                 <form action="#" th:action="@{/voie/deleteLongueur}" th:object="${longueur}"

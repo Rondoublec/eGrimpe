@@ -112,7 +112,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:if="${#lists.isEmpty(listSpots)}" class="btn-warning">
+                        <tr th:if="${#lists.isEmpty(listSpots)}" class="alert alert-info">
                             <td colspan="4" align="center">Il n'y a aucun spot trouvé !!!</td>
                         </tr>
                         <tr th:each="spot : ${listSpots}">

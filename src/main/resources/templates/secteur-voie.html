@@ -84,7 +84,7 @@
                             <td th:utext="${voie.nom}">...</td>
                             <td th:utext="${voie.description}">...</td>
                             <td th:utext="${voie.cotation}">...</td>
-                            <td th:utext="${voie.DateDeMiseAJour}">...</td>
+                            <td th:utext="${voie.dateDeMiseAJour}">...</td>
                             <td>
                                 <a th:href="@{/voie/longueurs(idSpot=${spot.idSpot},idSecteur=${secteur.id},idVoie=${voie.id})}">
                                     <input type="hidden" th:value="${spot.idSpot}" name="Spot"/>

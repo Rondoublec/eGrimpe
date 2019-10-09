@@ -56,20 +56,6 @@ public class SpotController {
         return "recherche-spot-list";
     }
 
-/*
-    @GetMapping("/spotold")
-    public String afficheSpots(Model model) {
-        Collection<Spot> mySpotsList = spotServiceInterface.getAllSpots();
-        model.addAttribute("allSpots", mySpotsList);
-// à garder en commentaire        model.addAttribute("allSpots", (ArrayList<Spot>)spotServiceInterface.getAllSpots());
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String mailUser = auth.getName();
-        User user = userServiceInterface.findUserByEmail(mailUser);
-        model.addAttribute("membre", estMembre(user));
-        return "spot-list";
-    }
-*/
-
     @GetMapping("/spot/add")
     public String addSpot(Model model, HttpSession httpSession) {
         Spot addSpot = new Spot();

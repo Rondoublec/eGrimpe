@@ -1,169 +1,110 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
 	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
 	<link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
-	<title>eGrimpe - Gestion des topos</title>
-	<meta charset="UTF-8"/>
+	<script src="../static/js/myJS.js" th:src="@{/js/myJS.js}"></script>
+	<title>eGrimpe - Modification des informations d'un topo</title>
+	<meta charset="UTF-8">
 </head>
 
 <body>
 <!-- menu de l'application dans le header -->
-<div th:insert="mon-header.html"/>
+<div th:insert="mon-header.html"></div>
 
+<div class="container">
 
-<div class="row">
-	<div class="col-md-offset-3 col-md-6">
+	<div class="row" style="margin-top:100px;margin-bottom:10px;">
 
-		<!-- Save Alert Messages -->
-		<div th:if="${saveSpot eq 'unsuccess'}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<strong>Erreur !</strong> Spot non sauvegard&eacute;.
+		<div class="col-md-6">
+			<!-- Save Alert Messages -->
+			<div th:if="${saveTopo eq 'unsuccess'}">
+				<div class="alert alert-danger alert-dismissible" role="alert">
+					<strong>Erreur!</strong>saveTopo (topo-edit) - Topo non mis &agrave; jour.
+				</div>
+			</div>
+			<div th:if="${saveTopo eq 'success'}">
+				<div class="alert alert-success alert-dismissible" role="alert">
+					<strong>Success!</strong>saveTopo (topo-edit) - Topo mis &agrave; jour.
+				</div>
+			</div>
+			<!-- Edit Alert Message -->
+			<div th:if="${status eq 'notfound'}">
+				<div class="alert alert-danger alert-dismissible" role="alert">
+					<strong>Erreur !</strong>status (topo-edit) - Topo invalide.
+				</div>
+			</div>
+			<div th:if="${edit eq 'unsuccess'}">
+				<div class="alert alert-danger alert-dismissible" role="alert">
+					<strong>Erreur !</strong>edit (topo-edit) - Topo non r&eacute;cup&eacute;r&eacute;.
+				</div>
+			</div>
+			<div th:if="${edit eq 'success'}">
+				<div class="alert alert-success alert-dismissible" role="alert">
+					<strong>OK !</strong>edit (topo-edit) - Topo r&eacute;cup&eacute;r&eacute; avec succ&egrave;s.
+				</div>
 			</div>
 		</div>
-		<div th:if="${saveSpot eq 'success'}">
-			<div class="alert alert-success alert-dismissible" role="alert">
-				<strong>OK !</strong> Spot sauvegard&eacute;.
-			</div>
-		</div>
 
-		<!-- Deletion Alert Messages -->
-		<div th:if="${deletion eq 'unsuccess'}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<strong>Erreur !</strong> Spot non supprim&eacute;.
-			</div>
-		</div>
-		<div th:if="${deletion eq 'success'}">
-			<div class="alert alert-success alert-dismissible" role="alert">
-				<strong>OK !</strong> Spot supprim&eacute;.
-			</div>
-		</div>
+		<div class="col-md-offset-1 col-md-11">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<h3>
+							<span>Topo : </span><b th:utext="${topo.nomTopo}">La topo</b>&nbsp;
+							<span>/ propri&eacute;taire : </span><b th:text="${topo.proprietaireTopo.getEmail()}">Toto</b>&nbsp;
+							<span th:text="'(r&eacute;f&eacute;rence ' + ${topo.idTopo} + ')'">(r&eacute;f&eacute;rence 12)</span>
+							<a href="/topo" class="glyphicon glyphicon-share-alt">Retour</a>
+						</h3>
 
-		<!-- Edit Alert Message -->
-		<div th:if="${status eq 'notfound'}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<strong>Erreur !</strong> Spot invalide.
-			</div>
-		</div>
-		<div th:if="${edit eq 'unsuccess'}">
-			<div class="alert alert-danger alert-dismissible" role="alert">
-				<strong>Erreur !</strong> Spot non r&eacute;cup&eacute;r&eacute;.
-			</div>
-		</div>
-		<div th:if="${edit eq 'success'}">
-			<div class="alert alert-success alert-dismissible" role="alert">
-				<strong>OK !</strong> Spot r&eacute;cup&eacute;r&eacute; avec succ&egrave;s.
-			</div>
-		</div>
-		<div class="panel panel-success">
-			<div class="panel-heading">
-				<h3 class="panel-title">Ajouter un Spot</h3>
-			</div>
-			<div class="panel-body">
-				<form th:object="${spot}" th:action="@{/spot/save}" action="#" method="post">
-					<input type="text" th:field="*{nomSpot}" class="form-control" placeholder="nomSpot"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<div><th:if="${#fields.hasErrors('nomSpot')}" th:errors="*{nomSpot}"></div>
-					<input type="text" th:field="*{interet}" class="form-control" placeholder="interet"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{presentation}" class="form-control" placeholder="presentation"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{hauteurMin}" class="form-control" placeholder="hauteurMin"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{hauteurMax}" class="form-control" placeholder="hauteurMax"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{roche}" class="form-control" placeholder="roche"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{cotationMin}" class="form-control" placeholder="cotationMin"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{cotationMax}" class="form-control" placeholder="cotationMax"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{labelAmi}" class="form-control" placeholder="labelAmi"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{codePostalSpot}" class="form-control" placeholder="codePostalSpot"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{communeSpot}" class="form-control" placeholder="communeSpot"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{massif}" class="form-control" placeholder="massif"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{orientation}" class="form-control" placeholder="orientation"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{acces}" class="form-control" placeholder="acces"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="text" th:field="*{cartographie}" class="form-control" placeholder="cartographie"/>
-					<div style="clear:both;display:block;height:10px;"></div>
-					<input type="submit" class="btn btn-danger pull-right" value="Sauvegarder">
-				</form>
-			</div>
+					</h3>
+				</div>
 
-		</div>
-	</div>
-</div>
+				<section class="table-responsive">
+					<table class="table table-striped table-bordered table-responsive">
+						<tr>
+							<div class="col-md-12 alert-success" th:if="${topo.disponibiliteTopo == true}">
+								<b>Topo disponible</b></div>
+							<div class="col-md-12 alert-danger " th:if="${topo.disponibiliteTopo != true}">
+								<b>Topo non disponible</b></div>
+						</tr>
+						<tr>
+							<th>Description</th>
+							<td th:text="${topo.descriptionTopo}"></td>
+						</tr>
+						<tr>
+							<th>D&eacute;partement</th>
+							<td th:text="${topo.departementTopo}"></td>
+						</tr>
+						<tr>
+							<th>Code postal</th>
+							<td th:text="${topo.codePostalTopo}"></td>
+						</tr>
+						<tr>
+							<th>Auteur</th>
+							<td th:text="${topo.auteurTopo}"></td>
+						</tr>
+						<tr>
+							<th>Date d'emprunt</th>
+							<td th:text="${topo.dateEmpruntTopo}"></td>
+						</tr>
+						<tr>
+							<th>Date de retour</th>
+							<td th:text="${topo.dateFinEmpruntTopo}"></td>
+						</tr>
+						<tr>
+							<th>Emprunteur</th>
+							<tr>
+                        	<span th:if="${topo.emprunteurTopo} != null"}
+							  th:text="${topo.emprunteurTopo.getEmail()}"></span>
+							</tr>
+					</table>
+				</section>
 
-<div class="row"  style="margin-bottom:50px;">
-	<div class="col-md-offset-2 col-md-8">
-		<div class="panel panel-success">
-			<div class="panel-heading">
-				<h3 class="panel-title">Tous les spots</h3>
 			</div>
-			<div class="panel-body">
-				<table class="table table-bordered">
-					<thead>
-					<tr class="btn-success">
-						<th>idSpot</th>
-						<th>nomSpot</th>
-						<th>interet</th>
-						<th>dateDeMiseAJour</th>
-						<th>presentation</th>
-						<th>hauteurMin</th>
-						<th>hauteurMax</th>
-						<th>roche</th>
-						<th>cotationMin</th>
-						<th>cotationMax</th>
-						<th>labelAmi</th>
-						<th>codePostalSpot</th>
-						<th>communeSpot</th>
-						<th>massif</th>
-						<th>orientation</th>
-						<th>acces</th>
-						<th>cartographie</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr th:if="${#lists.isEmpty(allSpots)}" class="btn-warning">
-						<td colspan="4" align="center">Il n'y a aucun spot enregist&eacute; pour le moment !!!</td>
-					</tr>
-					<tr th:each="spot : ${allSpots}">
-						<td th:text="${spot.idSpot}"></td>
-						<td th:text="${spot.nomSpot}"></td>
-						<td th:text="${spot.interet}"></td>
-						<td th:text="${spot.dateDeMiseAJour}"></td>
-						<td th:text="${spot.presentation}"></td>
-						<td th:text="${spot.hauteurMin}"></td>
-						<td th:text="${spot.hauteurMax}"></td>
-						<td th:text="${spot.roche}"></td>
-						<td th:text="${spot.cotationMin}"></td>
-						<td th:text="${spot.cotationMax}"></td>
-						<td th:text="${spot.labelAmi}"></td>
-						<td th:text="${spot.codePostalSpot}"></td>
-						<td th:text="${spot.communeSpot}"></td>
-						<td th:text="${spot.massif}"></td>
-						<td th:text="${spot.orientation}"></td>
-						<td th:text="${spot.acces}"></td>
-						<td th:text="${spot.cartographie}"></td>
-						<td align="center">
-							<a th:href="@{/spot/edit/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-edit">Modifier</span></a> &nbsp; &nbsp;
-							<a th:href="@{/spot/delete/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-trash">Supprimer</span></a>
-						</td>
-					</tr>
-
-					</tbody>
-				</table>
-			</div>
-
 		</div>
 	</div>
+
 </div>
 
 <div th:insert="mon-footer.html"/>
