@@ -57,7 +57,7 @@ public class TopoServiceImpl implements TopoServiceInterface{
     }
 
     @Override
-    public List<Topo> chercheTopos(Topo topoCherche) {
+    public List<Topo> listeTopos(Topo topoCherche) {
         List<Topo> toposTrouve= new ArrayList<>();
         toposTrouve=topoRepositoryInterface.rechercheTopo(topoCherche);
         return toposTrouve;

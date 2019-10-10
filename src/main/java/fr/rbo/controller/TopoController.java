@@ -1,6 +1,5 @@
 package fr.rbo.controller;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -25,6 +24,7 @@ import javax.validation.Valid;
 public class TopoController {
 
     private static final Logger log = LoggerFactory.getLogger(TopoController.class);
+    private String referer = "topo";
 
     @Autowired
     TopoServiceInterface topoServiceInterface;
@@ -32,26 +32,48 @@ public class TopoController {
     private UserServiceInterface userServiceInterface;
 
     @GetMapping("/topo")
-    public String Topo(Model model,
-                       HttpSession httpSession) {
+    public String Topo(Model model, HttpSession httpSession) {
         log.debug("page rechercher les topos");
-        Topo topoCherche = new Topo();
-        Collection<Topo> listTopos = topoServiceInterface.getAllTopos();
-        String label = new String();
-        model.addAttribute("topoCherche", topoCherche);
+        Topo topoCriteres = new Topo();
+        List<Topo> listTopos= topoServiceInterface.listeTopos(topoCriteres);
+        model.addAttribute("topoCriteres", topoCriteres);
+        model.addAttribute("listTopos", listTopos);
+        majModel(model,null, httpSession);
+//        model.addAttribute("referer", "topo");
+        referer = "topo";
+        return "recherche-topo-list";
+    }
+
+    @GetMapping("/mestopos")
+    public String MesTopos(Model model, HttpSession httpSession) {
+        log.debug("page mes topos");
+        Topo topoCriteres = new Topo();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String nom = auth.getName();
+        User user = userServiceInterface.findUserByEmail(nom);
+        if (user != null) {
+            topoCriteres.setProprietaireTopo(user);
+        }
+        List<Topo> listTopos= topoServiceInterface.listeTopos(topoCriteres);
+        model.addAttribute("topoCriteres", topoCriteres);
         model.addAttribute("listTopos", listTopos);
         majModel(model,null,httpSession);
+//        model.addAttribute("referer", "mestopos");
+        referer = "mestopos";
         return "recherche-topo-list";
     }
 
     @PostMapping(value = "/topo/recherche")
-    public String TopoeRecherche (Model model, @ModelAttribute ("topoCherche") Topo topoCherche,
+    public String TopoeRecherche (Model model, @ModelAttribute ("topoCriteres") Topo topoCriteres,
+//                                  @ModelAttribute ("referer") String referer,
                                   HttpSession httpSession) {
         log.debug("lancement d'une recherche");
-        List<Topo> listTopos= topoServiceInterface.chercheTopos(topoCherche);
-        model.addAttribute("topoCherche", topoCherche);
+        List<Topo> listTopos= topoServiceInterface.listeTopos(topoCriteres);
+        model.addAttribute("topoCriteres", topoCriteres);
         model.addAttribute("listTopos", listTopos);
         majModel(model,null,httpSession);
+//        model.addAttribute("referer", "toporecherche");
+        referer = "toporecherche";
         return "recherche-topo-list";
     }
 
@@ -60,6 +82,7 @@ public class TopoController {
         Topo addTopo = new Topo();
         model.addAttribute("topo", addTopo);
         majModel(model,null,httpSession);
+//        model.addAttribute("referer", "topoadd");
         return "topo-form";
     }
 
@@ -105,6 +128,7 @@ public class TopoController {
     @PostMapping("/topo/save")
     public String saveTopo(Model model, @ModelAttribute("topo") @Valid Topo topo,
                            BindingResult bindingResult, HttpSession httpSession,
+//                           @ModelAttribute ("referer") String referer,
                            final RedirectAttributes redirectAttributes) {
 
         // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
@@ -118,8 +142,9 @@ public class TopoController {
         } else {
             redirectAttributes.addFlashAttribute("saveTopo", "unsuccess");
         }
-
-        return "redirect:/topo";
+        String page = "redirect:/" + referer;
+//        return "redirect:/topo";
+        return page;
     }
 
     private User recupUser(HttpSession httpSession){

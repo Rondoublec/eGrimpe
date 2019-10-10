@@ -58,7 +58,10 @@
     </div>
 
     <div class="col-md-12">
-        <form data-toggle="validator" role="form" th:object="${topoCherche}" th:action="@{/topo/recherche}" method="post">
+        <form data-toggle="validator" role="form" th:object="${topoCriteres}" th:action="@{/topo/recherche}" method="post">
+<!--
+            <input type="text" th:value="${referer}" name="referer"/>
+-->
             <table class="table table-striped">
                 <thead>
                 <tr class="btn-default">

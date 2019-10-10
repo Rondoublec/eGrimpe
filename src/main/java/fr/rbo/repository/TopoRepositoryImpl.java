@@ -29,15 +29,22 @@ public class TopoRepositoryImpl implements TopoRepositoryInterface {
         Root<Topo> topo = cq.from(Topo.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        if (!topoCherche.getNomTopo().equals("")) {
-            predicates.add(cb.like(topo.get("nomTopo"), "%" + topoCherche.getNomTopo() + "%"));
+        if (topoCherche.getNomTopo() != null){
+            if (!topoCherche.getNomTopo().equals("")) {
+                predicates.add(cb.like(topo.get("nomTopo"), "%" + topoCherche.getNomTopo() + "%"));
+            }
+            if (!topoCherche.getCodePostalTopo().equals("")) {
+                predicates.add(cb.like(topo.get("codePostalTopo"), "%" + topoCherche.getCodePostalTopo() + "%"));
+            }
+            if (topoCherche.isDisponibiliteTopo()) {
+                predicates.add(cb.equal(topo.get("disponibiliteTopo"), topoCherche.isDisponibiliteTopo()));
+            }
         }
-        if (!topoCherche.getCodePostalTopo().equals("")) {
-            predicates.add(cb.like(topo.get("codePostalTopo"), "%" + topoCherche.getCodePostalTopo() + "%"));
+
+        if (topoCherche.getProprietaireTopo() != null) {
+            predicates.add(cb.equal(topo.get("proprietaireTopo"), topoCherche.getProprietaireTopo()));
         }
-        if (topoCherche.isDisponibiliteTopo()) {
-            predicates.add(cb.equal(topo.get("disponibiliteTopo"), topoCherche.isDisponibiliteTopo()));
-        }
+
         if (!predicates.isEmpty()) {
             cq.where(predicates.toArray(new Predicate[0]));
         }

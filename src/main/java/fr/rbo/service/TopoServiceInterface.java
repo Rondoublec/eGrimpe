@@ -21,6 +21,6 @@ public interface TopoServiceInterface {
      * @param topoCherche objet qui contient les valeurs des critères de recherche
      * @return Liste des topos correspondant aux critères
      */
-    public List<Topo> chercheTopos(Topo topoCherche);
+    public List<Topo> listeTopos(Topo topoCherche);
 
 }

@@ -1,6 +1,5 @@
 package fr.rbo.controller;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -32,25 +31,23 @@ public class SpotController {
     private UserServiceInterface userServiceInterface;
 
     @GetMapping("/spot")
-    public String Spot(Model model,
-                        HttpSession httpSession) {
-        log.debug("page rechercher les spots");
-        Spot spotCherche = new Spot();
-        Collection<Spot> listSpots = spotServiceInterface.getAllSpots();
-        String label = new String();
-        model.addAttribute("spotCherche", spotCherche);
+    public String Spot(Model model, HttpSession httpSession) {
+        log.debug("recherche-spot-list : Liste des spots complète");
+        Spot spotCriteres = new Spot();
+        List<Spot> listSpots= spotServiceInterface.recupSpots(spotCriteres);
+        model.addAttribute("spotCriteres", spotCriteres);
         model.addAttribute("listSpots", listSpots);
         majModel(model,null,httpSession);
         return "recherche-spot-list";
     }
 
     @PostMapping(value = "/spot/recherche")
-    public String SpoteRecherche (Model model, @ModelAttribute ("spotCherche") Spot spotCherche,
+    public String SpoteRecherche (Model model, @ModelAttribute ("spotCriteres") Spot spotCriteres,
                                           HttpSession httpSession) {
-        log.debug("lancement d'une recherche");
-        log.debug("labelAmi " + spotCherche.isLabelAmi());
-        List<Spot> listSpots= spotServiceInterface.chercheSpots(spotCherche);
-        model.addAttribute("spotCherche", spotCherche);
+        log.debug("recherche-spot-list : Liste des spot/recherche");
+        log.debug("labelAmi " + spotCriteres.isLabelAmi());
+        List<Spot> listSpots= spotServiceInterface.recupSpots(spotCriteres);
+        model.addAttribute("spotCriteres", spotCriteres);
         model.addAttribute("listSpots", listSpots);
         majModel(model,null,httpSession);
         return "recherche-spot-list";

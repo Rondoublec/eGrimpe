@@ -29,18 +29,21 @@ public class SpotRepositoryImpl implements SpotRepositoryInterface {
         Root<Spot> spot = cq.from(Spot.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        if (!spotCherche.getNomSpot().equals("")) {
-            predicates.add(cb.like(spot.get("nomSpot"), "%" + spotCherche.getNomSpot() + "%"));
+        if (spotCherche.getNomSpot() != null) {
+            if (!spotCherche.getNomSpot().equals("")) {
+                predicates.add(cb.like(spot.get("nomSpot"), "%" + spotCherche.getNomSpot() + "%"));
+            }
+            if (!spotCherche.getCodePostalSpot().equals("")) {
+                predicates.add(cb.like(spot.get("codePostalSpot"), "%" + spotCherche.getCodePostalSpot() + "%"));
+            }
+            if (!spotCherche.getCommuneSpot().equals("")) {
+                predicates.add(cb.like(spot.get("communeSpot"), "%" + spotCherche.getCommuneSpot() + "%"));
+            }
+            if (spotCherche.isLabelAmi()) {
+                predicates.add(cb.equal(spot.get("labelAmi"), spotCherche.isLabelAmi()));
+            }
         }
-        if (!spotCherche.getCodePostalSpot().equals("")) {
-            predicates.add(cb.like(spot.get("codePostalSpot"), "%" + spotCherche.getCodePostalSpot() + "%"));
-        }
-        if (!spotCherche.getCommuneSpot().equals("")) {
-            predicates.add(cb.like(spot.get("communeSpot"), "%" + spotCherche.getCommuneSpot() + "%"));
-        }
-        if (spotCherche.isLabelAmi()) {
-            predicates.add(cb.equal(spot.get("labelAmi"), spotCherche.isLabelAmi()));
-        }
+
         if (!predicates.isEmpty()) {
             cq.where(predicates.toArray(new Predicate[0]));
         }

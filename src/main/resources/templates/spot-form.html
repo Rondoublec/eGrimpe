@@ -72,10 +72,10 @@
                         <div th:if="${membre == true}">
                             <div class="col-md-offset-6 col-md-6">
                                 <select type="select" class="form-control" size="1"  th:field="*{labelAmi}">
-                                    <option th:value="'false'" th:text="Non_Labellis&eacute;_Ami_de_l_escalade">
-                                        Non_Labellis&eacute;_Ami_de_l_escalade</option>
-                                    <option th:value="'true'"  th:text="Labellisation_Ami_de_l_escalade">
-                                        Labellisation_Ami_de_l_escalade</option>
+                                    <option th:value="'false'" th:utext="'Non Labellisé Ami de l\'escalade'">
+                                        Non Labellisé Ami de l'escalade</option>
+                                    <option th:value="'true'"  th:utext="'Labellisation Ami de l\'escalade'">
+                                        Labellisation Ami de l'escalade</option>
                                 </select>
                             </div>
                             <div style="clear:both;display:block;height:10px;"></div>

@@ -110,6 +110,6 @@ public interface SpotServiceInterface {
      * @param spotCherche objet qui contient les valeurs des critères de recherche
      * @return Liste des spots correspondant aux critères
      */
-    public List<Spot> chercheSpots(Spot spotCherche);
+    public List<Spot> recupSpots(Spot spotCherche);
 
 }
