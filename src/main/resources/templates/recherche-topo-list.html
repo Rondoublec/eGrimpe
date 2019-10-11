@@ -59,9 +59,6 @@
 
     <div class="col-md-12">
         <form data-toggle="validator" role="form" th:object="${topoCriteres}" th:action="@{/topo/recherche}" method="post">
-<!--
-            <input type="text" th:value="${referer}" name="referer"/>
--->
             <table class="table table-striped">
                 <thead>
                 <tr class="btn-default">
@@ -89,8 +86,10 @@
                 <h3 class="panel-title">Liste des topos</h3>
             </div>
             <div class="panel-body">
-
-                <a th:href="@{/topo/add}"><span class="btn btn-primary">Créer</span></a> &nbsp; &nbsp;
+<!--
+                <a th:href="@{/topo/add}"><span class="btn btn-primary">Créer</span></a>
+-->
+                <a sec:authorize="isAuthenticated()" th:href="@{/topo/add}"><span class="btn btn-primary">Créer</span></a>
 
                 <table class="table table-striped">
                     <thead>
@@ -122,11 +121,13 @@
                         </td>
                         <td align="center">
                             <a th:href="@{/topo/affiche/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-eye-open">Afficher</span></a> &nbsp; &nbsp;
-                            <a th:href="@{/topo/edit/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>
+                            <span th:if="${topo.proprietaireTopo.getEmail()} == ${user.getEmail()}">
+                                <a th:href="@{/topo/edit/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>
+                            </span>
                             <span th:if="${membre} == true">
                                     <a th:href="@{/topo/delete/{id}(id=${topo.idTopo})}"
                                        onClick="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?');"><span class="glyphicon glyphicon-trash">Supprimer</span></a>
-                                </span>
+                            </span>
                         </td>
                     </tr>
 

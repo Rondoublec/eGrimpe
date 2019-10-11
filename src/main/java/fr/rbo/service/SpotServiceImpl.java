@@ -71,9 +71,9 @@ public class SpotServiceImpl implements SpotServiceInterface{
         return spotRepository.getOne(spotId);
     }
 
-    public void ajoutCommentaire(Commentaire commentaire,  Long spotId, String email) {
+    public void ajoutCommentaire(Commentaire commentaire,  Long spotId, String mailUser) {
         Spot spot = spotServiceInterface.findSpot(spotId);
-        User user = userServiceInterface.findUserByEmail(email);
+        User user = userServiceInterface.findUserByEmail(mailUser);
         commentaire.setUserCommentaire(user);
         commentaire.setSpot(spot);
         commentaire.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
@@ -84,11 +84,11 @@ public class SpotServiceImpl implements SpotServiceInterface{
         spotRepository.save(spot);
     }
     @Override
-    public void modifCommentaire(Commentaire commentaire, Long spotId, String email) {
+    public void modifCommentaire(Commentaire commentaire, Long spotId, String mailUser) {
         Spot spot = spotServiceInterface.findSpot(spotId);
         Commentaire commModifie = commentaireRepository.findById(commentaire.getId());
         commModifie.setMessage(commentaire.getMessage());
-        commModifie.setUserCommentaire(userServiceInterface.findUserByEmail(email));
+        commModifie.setUserCommentaire(userServiceInterface.findUserByEmail(mailUser));
         commModifie.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
         commentaireRepository.save(commModifie);
         spotRepository.save(spot);

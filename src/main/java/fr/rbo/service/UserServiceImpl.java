@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserServiceInterface, UserDetailsService
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	
-	public User findUserByEmail(String email) {
-		return userRepository.findByEmail(email);
+	public User findUserByEmail(String mailUser) {
+		return userRepository.findByEmail(mailUser);
 	}
 
 	
@@ -67,8 +67,8 @@ public class UserServiceImpl implements UserServiceInterface, UserDetailsService
 	
 	
 	@Transactional
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = userRepository.findByEmail(userName);
+	public UserDetails loadUserByUsername(String mailUser) throws UsernameNotFoundException {
+		User user = userRepository.findByEmail(mailUser);
 		List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
 		return buildUserForAuthentication(user, authorities);
 	}

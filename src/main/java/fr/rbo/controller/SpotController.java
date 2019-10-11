@@ -30,6 +30,11 @@ public class SpotController {
     @Autowired
     private UserServiceInterface userServiceInterface;
 
+    @RequestMapping(value={"/adm1n", "/adm1n/test"}, method = RequestMethod.GET)
+    public String Test(Model model, HttpSession httpSession) {
+        return "test";
+    }
+
     @GetMapping("/spot")
     public String Spot(Model model, HttpSession httpSession) {
         log.debug("recherche-spot-list : Liste des spots complète");
@@ -101,7 +106,6 @@ public class SpotController {
 
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String mailUser = auth.getName();
-
             User user = userServiceInterface.findUserByEmail(mailUser);
             if (user != null) {
                 model.addAttribute("user", user);
@@ -382,8 +386,8 @@ public class SpotController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        String nom = auth.getName();
-        User user = userServiceInterface.findUserByEmail(nom);
+        String mailUser = auth.getName();
+        User user = userServiceInterface.findUserByEmail(mailUser);
 
         if (user != null) {
             httpSession.setAttribute("utilisateurSession", user);

@@ -34,14 +34,40 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
+
 		http.
 			authorizeRequests()
-				.antMatchers("/**").permitAll()
-				.antMatchers("/").permitAll()
+// gestion des spots
+				.antMatchers("/spot/add").authenticated()
+				.antMatchers("/spot/delete/**").authenticated()
+				.antMatchers("/spot/edit/**").authenticated()
+				.antMatchers("/spot/addComment").authenticated()
+				.antMatchers("/spot/updateComment").authenticated()
+				.antMatchers("/spot/deleteComment").authenticated()
+				.antMatchers("/spot/addSecteur").authenticated()
+				.antMatchers("/spot/deleteSecteur").authenticated()
+				.antMatchers("/secteur/addVoie").authenticated()
+				.antMatchers("/secteur/deleteVoie").authenticated()
+				.antMatchers("/voie/addLongueur").authenticated()
+				.antMatchers("/voie/deleteLongueur").authenticated()
+				.antMatchers("/spot/save").authenticated()
+// gestion des toposs
+				.antMatchers("/topo/add").authenticated()
+				.antMatchers("/topo/delete/**").authenticated()
+				.antMatchers("/topo/edit/**").authenticated()
+				.antMatchers("/topo/save").authenticated()
+				.antMatchers("/mestopos").authenticated()
+
+				.antMatchers("/adm1n/**").authenticated()
+				.antMatchers("/adm1n/**").authenticated()
+
+//				.antMatchers("/**").permitAll()
+//				.antMatchers("/").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/registration").permitAll()
-				.antMatchers("/admin/**").hasAuthority("ADMIN").anyRequest()
+
+				.antMatchers("/adm1n**","/adm1n/**").hasAuthority("ADMIN").anyRequest()
+
 				.authenticated().and().csrf().disable().formLogin()
 				.loginPage("/login").failureUrl("/login?error=true")
 				.defaultSuccessUrl("/home")

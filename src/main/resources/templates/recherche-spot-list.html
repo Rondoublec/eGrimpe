@@ -96,7 +96,10 @@
                 </div>
                 <div class="panel-body">
 
+<!--
                     <a th:href="@{/spot/add}"><span class="btn btn-primary">Créer</span></a> &nbsp; &nbsp;
+-->
+                    <a sec:authorize="isAuthenticated()" th:href="@{/topo/add}"><span class="btn btn-primary">Créer</span></a>
 
                     <table class="table table-striped">
                         <thead>
@@ -125,7 +128,7 @@
                             <td th:text="${spot.labelAmi}"></td>
                             <td align="center">
                                 <a th:href="@{/spot/secteur/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-eye-open">Afficher</span></a> &nbsp; &nbsp;
-                                <a th:href="@{/spot/edit/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>
+                                <a sec:authorize="isAuthenticated()" th:href="@{/spot/edit/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>
                                 <span th:if="${membre} == true">
                                     <a th:href="@{/spot/delete/{id}(id=${spot.idSpot})}"
                                        onClick="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?');"><span class="glyphicon glyphicon-trash">Supprimer</span></a>

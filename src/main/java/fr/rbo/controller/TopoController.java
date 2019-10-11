@@ -39,7 +39,6 @@ public class TopoController {
         model.addAttribute("topoCriteres", topoCriteres);
         model.addAttribute("listTopos", listTopos);
         majModel(model,null, httpSession);
-//        model.addAttribute("referer", "topo");
         referer = "topo";
         return "recherche-topo-list";
     }
@@ -49,8 +48,8 @@ public class TopoController {
         log.debug("page mes topos");
         Topo topoCriteres = new Topo();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String nom = auth.getName();
-        User user = userServiceInterface.findUserByEmail(nom);
+        String mailUser = auth.getName();
+        User user = userServiceInterface.findUserByEmail(mailUser);
         if (user != null) {
             topoCriteres.setProprietaireTopo(user);
         }
@@ -58,22 +57,24 @@ public class TopoController {
         model.addAttribute("topoCriteres", topoCriteres);
         model.addAttribute("listTopos", listTopos);
         majModel(model,null,httpSession);
-//        model.addAttribute("referer", "mestopos");
         referer = "mestopos";
         return "recherche-topo-list";
     }
 
     @PostMapping(value = "/topo/recherche")
     public String TopoeRecherche (Model model, @ModelAttribute ("topoCriteres") Topo topoCriteres,
-//                                  @ModelAttribute ("referer") String referer,
                                   HttpSession httpSession) {
         log.debug("lancement d'une recherche");
+        if (referer == "mestopos") {
+            User user = recupUser(httpSession);
+            if (user != null) {
+                topoCriteres.setProprietaireTopo(user);
+            }
+        }
         List<Topo> listTopos= topoServiceInterface.listeTopos(topoCriteres);
         model.addAttribute("topoCriteres", topoCriteres);
         model.addAttribute("listTopos", listTopos);
         majModel(model,null,httpSession);
-//        model.addAttribute("referer", "toporecherche");
-        referer = "toporecherche";
         return "recherche-topo-list";
     }
 
@@ -82,7 +83,6 @@ public class TopoController {
         Topo addTopo = new Topo();
         model.addAttribute("topo", addTopo);
         majModel(model,null,httpSession);
-//        model.addAttribute("referer", "topoadd");
         return "topo-form";
     }
 
@@ -128,7 +128,6 @@ public class TopoController {
     @PostMapping("/topo/save")
     public String saveTopo(Model model, @ModelAttribute("topo") @Valid Topo topo,
                            BindingResult bindingResult, HttpSession httpSession,
-//                           @ModelAttribute ("referer") String referer,
                            final RedirectAttributes redirectAttributes) {
 
         // Si erreur de validation par rapport aux annotations de validation de l'objet au niveau de sa declaration
@@ -143,7 +142,6 @@ public class TopoController {
             redirectAttributes.addFlashAttribute("saveTopo", "unsuccess");
         }
         String page = "redirect:/" + referer;
-//        return "redirect:/topo";
         return page;
     }
 
@@ -158,8 +156,8 @@ public class TopoController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        String nom = auth.getName();
-        User user = userServiceInterface.findUserByEmail(nom);
+        String mailUser = auth.getName();
+        User user = userServiceInterface.findUserByEmail(mailUser);
 
         if (user != null) {
             httpSession.setAttribute("utilisateurSession", user);
