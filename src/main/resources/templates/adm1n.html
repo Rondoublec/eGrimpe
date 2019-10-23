@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" href="../static/css/myStyle.css" th:href="@{/css/myStyle.css}" />
+	<title>eGrimpe - Admin</title>
+	<meta charset="UTF-8"/>
+</head>
+
+<body>
+<!-- menu de l'application dans le header -->
+<div th:insert="mon-header.html"/>
+
+<div class="d-flex p-2 bd-highlight" style="margin-top:50px;" id="elcapitain">
+	<div class="container">
+	<div class="row" style="margin-top:100px;margin-bottom:10px;">
+
+		<div class="col-md-offset-1 col-md-11">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Administration des utilisateurs
+					</h3>
+				</div>
+
+					<table class="table table-striped table-bordered table-responsive">
+						<span th:if="${user.getEmail() != null}">
+							<tr>
+								<th>id</th>
+								<td th:text="${user.getId()}">id</td>
+							</tr>
+							<tr>
+								<th>name</th>
+								<td th:text="${user.getName()}">name</td>
+							</tr>
+							<tr>
+								<th>lastName</th>
+								<td th:text="${user.getLastName()}">lastName</td>
+							</tr>
+							<tr>
+								<th>email</th>
+								<td th:text="${user.getEmail()}">email</td>
+							</tr>
+							<tr th:each="role : ${roles}">
+								<th>roles</th>
+								<td th:text="${role.role}">role</td>
+<!--
+								<td th:text="${user.getRoles()}"></td>
+-->
+							</tr>
+							<tr>
+								<th>isActive</th>
+								<td th:text="${user.isActive()}">true</td>
+							</tr>
+							<tr>
+								<th>membre assoc.</th>
+								<td th:utext="${membre}">false</td>
+							</tr>
+						</span>
+					</table>
+
+			</div>
+		</div>
+
+
+	</div>
+	</div>
+</div>
+
+<div th:insert="mon-footer.html"/>
+
+</body>
+</html>

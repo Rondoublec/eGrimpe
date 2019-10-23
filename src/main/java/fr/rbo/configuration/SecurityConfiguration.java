@@ -51,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/voie/addLongueur").authenticated()
 				.antMatchers("/voie/deleteLongueur").authenticated()
 				.antMatchers("/spot/save").authenticated()
-// gestion des toposs
+// gestion des topos
 				.antMatchers("/topo/add").authenticated()
 				.antMatchers("/topo/delete/**").authenticated()
 				.antMatchers("/topo/edit/**").authenticated()
@@ -59,14 +59,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/mestopos").authenticated()
 
 				.antMatchers("/adm1n/**").authenticated()
-				.antMatchers("/adm1n/**").authenticated()
 
-//				.antMatchers("/**").permitAll()
-//				.antMatchers("/").permitAll()
+				.antMatchers("/adm1n**","/adm1n/**").hasAuthority("ADMIN")
+
+				.antMatchers("/**").permitAll()
+				.antMatchers("/").permitAll()
 				.antMatchers("/login").permitAll()
-				.antMatchers("/registration").permitAll()
-
-				.antMatchers("/adm1n**","/adm1n/**").hasAuthority("ADMIN").anyRequest()
+				.antMatchers("/registration").permitAll().anyRequest()
 
 				.authenticated().and().csrf().disable().formLogin()
 				.loginPage("/login").failureUrl("/login?error=true")

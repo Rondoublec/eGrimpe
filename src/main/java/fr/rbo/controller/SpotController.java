@@ -30,9 +30,12 @@ public class SpotController {
     @Autowired
     private UserServiceInterface userServiceInterface;
 
-    @RequestMapping(value={"/adm1n", "/adm1n/test"}, method = RequestMethod.GET)
-    public String Test(Model model, HttpSession httpSession) {
-        return "test";
+    @GetMapping({"/adm1n", "/adm1n/test"})
+    public String Admin(Model model, HttpSession httpSession) {
+        log.debug("Page Adm1n");
+        majModel(model,null,httpSession);
+
+        return "adm1n";
     }
 
     @GetMapping("/spot")
