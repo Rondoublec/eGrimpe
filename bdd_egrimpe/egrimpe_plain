@@ -1,0 +1,651 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 11.2
+-- Dumped by pg_dump version 11.2
+
+-- Started on 2019-11-07 19:15:53
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 200 (class 1259 OID 62178)
+-- Name: adresse; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.adresse (
+    adresse_id integer NOT NULL,
+    adresse1 character varying(50),
+    code_postal character varying(5),
+    complement_adresse character varying(50),
+    numero character varying(10),
+    pays character varying(25),
+    type_de_voie character varying(20),
+    ville character varying(50)
+);
+
+
+ALTER TABLE public.adresse OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 62788)
+-- Name: commentaire; Type: TABLE; Schema: public; Owner: adm_egrimpe
+--
+
+CREATE TABLE public.commentaire (
+    id integer NOT NULL,
+    date_de_miseajour timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    message character varying(120) NOT NULL,
+    site_id_spot bigint,
+    user_commentaire_id bigint,
+    spot_id_spot bigint
+);
+
+
+ALTER TABLE public.commentaire OWNER TO adm_egrimpe;
+
+--
+-- TOC entry 196 (class 1259 OID 62078)
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+
+--
+-- TOC entry 202 (class 1259 OID 62430)
+-- Name: longueur; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.longueur (
+    id integer NOT NULL,
+    cotation character varying(2),
+    date_de_miseajour timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    description character varying(200),
+    nom character varying(40),
+    voie_id integer
+);
+
+
+ALTER TABLE public.longueur OWNER TO postgres;
+
+--
+-- TOC entry 197 (class 1259 OID 62098)
+-- Name: role; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.role (
+    role_id integer NOT NULL,
+    role character varying(255)
+);
+
+
+ALTER TABLE public.role OWNER TO postgres;
+
+--
+-- TOC entry 203 (class 1259 OID 62436)
+-- Name: secteur; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.secteur (
+    id integer NOT NULL,
+    date_de_miseajour timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    description character varying(200),
+    nom character varying(40) NOT NULL,
+    spot_id_spot bigint
+);
+
+
+ALTER TABLE public.secteur OWNER TO postgres;
+
+--
+-- TOC entry 201 (class 1259 OID 62213)
+-- Name: spot; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.spot (
+    id_spot bigint NOT NULL,
+    acces character varying(50),
+    cartographie character varying(50),
+    code_postal_spot character varying(5),
+    commune_spot character varying(50),
+    cotation_max character varying(2),
+    cotation_min character varying(2),
+    date_de_miseajour timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    hauteur_max integer,
+    hauteur_min integer,
+    interet integer,
+    label_ami boolean,
+    massif character varying(50),
+    nom_spot character varying(40) NOT NULL,
+    orientation character varying(20),
+    presentation character varying(500),
+    roche character varying(50)
+);
+
+
+ALTER TABLE public.spot OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 71018)
+-- Name: topo; Type: TABLE; Schema: public; Owner: adm_egrimpe
+--
+
+CREATE TABLE public.topo (
+    id_topo bigint NOT NULL,
+    auteur_topo character varying(40),
+    code_postal_topo character varying(5) NOT NULL,
+    date_emprunt_topo timestamp without time zone,
+    date_fin_emprunt_topo timestamp without time zone,
+    departement_topo character varying(3) NOT NULL,
+    description_topo character varying(500),
+    disponibilite_topo boolean NOT NULL,
+    nom_topo character varying(40) NOT NULL,
+    emprunteur_topo bigint,
+    proprietaire_topo bigint
+);
+
+
+ALTER TABLE public.topo OWNER TO adm_egrimpe;
+
+--
+-- TOC entry 206 (class 1259 OID 71016)
+-- Name: topo_id_topo_seq; Type: SEQUENCE; Schema: public; Owner: adm_egrimpe
+--
+
+CREATE SEQUENCE public.topo_id_topo_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.topo_id_topo_seq OWNER TO adm_egrimpe;
+
+--
+-- TOC entry 2900 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: topo_id_topo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER SEQUENCE public.topo_id_topo_seq OWNED BY public.topo.id_topo;
+
+
+--
+-- TOC entry 198 (class 1259 OID 62103)
+-- Name: user_role; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_role (
+    user_id bigint NOT NULL,
+    role_id integer NOT NULL
+);
+
+
+ALTER TABLE public.user_role OWNER TO postgres;
+
+--
+-- TOC entry 199 (class 1259 OID 62108)
+-- Name: utilisateur; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.utilisateur (
+    id bigint NOT NULL,
+    active boolean NOT NULL,
+    email character varying(255) NOT NULL,
+    last_name character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    password character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.utilisateur OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 62442)
+-- Name: voie; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.voie (
+    id integer NOT NULL,
+    cotation character varying(2) NOT NULL,
+    date_de_miseajour timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    description character varying(200),
+    nom character varying(40) NOT NULL,
+    secteur_id integer
+);
+
+
+ALTER TABLE public.voie OWNER TO postgres;
+
+--
+-- TOC entry 2731 (class 2604 OID 71021)
+-- Name: topo id_topo; Type: DEFAULT; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER TABLE ONLY public.topo ALTER COLUMN id_topo SET DEFAULT nextval('public.topo_id_topo_seq'::regclass);
+
+
+--
+-- TOC entry 2887 (class 0 OID 62178)
+-- Dependencies: 200
+-- Data for Name: adresse; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.adresse (adresse_id, adresse1, code_postal, complement_adresse, numero, pays, type_de_voie, ville) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2892 (class 0 OID 62788)
+-- Dependencies: 205
+-- Data for Name: commentaire; Type: TABLE DATA; Schema: public; Owner: adm_egrimpe
+--
+
+COPY public.commentaire (id, date_de_miseajour, message, site_id_spot, user_commentaire_id, spot_id_spot) FROM stdin;
+85	2019-08-21 10:06:07.711	ce site est vraiment trop génial, mais les commentaires c'est moyen 70 site est vraiment trop gén100, mais les commen120	\N	64	49
+86	2019-08-21 10:06:41.303	ce site est vraiment trop génial, mais les commentaires c'est moyen 70 site est vraiment trop gén100, mais les commen12?	\N	64	49
+87	2019-08-21 10:19:48.451	ce site est vraiment trop génial, mais les commentaires c'est moyen 70 site est vraiment trop gén100, mais les commen12a	\N	64	49
+93	2019-08-22 15:19:47.017	Super site	\N	64	49
+94	2019-08-22 15:49:41.571	ce site est vraiment trop génial, mais les commentaires c'est moyen	\N	37	49
+95	2019-08-22 15:50:16.204	ce site est vraiment trop génial, mais les commentaires c'est moyen	\N	37	49
+105	2019-08-22 16:34:36.136	quoi ! je suis null ?	\N	37	49
+106	2019-08-22 16:35:39.652	Super site	\N	37	49
+102	2019-08-22 16:33:19.856	mkmkmkmk	\N	37	49
+110	2019-08-22 16:41:31.799	ca doit fonctionner	\N	37	49
+116	2019-08-23 09:32:16.797	ce site est vraiment trop génial, mais les commentaires c'est moyen	\N	37	55
+118	2019-08-23 11:04:20.739	quoi ! je suis null ?	\N	64	55
+121	2019-08-23 11:10:20.345	Super site	\N	119	55
+206	2019-10-03 13:59:09.16	muLorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse auctor, arcu at ultricies efficitur, augue ex 120	\N	37	61
+124	2019-09-05 10:09:33.297	Bonjour je cherche un partenaire pour cette ascension	\N	64	55
+214	2019-10-10 10:43:53.98	test	\N	64	55
+88	2019-09-05 13:34:58.701	ce site est vraiment trop génial, mais les commentaires c'est moyen mofif	\N	37	55
+96	2019-09-05 15:00:20.132	un vrai commentaire modifié par a	\N	37	49
+135	2019-09-05 15:20:41.29	<u>Ceci</u><BR>\r\n<i>Est un commentaire multi lignes</i><BR>	\N	37	47
+136	2019-09-05 15:21:46.086	Autre commentaire<BR><b><i>	\N	64	47
+138	2019-09-05 16:48:29.471	<s>C'est une maison</s> <u>bleu</u>. <i>Adosser à la colline</i>	\N	37	47
+169	2019-09-12 19:06:01.268	Vraiment très chouette et plus encore	\N	37	168
+\.
+
+
+--
+-- TOC entry 2889 (class 0 OID 62430)
+-- Dependencies: 202
+-- Data for Name: longueur; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.longueur (id, cotation, date_de_miseajour, description, nom, voie_id) FROM stdin;
+185	9z	2019-09-27 10:57:53.065	c'est ma 1ere longueur, la longueur la plus longue	Longueur 01	176
+186	2b	2019-09-27 10:59:20.046	c'est une deuxieme longueur	Longueur 02	177
+192	1a	2019-09-27 14:53:13.01	la deuxième est plus courte	Longueur 02	176
+200	9z	2019-10-02 17:35:22.487	fatale	du crime	199
+203	3a	2019-10-03 13:15:05.514	c'est le début, il faut s'échauffer	Courte	202
+204	4c	2019-10-03 13:15:37.86	On peut commencer à y aller	Moyenne	202
+209	1a	2019-10-03 14:07:53.421	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ultricies tincidunt auctor. Cras nisi neque, aliquam nec eros ut, euismod suscipit dui. Aenean auctor mauris id iaculis tristique posuere.	terre	208
+210	2b	2019-10-03 14:08:19.003	Luismod suscipit dui. Aenean auctor mauris id iaculis tristique posuere.	mer	208
+211	3c	2019-10-03 14:08:43.392	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ultricies tincidunt auctor. Cras nisi neque, aliquam nec eros	air	208
+213	2b	2019-10-08 08:48:51.737	a plat	daller se coucher	212
+\.
+
+
+--
+-- TOC entry 2884 (class 0 OID 62098)
+-- Dependencies: 197
+-- Data for Name: role; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.role (role_id, role) FROM stdin;
+2	ADMIN
+4	ADMIN
+65	ADMIN
+67	ADMIN
+69	ADMIN
+71	ADMIN
+73	ADMIN
+90	ADMIN
+38	MEMBRE
+113	ADMIN
+115	USER
+120	USER
+\.
+
+
+--
+-- TOC entry 2890 (class 0 OID 62436)
+-- Dependencies: 203
+-- Data for Name: secteur; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.secteur (id, date_de_miseajour, description, nom, spot_id_spot) FROM stdin;
+140	\N	mon secteur	BouBou	55
+141	2019-09-12 14:43:16.491	deux	voie 02	55
+142	2019-09-12 15:25:37.317	mkfmùqskdfksfkqskfùs	Secteur 03	55
+144	2019-09-12 15:40:39.293	44444444	secteur 04	55
+145	2019-09-12 15:42:40.819	moins de 200	05	55
+146	2019-09-12 16:21:50.442	qqqq	qqqq	55
+170	2019-09-12 19:03:14.251	premier niveau facile, à faire en basket !	Secteur tennis	168
+172	2019-09-12 19:28:08.229	La piste aux étoiles	Deuxième secteur	168
+173	2019-09-20 16:20:16.64	il est très bien	Secteur 01	47
+174	2019-09-20 16:20:57.502	il est pas mal non plus	Secteur 02	47
+198	2019-10-02 17:34:31.426	le 3 eme secteur	Secteur 03	47
+201	2019-10-03 13:13:45.33	Pour prendre son temps et se sustenter entre amis	Secteur du repas	49
+207	2019-10-03 14:01:57.314	Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un 	Le pontet	61
+\.
+
+
+--
+-- TOC entry 2888 (class 0 OID 62213)
+-- Dependencies: 201
+-- Data for Name: spot; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.spot (id_spot, acces, cartographie, code_postal_spot, commune_spot, cotation_max, cotation_min, date_de_miseajour, hauteur_max, hauteur_min, interet, label_ami, massif, nom_spot, orientation, presentation, roche) FROM stdin;
+55	à pieds, à vélo, en voiture	en cours ...	59700	Marcq-en-Baroeul	3c	1a	2019-10-07 17:26:29.742	150	50	3	t	Des Maures	Mon Spot Rouge	Sud	Trop Bien x	Pierre
+168	Par la route		30000	Nimes	5c	2b	2019-10-09 17:55:38.085	100	20	3	t	mont du plan	Mon spot 5	Nord	ceci est un spot 5	calcaire
+49	en ballon	nadafff	59000	Lille	9z	1a	2019-10-03 13:17:28.551	800	100	10	f	Mont decat	Mon spot 2	Nord	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse auctor, arcu at ultricies efficitur, augue ex mollis nisi, sit amet tincidunt velit ex sed velit. Cras a est tincidunt massa nunc.	Roche très dure
+47	On y vient à pieds.	non	99000	labas	1c	1a	2019-10-07 14:26:10.11	100	1	5	f	or	San Fransisco	normal	C'est une maison bleue. Adosser à la colline.	voisine
+61			84000	Avignon	9c	1a	2019-10-07 14:26:31.019	100	10	3	t	Luberon	Mon spot	Sud	C'est chez moi, mais ça peut être aussi chez toi\r\nAllez ! Viens.\r\nJe t’emmène au vent.\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse auctor, arcu at ultricies efficitur, augue 200	Calcaire
+\.
+
+
+--
+-- TOC entry 2894 (class 0 OID 71018)
+-- Dependencies: 207
+-- Data for Name: topo; Type: TABLE DATA; Schema: public; Owner: adm_egrimpe
+--
+
+COPY public.topo (id_topo, auteur_topo, code_postal_topo, date_emprunt_topo, date_fin_emprunt_topo, departement_topo, description_topo, disponibilite_topo, nom_topo, emprunteur_topo, proprietaire_topo) FROM stdin;
+4	bibi	30100	\N	\N	30	ma topo	f	Topo de ABC	\N	64
+5		03100	\N	\N	03	03	f	topo 03	\N	64
+6		04100	\N	\N	04	D04	f	Topo 04	\N	64
+1	toto	30100	\N	\N	30	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sagittis leo nec eros imperdiet, vitae lacinia nisi accumsan. Aenean consectetur est eu sapien interdum, non consequat nulla luctus. Nullam non massa enim. Sed viverra est nec magna rhoncus, nec tempor mi lobortis. Vivamus tristique placerat nibh, non tristique augue tristique et. In lacinia, quam eget tempor bibendum, nunc massa elementum velit, ut scelerisque metus metus non nunc. Vivamus vel libero non leo dapibus interdum sed a	f	Topo 01	\N	37
+10	qaaa	q	\N	\N	q	q	f	topo q	\N	114
+3	Durand	84200	\N	\N	84	2eme topo - récupérée par a@b.c	f	TOPO 02	\N	64
+\.
+
+
+--
+-- TOC entry 2885 (class 0 OID 62103)
+-- Dependencies: 198
+-- Data for Name: user_role; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_role (user_id, role_id) FROM stdin;
+1	2
+3	4
+37	38
+64	65
+66	67
+68	69
+70	71
+72	73
+89	90
+112	113
+114	115
+119	120
+\.
+
+
+--
+-- TOC entry 2886 (class 0 OID 62108)
+-- Dependencies: 199
+-- Data for Name: utilisateur; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.utilisateur (id, active, email, last_name, name, password) FROM stdin;
+1	t	a.b@free.fr	b	a	$2a$10$iKbl5zoCx9uCLtmjswK8dexUsOoQ5iEoJna8xrvoBm5ANq0GtEKKm
+3	t	remy.b@free.fr	Bourdoncle	Rémy	$2a$10$.Z7.PamYn15t5CYx4sXoOujEv1QM1UEE3mvD1EQqVdctgh/NsRBtS
+37	t	a@a.a	a	a	$2a$10$9o/xn4yNPxGXVDlO4sAI1OuZQld4kIxOqvU/FSUY5jaxTgrKEvDO6
+64	t	a@b.c	toto	remy	$2a$10$WkwJL7zALuVgyO3OYwbs/uJL.Y6TFGcCK7o0gD/Grfp0VtKrcllxW
+66	t	a@a.d	a	a	$2a$10$ob3LkT.nXza5o.EtkL7MkuuxfI1X22.uEw2ILVqcgh5NiktbX1.7i
+68	t	a@a.e	b	a	$2a$10$4CPq7sWhNSjqBbOssAOIW.RpnQCb.mPzt8ldbBaDJDpV2qaCRQCEi
+70	t	a@a.g	a	a	$2a$10$UKxep0yV46Or33nd0Lw89OXo8fG6l5l/G8O6mu0ej9Be.jMpTP6qy
+72	t	d@e.f	c	b	$2a$10$gC5bQQ5IS1R9D3AjeCkbGO/eHiax/0fyWfusqRQ9cJOQfYAx3aypu
+89	t	aa@a.a	aa	aa	$2a$10$E0xD/a5VBDcjjM1nnfnwAenH/w..yuuVzKdLQYQiAjGhFVfnoyy.6
+112	t	1@2.3	aaaa	aaaa	$2a$10$FqlaKWW4oGm9p00KQCZ.OelvDTmdqdHoa8VYhgb6K5wAnofuzqyfO
+114	t	q@q.q	q	q	$2a$10$V3WmoqVAPC9q4wwPz0g1Z.wtfKivNhhKTH7i33JGQLJ4xsyT9gKfy
+119	t	testuser@test.fr	user	test	$2a$10$GgBWQ91N0w7DZ7mXkQSSS.gQ1iC3OC9DVKxdMiqjo5na589dL0H72
+\.
+
+
+--
+-- TOC entry 2891 (class 0 OID 62442)
+-- Dependencies: 204
+-- Data for Name: voie; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.voie (id, cotation, date_de_miseajour, description, nom, secteur_id) FROM stdin;
+176	1a	2019-09-20 19:47:24.636	C'est la 1ere voie	voie 01	173
+177	9z	2019-09-20 21:25:50.949	C'est la 2eme voie	voie 02	173
+199	1a	2019-10-02 17:35:03.791	confortable	Ture	198
+202	3b	2019-10-03 13:14:17.564	Pour se déplacer plus vite	Ture	201
+208	5e	2019-10-03 14:05:59.954	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ultricies tincidunt auctor. Cras nisi neque, aliquam nec eros ut, euismod suscipit dui. Aenean auctor mauris id iaculis tristique posuere.	Royale	207
+212	1a	2019-10-08 08:48:12.873	trop courte	ci	170
+\.
+
+
+--
+-- TOC entry 2901 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.hibernate_sequence', 214, true);
+
+
+--
+-- TOC entry 2902 (class 0 OID 0)
+-- Dependencies: 206
+-- Name: topo_id_topo_seq; Type: SEQUENCE SET; Schema: public; Owner: adm_egrimpe
+--
+
+SELECT pg_catalog.setval('public.topo_id_topo_seq', 10, true);
+
+
+--
+-- TOC entry 2739 (class 2606 OID 62182)
+-- Name: adresse adresse_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.adresse
+    ADD CONSTRAINT adresse_pkey PRIMARY KEY (adresse_id);
+
+
+--
+-- TOC entry 2749 (class 2606 OID 62793)
+-- Name: commentaire commentaire_pkey; Type: CONSTRAINT; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER TABLE ONLY public.commentaire
+    ADD CONSTRAINT commentaire_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2743 (class 2606 OID 62435)
+-- Name: longueur longueur_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.longueur
+    ADD CONSTRAINT longueur_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2733 (class 2606 OID 62102)
+-- Name: role role_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_pkey PRIMARY KEY (role_id);
+
+
+--
+-- TOC entry 2745 (class 2606 OID 62441)
+-- Name: secteur secteur_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.secteur
+    ADD CONSTRAINT secteur_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2741 (class 2606 OID 62221)
+-- Name: spot spot_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.spot
+    ADD CONSTRAINT spot_pkey PRIMARY KEY (id_spot);
+
+
+--
+-- TOC entry 2751 (class 2606 OID 71026)
+-- Name: topo topo_pkey; Type: CONSTRAINT; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER TABLE ONLY public.topo
+    ADD CONSTRAINT topo_pkey PRIMARY KEY (id_topo);
+
+
+--
+-- TOC entry 2735 (class 2606 OID 62107)
+-- Name: user_role user_role_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT user_role_pkey PRIMARY KEY (user_id, role_id);
+
+
+--
+-- TOC entry 2737 (class 2606 OID 62115)
+-- Name: utilisateur utilisateur_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.utilisateur
+    ADD CONSTRAINT utilisateur_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2747 (class 2606 OID 62447)
+-- Name: voie voie_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.voie
+    ADD CONSTRAINT voie_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2753 (class 2606 OID 62126)
+-- Name: user_role fk1adslu3s4xgk5eemf54qxm908; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT fk1adslu3s4xgk5eemf54qxm908 FOREIGN KEY (user_id) REFERENCES public.utilisateur(id);
+
+
+--
+-- TOC entry 2757 (class 2606 OID 62794)
+-- Name: commentaire fk60ge4k42cx5743fqwbot279po; Type: FK CONSTRAINT; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER TABLE ONLY public.commentaire
+    ADD CONSTRAINT fk60ge4k42cx5743fqwbot279po FOREIGN KEY (site_id_spot) REFERENCES public.spot(id_spot);
+
+
+--
+-- TOC entry 2752 (class 2606 OID 62121)
+-- Name: user_role fka68196081fvovjhkek5m97n3y; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT fka68196081fvovjhkek5m97n3y FOREIGN KEY (role_id) REFERENCES public.role(role_id);
+
+
+--
+-- TOC entry 2760 (class 2606 OID 71027)
+-- Name: topo fkfbthoin62m670ty1irdwjbi0b; Type: FK CONSTRAINT; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER TABLE ONLY public.topo
+    ADD CONSTRAINT fkfbthoin62m670ty1irdwjbi0b FOREIGN KEY (emprunteur_topo) REFERENCES public.utilisateur(id);
+
+
+--
+-- TOC entry 2758 (class 2606 OID 62799)
+-- Name: commentaire fkjjabfriygphw60uis9npkburt; Type: FK CONSTRAINT; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER TABLE ONLY public.commentaire
+    ADD CONSTRAINT fkjjabfriygphw60uis9npkburt FOREIGN KEY (user_commentaire_id) REFERENCES public.utilisateur(id);
+
+
+--
+-- TOC entry 2755 (class 2606 OID 62453)
+-- Name: secteur fklfdetirmjbts6pbjebbdm19f1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.secteur
+    ADD CONSTRAINT fklfdetirmjbts6pbjebbdm19f1 FOREIGN KEY (spot_id_spot) REFERENCES public.spot(id_spot);
+
+
+--
+-- TOC entry 2756 (class 2606 OID 62458)
+-- Name: voie fkqlo061c6fgkuosv9chywpgn8t; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.voie
+    ADD CONSTRAINT fkqlo061c6fgkuosv9chywpgn8t FOREIGN KEY (secteur_id) REFERENCES public.secteur(id);
+
+
+--
+-- TOC entry 2754 (class 2606 OID 62448)
+-- Name: longueur fkro1y7gu1g630s7j7vaiksn6s5; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.longueur
+    ADD CONSTRAINT fkro1y7gu1g630s7j7vaiksn6s5 FOREIGN KEY (voie_id) REFERENCES public.voie(id);
+
+
+--
+-- TOC entry 2759 (class 2606 OID 62804)
+-- Name: commentaire fks7cglhf7auy079hyqlvo9a238; Type: FK CONSTRAINT; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER TABLE ONLY public.commentaire
+    ADD CONSTRAINT fks7cglhf7auy079hyqlvo9a238 FOREIGN KEY (spot_id_spot) REFERENCES public.spot(id_spot);
+
+
+--
+-- TOC entry 2761 (class 2606 OID 71032)
+-- Name: topo fksyimuyemxibndqifqowe9jj8t; Type: FK CONSTRAINT; Schema: public; Owner: adm_egrimpe
+--
+
+ALTER TABLE ONLY public.topo
+    ADD CONSTRAINT fksyimuyemxibndqifqowe9jj8t FOREIGN KEY (proprietaire_topo) REFERENCES public.utilisateur(id);
+
+
+-- Completed on 2019-11-07 19:15:54
+
+--
+-- PostgreSQL database dump complete
+--
+
