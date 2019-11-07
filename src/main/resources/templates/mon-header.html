@@ -18,6 +18,9 @@
         <!-- Partie droite -->
         <ul class="nav navbar-nav navbar-right">
             <li><a sec:authorize="isAuthenticated()">Bienvenue <span sec:authentication="name">Username</span><span class="sr-only">(current)</span></a><li>
+            <span th:if="${user != null}">
+                <div th:each ="role : ${roles}" th:utext="${role.getRole()}"></div>
+            </span>
             <li><a sec:authorize="isAnonymous()" href="/registration">S'inscire</a></li>
             <li><a sec:authorize="isAnonymous()" href="/login">Se connecter</a></li>
             <li><a sec:authorize="isAuthenticated()" href="/logout">Logout</a></li>
