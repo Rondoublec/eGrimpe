@@ -21,18 +21,16 @@
         <logger name="org.postgresql" level="ERROR"/>
         <logger name="com.zaxxer" level="ERROR"/>
 -->
-	<logger name="com.zaxxer" level="ERROR"/>
     <!-- project default level -->
-<!--
-	<logger name="fr.rbo" level="DEBUG">
+	<logger name="fr.rbo" level="INFO">
 		<appender-ref ref="console" />
 		<appender-ref ref="rollingFile" />
 	</logger>
--->
-
+<!--
 	<root level="DEBUG">
 		<appender-ref ref="console" />
 		<appender-ref ref="rollingFile" />
 	</root>
+-->
 
 </configuration>

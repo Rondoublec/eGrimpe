@@ -23,4 +23,26 @@ public interface TopoServiceInterface {
      */
     public List<Topo> listeTopos(Topo topoCherche);
 
-}
+    /**
+     * demande emprunt d'une topo
+     * @param topoId ID de la topo demandée pour emprunt
+     * @param utilisateur qui demande l'emprunt
+     * @return resultat true = OK / false = KO
+     */
+    public Boolean emprunterTopo(Long topoId, User utilisateur);
+
+    /**
+     * accepter la demande d'emprunt
+     * @param topoId ID de la topo demandée pour emprunt
+     * @return resultat true = OK / false = KO
+     */
+    public Boolean accepterEmpruntTopo(Long topoId);
+
+    /**
+     * refuser la demande d'emprunt (permet aussi de réinitialiser lors d'un retour d'une topo)
+     * @param topoId ID de la topo demandée pour emprunt
+     * @return resultat true = OK / false = KO
+     */
+    public Boolean annulerDemandeTopo(Long topoId);
+
+    }

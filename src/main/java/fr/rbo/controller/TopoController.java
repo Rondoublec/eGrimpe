@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -31,15 +32,24 @@ public class TopoController {
     @Autowired
     private UserServiceInterface userServiceInterface;
 
-    @GetMapping("/topo")
-    public String Topo(Model model, HttpSession httpSession) {
+    @GetMapping({"/topo", "/lestopos"})
+    public String Topo(Model model, HttpSession httpSession, HttpServletRequest request) {
         log.debug("page rechercher les topos");
+        String url = request.getRequestURI();
+        if (url.equals("/lestopos")){
+            referer = "topo";
+        }
         Topo topoCriteres = new Topo();
+        if (referer == "mestopos") {
+            User user = recupUser(httpSession);
+            if (user != null) { topoCriteres.setProprietaireTopo(user);}
+        } else {
+            referer = "topo";
+        }
         List<Topo> listTopos= topoServiceInterface.listeTopos(topoCriteres);
         model.addAttribute("topoCriteres", topoCriteres);
         model.addAttribute("listTopos", listTopos);
         majModel(model,null, httpSession);
-        referer = "topo";
         return "recherche-topo-list";
     }
 
@@ -67,9 +77,7 @@ public class TopoController {
         log.debug("lancement d'une recherche");
         if (referer == "mestopos") {
             User user = recupUser(httpSession);
-            if (user != null) {
-                topoCriteres.setProprietaireTopo(user);
-            }
+            if (user != null) { topoCriteres.setProprietaireTopo(user);}
         }
         List<Topo> listTopos= topoServiceInterface.listeTopos(topoCriteres);
         model.addAttribute("topoCriteres", topoCriteres);
@@ -89,12 +97,47 @@ public class TopoController {
     @GetMapping("/topo/delete/{topoId}")
     public String RemoveTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
                              Model model) {
-        if(topoServiceInterface.deleteTopo(topoId)) {
+        if (topoServiceInterface.deleteTopo(topoId)) {
             redirectAttributes.addFlashAttribute("deletion", "success");
         } else {
             redirectAttributes.addFlashAttribute("deletion", "unsuccess");
         }
-        return "redirect:/topo";
+        return pageOrigine();
+    }
+
+    @GetMapping("/topo/demande/{topoId}")
+    public String EmprunterTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
+                           Model model, HttpSession httpSession) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User utilisateur = userServiceInterface.findUserByEmail(auth.getName());
+        if (topoServiceInterface.emprunterTopo(topoId, utilisateur)){
+            redirectAttributes.addFlashAttribute("demande", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("demande", "unsuccess");
+        }
+        return pageOrigine();
+    }
+
+    @GetMapping("/topo/accepte/{topoId}")
+    public String AccepterTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
+                                Model model, HttpSession httpSession) {
+        if (topoServiceInterface.accepterEmpruntTopo(topoId)){
+            redirectAttributes.addFlashAttribute("valideDemande", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("valideDemande", "unsuccess");
+        }
+        return pageOrigine();
+    }
+
+    @GetMapping("/topo/annule/{topoId}")
+    public String AnnulerrTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
+                                Model model, HttpSession httpSession) {
+        if (topoServiceInterface.annulerDemandeTopo(topoId)){
+            redirectAttributes.addFlashAttribute("annuleDemande", "success");
+        } else {
+            redirectAttributes.addFlashAttribute("annuleDemande", "unsuccess");
+        }
+        return pageOrigine();
     }
 
     @GetMapping("/topo/edit/{topoId}")
@@ -122,7 +165,7 @@ public class TopoController {
         } else {
             redirectAttributes.addFlashAttribute("status","notfound");
         }
-        return "redirect:/topo";
+        return pageOrigine();
     }
 
     @PostMapping("/topo/save")
@@ -141,8 +184,7 @@ public class TopoController {
         } else {
             redirectAttributes.addFlashAttribute("saveTopo", "unsuccess");
         }
-        String page = "redirect:/" + referer;
-        return page;
+        return pageOrigine();
     }
 
     private User recupUser(HttpSession httpSession){
@@ -186,6 +228,14 @@ public class TopoController {
             }
         }
         return membre;
+    }
+
+    private String pageOrigine() {
+        String page = "redirect:/topo";
+        if (referer == "mestopos") {
+            page = "redirect:/" + referer;
+        }
+        return page;
     }
 
 }

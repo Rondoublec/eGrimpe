@@ -15,6 +15,39 @@
 <div class="row"  style="margin-top:100px;margin-bottom:10px;">
 
     <div class="col-md-offset-1 col-md-6">
+        <!-- Demande d'emprunt Messages -->
+        <div th:if="${demande eq 'unsuccess'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong>Demande impossible
+            </div>
+        </div>
+        <div th:if="${demande eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong>Demande adress&eacute;e
+            </div>
+        </div>
+        <!-- Acceptation demande d'emprunt Messages -->
+        <div th:if="${accepterDemande eq 'unsuccess'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong>Impossible d'accepter la demande
+            </div>
+        </div>
+        <div th:if="${accepterDemande eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong>Demande accept&eacute;e
+            </div>
+        </div>
+        <!-- Annulation demande d'emprunt Messages -->
+        <div th:if="${refuserDemande eq 'unsuccess'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong>Immpossible d'annuler la demande
+            </div>
+        </div>
+        <div th:if="${refuserDemande eq 'success'}">
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <strong>OK !</strong>Annulation de la demande r&eacute;alis&eacute;e
+            </div>
+        </div>
         <!-- Save Alert Messages -->
         <div th:if="${saveTopo eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
@@ -113,20 +146,50 @@
                         <td th:text="${topo.codePostalTopo}"></td>
                         <td th:text="${topo.descriptionTopo}"></td>
                         <td th:text="${topo.proprietaireTopo.getEmail()}"></td>
-                        <td th:text="${topo.disponibiliteTopo}"></td>
+                        <td>
+                            <div th:if="${status eq 'notfound'}">
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <strong>Erreur !</strong>status (topo-list) - Topo invalide.
+                                </div>
+                            </div>
+                        <span th:if="${topo.disponibiliteTopo} == false"}
+                            <span>Non</span>
+                        </span>
+                        <span th:if="${topo.disponibiliteTopo} == true"}
+                            <span>Oui</span>
+                        </span>
+                        </td>
                         <td th:text="${topo.dateEmpruntTopo}"></td>
                         <td>
-                        <span th:if="${topo.dateEmpruntTopo} != null"}
+                        <span th:if="${topo.emprunteurTopo} != null"}
                               th:text="${topo.emprunteurTopo.getEmail()}"></span>
                         </td>
                         <td align="center">
                             <a th:href="@{/topo/affiche/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-eye-open">Afficher</span></a> &nbsp; &nbsp;
                             <span th:if="${topo.proprietaireTopo.getEmail()} == ${user.getEmail()}">
                                 <a th:href="@{/topo/edit/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>
+                                <span th:if="${topo.emprunteurTopo} != null">
+                                    <span th:if="${topo.dateEmpruntTopo} == null">
+                                        <a th:href="@{/topo/accepte/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Accepter emprunt</span></a>
+                                        <a th:href="@{/topo/annule/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Refuser emprunt</span></a>
+                                    </span>
+                                    <span th:if="${topo.dateEmpruntTopo} != null">
+                                        <a th:href="@{/topo/annule/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Terminer emprunt</span></a>
+                                    </span>
+                                </span>
                             </span>
                             <span th:if="${membre} == true">
                                     <a th:href="@{/topo/delete/{id}(id=${topo.idTopo})}"
                                        onClick="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?');"><span class="glyphicon glyphicon-trash">Supprimer</span></a>
+                            </span>
+                            <span th:if="${user.email} != null">
+                                <span th:if="${topo.proprietaireTopo.getEmail()} != ${user.getEmail()}">
+                                    <span th:if="${topo.disponibiliteTopo} == true">
+                                        <span th:if="${topo.emprunteurTopo} == null">
+                                            <a th:href="@{/topo/demande/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Emprunter</span></a>
+                                        </span>
+                                    </span>
+                                </span>
                             </span>
                         </td>
                     </tr>

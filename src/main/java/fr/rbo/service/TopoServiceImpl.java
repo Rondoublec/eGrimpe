@@ -1,10 +1,13 @@
 package fr.rbo.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import fr.rbo.model.*;
@@ -62,5 +65,33 @@ public class TopoServiceImpl implements TopoServiceInterface{
         toposTrouve=topoRepositoryInterface.rechercheTopo(topoCherche);
         return toposTrouve;
     }
+
+    public Boolean emprunterTopo(Long topoId, User utilisateur) {
+        Topo topo = topoRepository.getOne(topoId);
+        if (topo == null) {return false;}
+        topo.setEmprunteurTopo(utilisateur);
+        topo = topoRepository.save(topo);
+        if (topo == null) {return false;}
+        return true;
+    }
+
+    public Boolean accepterEmpruntTopo(Long topoId) {
+        Topo topo = topoRepository.getOne(topoId);
+        if (topo == null) {return false;}
+        topo.setDateEmpruntTopo(new Date(System.currentTimeMillis()));
+        topo = topoRepository.save(topo);
+        if (topo == null) {return false;}
+        return true;
+    }
+    public Boolean annulerDemandeTopo(Long topoId) {
+        Topo topo = topoRepository.getOne(topoId);
+        if (topo == null) {return false;}
+        topo.setEmprunteurTopo(null);
+        topo.setDateEmpruntTopo(null);
+        topo = topoRepository.save(topo);
+        if (topo == null) {return false;}
+        return true;
+    }
+
 
 }
