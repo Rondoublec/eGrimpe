@@ -70,8 +70,11 @@ public class SpotController {
     }
 
     @GetMapping("/spot/delete/{spotId}")
-    public String RemoveSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
-                                 Model model) {
+    public String RemoveSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes) {
+        if (!estMembre(recupUser())) {
+            redirectAttributes.addFlashAttribute("status","notAuthorize");
+            return "redirect:/spot";
+        }
         if(spotServiceInterface.deleteSpot(spotId)) {
             redirectAttributes.addFlashAttribute("deletion", "success");
         } else {
@@ -96,7 +99,7 @@ public class SpotController {
 
     @GetMapping("/spot/secteur/{spotId}")
     public String detailSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
-                           Model model, HttpSession httpSession) {
+                           Model model) {
         Spot monSpot = spotServiceInterface.findSpot(spotId);
         long idSpot = monSpot.getIdSpot();
         if (idSpot > 0){
@@ -385,13 +388,14 @@ public class SpotController {
         return "voie-longueur";
     }
 
-    private void majModel(Model model, Long spotId, HttpSession httpSession) {
 
+    private User recupUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return userServiceInterface.findUserByEmail(auth.getName());
+    }
 
-        String mailUser = auth.getName();
-        User user = userServiceInterface.findUserByEmail(mailUser);
-
+    private void majModel(Model model, Long spotId, HttpSession httpSession) {
+        User user = recupUser();
         if (user != null) {
             httpSession.setAttribute("utilisateurSession", user);
             model.addAttribute("membre", estMembre(user));
@@ -401,7 +405,6 @@ public class SpotController {
             User userVide = new User();
             model.addAttribute("user", userVide);
         }
-
         if (spotId != null) {
             Spot spot = spotServiceInterface.findSpot(spotId);
             model.addAttribute("spot", spot);
@@ -413,9 +416,7 @@ public class SpotController {
         if (user != null) {
             Set<Role> roles = user.getRoles();
             for (Role role : roles) {
-                if (role.getRole().equals("MEMBRE")) {
-                    membre = true;
-                }
+                if (role.getRole().equals("MEMBRE")) { membre = true; }
             }
         }
         return membre;

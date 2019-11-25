@@ -18,41 +18,46 @@
             <!-- Save Alert Messages -->
             <div th:if="${saveSpot eq 'unsuccess'}">
                 <div class="alert alert-danger alert-dismissible" role="alert">
-                    <strong>Erreur !</strong>saveSpot (spot-list) - Spot non sauvegard&eacute;.
+                    <strong>Erreur !</strong> - Spot non sauvegard&eacute;.
                 </div>
             </div>
             <div th:if="${saveSpot eq 'success'}">
                 <div class="alert alert-success alert-dismissible" role="alert">
-                    <strong>OK !</strong>saveSpot (spot-list) - Spot sauvegard&eacute;.
+                    <strong>OK !</strong> - Spot sauvegard&eacute;.
                 </div>
             </div>
 
             <!-- Deletion Alert Messages -->
             <div th:if="${deletion eq 'unsuccess'}">
                 <div class="alert alert-danger alert-dismissible" role="alert">
-                    <strong>Erreur !</strong>deletion (spot-list) - Spot non supprim&eacute;.
+                    <strong>Erreur !</strong> - Spot non supprim&eacute;.
                 </div>
             </div>
             <div th:if="${deletion eq 'success'}">
                 <div class="alert alert-success alert-dismissible" role="alert">
-                    <strong>OK !</strong>deletion (spot-list) - Spot supprim&eacute;.
+                    <strong>OK !</strong> - Spot supprim&eacute;.
                 </div>
             </div>
 
             <!-- Edit Alert Message -->
+            <div th:if="${status eq 'notAuthorize'}">
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <strong>Erreur !</strong> - Action non autoris&eacute;e. <Strong>Pirate !</Strong>
+                </div>
+            </div>
             <div th:if="${status eq 'notfound'}">
                 <div class="alert alert-danger alert-dismissible" role="alert">
-                    <strong>Erreur !</strong>status (spot-list) - Spot invalide.
+                    <strong>Erreur !</strong> - Spot invalide.
                 </div>
             </div>
             <div th:if="${edit eq 'unsuccess'}">
                 <div class="alert alert-danger alert-dismissible" role="alert">
-                    <strong>Erreur !</strong>edit (spot-list) - Spot non r&eacute;cup&eacute;r&eacute;.
+                    <strong>Erreur !</strong> - Spot non r&eacute;cup&eacute;r&eacute;.
                 </div>
             </div>
             <div th:if="${edit eq 'success'}">
                 <div class="alert alert-success alert-dismissible" role="alert">
-                    <strong>OK !</strong>edit (spot-list) - Spot r&eacute;cup&eacute;r&eacute; avec succ&egrave;s.
+                    <strong>OK !</strong> - Spot r&eacute;cup&eacute;r&eacute; avec succ&egrave;s.
                 </div>
             </div>
         </div>
@@ -125,7 +130,14 @@
                             <td th:text="${spot.hauteurMin} + ' / ' + ${spot.hauteurMax}"></td>
                             <td th:text="${spot.cotationMin} + ' / ' + ${spot.cotationMax}"></td>
                             <td th:text="${spot.roche}"></td>
-                            <td th:text="${spot.labelAmi}"></td>
+                            <td>
+                                <span th:if="${spot.labelAmi} == false"}
+                                <span>Non</span>
+                                </span>
+                                <span th:if="${spot.labelAmi} == true"}
+                                <span>Ami de l'escalade</span>
+                            </span>
+                            </td>
                             <td align="center">
                                 <a th:href="@{/spot/secteur/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-eye-open">Afficher</span></a> &nbsp; &nbsp;
                                 <a sec:authorize="isAuthenticated()" th:href="@{/spot/edit/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>

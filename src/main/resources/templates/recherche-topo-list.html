@@ -16,76 +16,81 @@
 
     <div class="col-md-offset-1 col-md-6">
         <!-- Demande d'emprunt Messages -->
-        <div th:if="${demande eq 'unsuccess'}">
+        <div th:if="${soumettreDemande eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong>Demande impossible
+                <strong>Erreur !</strong> - Demande impossible
             </div>
         </div>
-        <div th:if="${demande eq 'success'}">
+        <div th:if="${soumettreDemande eq 'success'}">
             <div class="alert alert-success alert-dismissible" role="alert">
-                <strong>OK !</strong>Demande adress&eacute;e
+                <strong>OK !</strong> - Demande adress&eacute;e
             </div>
         </div>
         <!-- Acceptation demande d'emprunt Messages -->
         <div th:if="${accepterDemande eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong>Impossible d'accepter la demande
+                <strong>Erreur !</strong> - Impossible d'accepter la demande
             </div>
         </div>
         <div th:if="${accepterDemande eq 'success'}">
             <div class="alert alert-success alert-dismissible" role="alert">
-                <strong>OK !</strong>Demande accept&eacute;e
+                <strong>OK !</strong> - Demande accept&eacute;e
             </div>
         </div>
         <!-- Annulation demande d'emprunt Messages -->
-        <div th:if="${refuserDemande eq 'unsuccess'}">
+        <div th:if="${annulerDemande eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong>Immpossible d'annuler la demande
+                <strong>Erreur !</strong> - Impossible d'annuler la demande
             </div>
         </div>
-        <div th:if="${refuserDemande eq 'success'}">
+        <div th:if="${annulerDemande eq 'success'}">
             <div class="alert alert-success alert-dismissible" role="alert">
-                <strong>OK !</strong>Annulation de la demande r&eacute;alis&eacute;e
+                <strong>OK !</strong> - Annulation de la demande r&eacute;alis&eacute;e
             </div>
         </div>
         <!-- Save Alert Messages -->
         <div th:if="${saveTopo eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong>saveTopo (topo-list) - Topo non sauvegard&eacute;.
+                <strong>Erreur !</strong> - Topo non sauvegard&eacute;e.
             </div>
         </div>
         <div th:if="${saveTopo eq 'success'}">
             <div class="alert alert-success alert-dismissible" role="alert">
-                <strong>OK !</strong>saveTopo (topo-list) - Topo sauvegard&eacute;.
+                <strong>OK !</strong> - Topo sauvegard&eacute;e.
             </div>
         </div>
 
         <!-- Deletion Alert Messages -->
         <div th:if="${deletion eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong>deletion (topo-list) - Topo non supprim&eacute;.
+                <strong>Erreur !</strong> - Topo non supprim&eacute;e.
             </div>
         </div>
         <div th:if="${deletion eq 'success'}">
             <div class="alert alert-success alert-dismissible" role="alert">
-                <strong>OK !</strong>deletion (topo-list) - Topo supprim&eacute;.
+                <strong>OK !</strong> - Topo supprim&eacute;e.
             </div>
         </div>
 
         <!-- Edit Alert Message -->
         <div th:if="${status eq 'notfound'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong>status (topo-list) - Topo invalide.
+                <strong>Erreur !</strong> - Topo invalide.
+            </div>
+        </div>
+        <div th:if="${status eq 'notAuthorize'}">
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Erreur !</strong> - Action non autoris&eacute;e. <Strong>Pirate !</Strong>
             </div>
         </div>
         <div th:if="${edit eq 'unsuccess'}">
             <div class="alert alert-danger alert-dismissible" role="alert">
-                <strong>Erreur !</strong>edit (topo-list) - Topo non r&eacute;cup&eacute;r&eacute;.
+                <strong>Erreur !</strong> - Topo non r&eacute;cup&eacute;r&eacute;e.
             </div>
         </div>
         <div th:if="${edit eq 'success'}">
             <div class="alert alert-success alert-dismissible" role="alert">
-                <strong>OK !</strong>edit (topo-list) - Topo r&eacute;cup&eacute;r&eacute; avec succ&egrave;s.
+                <strong>OK !</strong> - Topo r&eacute;cup&eacute;r&eacute;e avec succ&egrave;s.
             </div>
         </div>
     </div>

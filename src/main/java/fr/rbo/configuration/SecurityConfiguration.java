@@ -56,6 +56,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/topo/delete/**").authenticated()
 				.antMatchers("/topo/edit/**").authenticated()
 				.antMatchers("/topo/save").authenticated()
+				.antMatchers("/topo/demande").authenticated()
+				.antMatchers("/topo/accepte").authenticated()
+				.antMatchers("/topo/annule").authenticated()
 				.antMatchers("/mestopos").authenticated()
 
 				.antMatchers("/adm1n/**").authenticated()
