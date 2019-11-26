@@ -169,30 +169,39 @@
                         <span th:if="${topo.emprunteurTopo} != null"}
                               th:text="${topo.emprunteurTopo.getEmail()}"></span>
                         </td>
-                        <td align="center">
-                            <a th:href="@{/topo/affiche/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-eye-open">Afficher</span></a> &nbsp; &nbsp;
+                        <td align="left">
+                            <a th:href="@{/topo/affiche/{id}(id=${topo.idTopo})}" title="Afficher" data-toggle="tooltip" data-placement="top">
+                                <span class="glyphicon glyphicon-eye-open"></span></a> &nbsp;
                             <span th:if="${topo.proprietaireTopo.getEmail()} == ${user.getEmail()}">
-                                <a th:href="@{/topo/edit/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>
-                                <span th:if="${topo.emprunteurTopo} != null">
-                                    <span th:if="${topo.dateEmpruntTopo} == null">
-                                        <a th:href="@{/topo/accepte/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Accepter emprunt</span></a>
-                                        <a th:href="@{/topo/annule/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Refuser emprunt</span></a>
-                                    </span>
-                                    <span th:if="${topo.dateEmpruntTopo} != null">
-                                        <a th:href="@{/topo/annule/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Terminer emprunt</span></a>
-                                    </span>
-                                </span>
+                                <a th:href="@{/topo/edit/{id}(id=${topo.idTopo})}" title="Modifier" data-toggle="tooltip" data-placement="top">
+                                    <span class="glyphicon glyphicon-edit"></span></a> &nbsp;
                             </span>
                             <span th:if="${membre} == true">
-                                    <a th:href="@{/topo/delete/{id}(id=${topo.idTopo})}"
-                                       onClick="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?');"><span class="glyphicon glyphicon-trash">Supprimer</span></a>
+                                <a th:href="@{/topo/delete/{id}(id=${topo.idTopo})}" title="Supprimer" data-toggle="tooltip" data-placement="top"
+                                    onClick="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?');">
+                                    <span class="glyphicon glyphicon-trash"></span></a> &nbsp;
                             </span>
                             <span th:if="${user.email} != null">
                                 <span th:if="${topo.proprietaireTopo.getEmail()} != ${user.getEmail()}">
                                     <span th:if="${topo.disponibiliteTopo} == true">
                                         <span th:if="${topo.emprunteurTopo} == null">
-                                            <a th:href="@{/topo/demande/{id}(id=${topo.idTopo})}"><span class="glyphicon glyphicon-edit">Emprunter</span></a>
+                                            <a th:href="@{/topo/demande/{id}(id=${topo.idTopo})}"  title="Demander l'emprunt" data-toggle="tooltip" data-placement="top">
+                                                <span class="glyphicon glyphicon-open"></span></a> &nbsp;
                                         </span>
+                                    </span>
+                                </span>
+                            </span>
+                            <span th:if="${topo.proprietaireTopo.getEmail()} == ${user.getEmail()}">
+                                <span th:if="${topo.emprunteurTopo} != null">
+                                    <span th:if="${topo.dateEmpruntTopo} == null">
+                                        <a th:href="@{/topo/accepte/{id}(id=${topo.idTopo})}" title="Accepter l'emprunt" data-toggle="tooltip" data-placement="top">
+                                            <span class="glyphicon glyphicon-thumbs-up"></span></a> &nbsp;
+                                        <a th:href="@{/topo/annule/{id}(id=${topo.idTopo})}" title="Refuser l'emprunt" data-toggle="tooltip" data-placement="top">
+                                            <span class="glyphicon glyphicon-thumbs-down"></span></a> &nbsp;
+                                    </span>
+                                    <span th:if="${topo.dateEmpruntTopo} != null">
+                                        <a th:href="@{/topo/annule/{id}(id=${topo.idTopo})}" title="Terminer l'emprunt" data-toggle="tooltip" data-placement="top">
+                                            <span class="glyphicon glyphicon-save"></span></a> &nbsp;
                                     </span>
                                 </span>
                             </span>

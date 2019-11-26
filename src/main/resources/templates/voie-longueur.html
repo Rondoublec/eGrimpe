@@ -68,7 +68,7 @@
                 <div class="panel-heading">
                     <h3>
                         <span>Voie : </span><b th:utext="${voie.nom}">Ma voie</b>&nbsp;<span th:text="'(r&eacute;f&eacute;rence ' + ${voie.id} + ')'">(r&eacute;f&eacute;rence 36)</span>
-                        <a th:href="@{/secteur/voies(idSpot=${spot.idSpot},idSecteur=${secteur.id})}" class="glyphicon glyphicon-share-alt">Retour</a>
+                        <a th:href="@{/secteur/voies(idSpot=${spot.idSpot},idSecteur=${secteur.id})}" class="glyphicon glyphicon-eject">Retour</a>
                     </h3>
                 </div>
                 <section class="table-responsive">
@@ -108,7 +108,8 @@
                                     <input type="hidden" th:value="${voie.id}" name="idVoie"/>
                                     <input type="hidden" th:value="${longueur.id}" name="idLongueur"/>
                                     <input type="hidden" th:value="${user.email}" name="email"/>
-                                    <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-trash">Supprimer</span></button>
+                                    <button type="submit" class="btn btn-link" title="Supprimer" data-toggle="tooltip" data-placement="top">
+                                        <span class="glyphicon glyphicon-trash"></span></button>
                                 </form>
                               </span>
                             </td>

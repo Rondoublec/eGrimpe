@@ -34,7 +34,7 @@
                     <h3>
                         <span>Spot : </span><b th:utext="${spot.nomSpot}">Mon spot</b>&nbsp;
                             <span th:text="'(r&eacute;f&eacute;rence ' + ${spot.idSpot} + ')'">(r&eacute;f&eacute;rence 12)</span>
-                        <a href="/spot" class="glyphicon glyphicon-share-alt">Retour</a>
+                        <a href="/spot" class="glyphicon glyphicon-eject">Retour</a>
                     </h3>
                 </div>
                 <section class="table-responsive">
@@ -124,7 +124,8 @@
                                 <a th:href="@{/secteur/voies(idSpot=${spot.idSpot},idSecteur=${secteur.id})}">
                                     <input type="hidden" th:value="${spot.idSpot}" name="Spot"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
-                                    <button type="submit" class="btn-link"><span class="glyphicon glyphicon-eye-open">Afficher</span></button>
+                                    <button type="submit" class="btn-link" title="Afficher" data-toggle="tooltip" data-placement="top">
+                                        <span class="glyphicon glyphicon-eye-open"></span></button>
                                 </a>
                               <span th:if="${membre} == true">
                                 <form action="#" th:action="@{/spot/deleteSecteur}" th:object="${secteur}"
@@ -132,7 +133,8 @@
                                     <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <input type="hidden" th:value="${user.email}" name="email"/>
-                                    <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-trash">Supprimer</span></button>
+                                    <button type="submit" class="btn btn-link" title="Supprimer" data-toggle="tooltip" data-placement="top">
+                                        <span class="glyphicon glyphicon-trash"></span></button>
                                 </form>
                               </span>
                             </td>
@@ -171,7 +173,8 @@
                         <form action="#" th:action="@{/spot/updateComment}" th:object="${commentaire}" method="post">
                             <b th:utext="${commentaire.message}">BlaBla</b>
                             <small th:utext="' (Par : ' + ${commentaire.userCommentaire.email} + ' le : ' + ${commentaire.dateDeMiseAJour} + ')'"> (Par toto le 12)</small>
-                            <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-edit">Modifier</span></button>
+                            <button type="submit" class="btn btn-link" title="Modifier" data-toggle="tooltip" data-placement="top">
+                                <span class="glyphicon glyphicon-edit"></span></button>
                             <textarea maxlength="120" type="textarea" class="form-control" th:field="${commentaire.message}" id="message"></textarea>
                             <input type="hidden" th:value="${commentaire.id}" name="id"/>
                             <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
@@ -182,7 +185,8 @@
                             <input type="hidden" th:value="${commentaire.id}" name="idCommentaire"/>
                             <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                             <input type="hidden" th:value="${user.email}" name="email"/>
-                            <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-trash">Supprimer</span></button>
+                            <button type="submit" class="btn btn-link" title="Supprimer" data-toggle="tooltip" data-placement="top">
+                                <span class="glyphicon glyphicon-trash"></span></button>
                         </form>
                             </th>
                         </tr>

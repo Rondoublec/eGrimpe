@@ -54,7 +54,7 @@
                 <div class="panel-heading">
                     <h3>
                         <span>Secteur : </span><b th:utext="${secteur.nom}">Mon secteur</b>&nbsp;<span th:text="'(r&eacute;f&eacute;rence ' + ${secteur.id} + ')'">(r&eacute;f&eacute;rence 24)</span>
-                        <a th:href="@{/spot/secteur/{id}(id=${spot.idSpot})}" class="glyphicon glyphicon-share-alt">Retour</a>
+                        <a th:href="@{/spot/secteur/{id}(id=${spot.idSpot})}" class="glyphicon glyphicon-eject">Retour</a>
                     </h3>
                 </div>
                 <section class="table-responsive">
@@ -90,7 +90,8 @@
                                     <input type="hidden" th:value="${spot.idSpot}" name="Spot"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <input type="hidden"  th:value="${voie.id}" name="idVoie"/>
-                                    <button type="submit" class="btn-link"><span class="glyphicon glyphicon-eye-open">Afficher</span></button>
+                                    <button type="submit" class="btn-link" title="Afficher" data-toggle="tooltip" data-placement="top">
+                                        <span class="glyphicon glyphicon-eye-open"></span></button>
                                 </a>
                               <span th:if="${membre} == true">
                                 <form action="#" th:action="@{/secteur/deleteVoie}" th:object="${voie}"
@@ -99,7 +100,8 @@
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <input type="hidden" th:value="${voie.id}" name="idVoie"/>
                                     <input type="hidden" th:value="${user.email}" name="email"/>
-                                    <button type="submit" class="btn btn-link"><span class="glyphicon glyphicon-trash">Supprimer</span></button>
+                                    <button type="submit" class="btn btn-link" title="Supprimer" data-toggle="tooltip" data-placement="top">
+                                        <span class="glyphicon glyphicon-trash"></span></button>
                                 </form>
                               </span>
                             </td>

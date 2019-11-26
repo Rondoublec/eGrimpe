@@ -32,9 +32,8 @@ public class SpotController {
 
     @GetMapping({"/adm1n", "/adm1n/test"})
     public String Admin(Model model, HttpSession httpSession) {
-        log.debug("Page Adm1n");
+        log.info("Appel à la Page Adm1n");
         majModel(model,null,httpSession);
-
         return "adm1n";
     }
 
@@ -63,6 +62,7 @@ public class SpotController {
 
     @GetMapping("/spot/add")
     public String addSpot(Model model, HttpSession httpSession) {
+        log.debug("spot-form : Ajout d'un spot");
         Spot addSpot = new Spot();
         model.addAttribute("spot", addSpot);
         majModel(model,null,httpSession);
@@ -71,6 +71,7 @@ public class SpotController {
 
     @GetMapping("/spot/delete/{spotId}")
     public String RemoveSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes) {
+        log.debug("demande de suppression spot : " + spotId);
         if (!estMembre(recupUser())) {
             redirectAttributes.addFlashAttribute("status","notAuthorize");
             return "redirect:/spot";
@@ -86,6 +87,7 @@ public class SpotController {
     @GetMapping("/spot/edit/{spotId}")
     public String EditSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
                              Model model, HttpSession httpSession) {
+        log.debug("demande de modification spot : " + spotId);
         Spot editSpot = spotServiceInterface.findSpot(spotId);
         if(editSpot!=null) {
             majModel(model,null,httpSession);
@@ -100,6 +102,7 @@ public class SpotController {
     @GetMapping("/spot/secteur/{spotId}")
     public String detailSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
                            Model model) {
+        log.debug("spot-secteur : Liste des secteurs du spot : " + spotId);
         Spot monSpot = spotServiceInterface.findSpot(spotId);
         long idSpot = monSpot.getIdSpot();
         if (idSpot > 0){
@@ -131,9 +134,8 @@ public class SpotController {
     }
     @GetMapping("/spot/addSecteur")
     public String ajoutSecteur(Model model,@RequestParam("idSpot") Long idSpot) {
-
         /* Création d'un secteur */
-        log.debug("addsecteur "  + idSpot);
+        log.debug("secteur-form : Ajout d'un secteur sur le spot " + idSpot);
         Secteur secteur = new Secteur();
         model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));
         model.addAttribute("secteur", secteur);
@@ -147,7 +149,6 @@ public class SpotController {
 
         log.debug("submit du formulaire secteur");
         log.debug("addsecteur create spot "  + idSpot);
-
         if (result.hasErrors()){
             log.debug("erreur du validation du formulaire secteur");
             model.addAttribute("spot", spotServiceInterface.findSpot(idSpot));

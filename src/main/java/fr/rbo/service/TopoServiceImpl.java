@@ -78,20 +78,22 @@ public class TopoServiceImpl implements TopoServiceInterface{
     public Boolean accepterEmpruntTopo(Long topoId) {
         Topo topo = topoRepository.getOne(topoId);
         if (topo == null) {return false;}
+        topo.setDisponibiliteTopo(false);
         topo.setDateEmpruntTopo(new Date(System.currentTimeMillis()));
         topo = topoRepository.save(topo);
         if (topo == null) {return false;}
         return true;
     }
+
     public Boolean annulerDemandeTopo(Long topoId) {
         Topo topo = topoRepository.getOne(topoId);
         if (topo == null) {return false;}
+        topo.setDisponibiliteTopo(true);
         topo.setEmprunteurTopo(null);
         topo.setDateEmpruntTopo(null);
         topo = topoRepository.save(topo);
         if (topo == null) {return false;}
         return true;
     }
-
 
 }

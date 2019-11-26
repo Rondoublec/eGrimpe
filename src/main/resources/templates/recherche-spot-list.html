@@ -139,11 +139,14 @@
                             </span>
                             </td>
                             <td align="center">
-                                <a th:href="@{/spot/secteur/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-eye-open">Afficher</span></a> &nbsp; &nbsp;
-                                <a sec:authorize="isAuthenticated()" th:href="@{/spot/edit/{id}(id=${spot.idSpot})}"><span class="glyphicon glyphicon-edit">Modifier</span></a>
+                                <a th:href="@{/spot/secteur/{id}(id=${spot.idSpot})}" title="Afficher" data-toggle="tooltip" data-placement="top">
+                                    <span class="glyphicon glyphicon-eye-open"></span></a> &nbsp;
+                                <a sec:authorize="isAuthenticated()" th:href="@{/spot/edit/{id}(id=${spot.idSpot})}" title="Modifier" data-toggle="tooltip" data-placement="top">
+                                    <span class="glyphicon glyphicon-edit"></span></a> &nbsp;
                                 <span th:if="${membre} == true">
-                                    <a th:href="@{/spot/delete/{id}(id=${spot.idSpot})}"
-                                       onClick="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?');"><span class="glyphicon glyphicon-trash">Supprimer</span></a>
+                                    <a th:href="@{/spot/delete/{id}(id=${spot.idSpot})}"  title="Supprimer" data-toggle="tooltip" data-placement="top"
+                                       onClick="return confirm('ATTENTION ! Vous allez supprimer un élément, voulez-vous poursuivre ?');">
+                                        <span class="glyphicon glyphicon-trash"></span></a>
                                 </span>
                             </td>
                         </tr>
