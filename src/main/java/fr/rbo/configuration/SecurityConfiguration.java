@@ -17,10 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-
+	@Qualifier("UserServiceInterface")
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -29,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			throws Exception {
 		auth
 			.userDetailsService(userDetailsService)
-			.passwordEncoder(bCryptPasswordEncoder);
+			.passwordEncoder(passwordEncoder());
 	}
 
 	@Override
@@ -79,6 +76,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 				.logoutSuccessUrl("/").and().exceptionHandling()
 				.accessDeniedPage("/access-denied");
+		http.headers().frameOptions().disable();
 	}
 	
 	@Override
