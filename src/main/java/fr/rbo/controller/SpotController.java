@@ -70,12 +70,15 @@ public class SpotController {
     }
 
     @GetMapping("/spot/delete/{spotId}")
-    public String RemoveSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes) {
-        log.debug("demande de suppression spot : " + spotId);
+    public String RemoveSpot(@PathVariable("spotId") Long spotId,
+                             final RedirectAttributes redirectAttributes) {
+        String email = recupUser().getEmail();
         if (!estMembre(recupUser())) {
+            log.info("ALERTE SECURITE tentative de suppression spot : " + spotId + " par " + email + " NON AUTORISEE");
             redirectAttributes.addFlashAttribute("status","notAuthorize");
             return "redirect:/spot";
         }
+        log.info("Suppression spot : " + spotId + " par " + email);
         if(spotServiceInterface.deleteSpot(spotId)) {
             redirectAttributes.addFlashAttribute("deletion", "success");
         } else {
@@ -172,8 +175,7 @@ public class SpotController {
     public String supprSecteurSubmit(Model model, @RequestParam("idSecteur") int idSecteur,
                                          @RequestParam("spotId") Long spotId,
                                          @RequestParam("email") String email, HttpSession httpSession) {
-
-        log.info("Suppression du secteur " + idSecteur + " par " + email);
+        log.info("Suppression du secteur " + idSecteur + " du spot " + spotId + " par " + email);
         spotServiceInterface.supprSecteur(idSecteur,spotId);
         majModel(model,spotId,httpSession);
         Commentaire com = new Commentaire();
@@ -225,9 +227,7 @@ public class SpotController {
     public String supprCommentaireSubmit(Model model, @RequestParam("idCommentaire") int idCommentaire,
                                          @RequestParam("spotId") Long spotId,
                                          @RequestParam("email") String email, HttpSession httpSession) {
-
-        log.info("Suppression du commentaire par " + email);
-
+        log.info("Suppression du commentaire " + idCommentaire + " du spot " + spotId + " par " + email);
         spotServiceInterface.supprCommentaire(idCommentaire,spotId);
         majModel(model,spotId,httpSession);
         Commentaire com = new Commentaire();
@@ -309,8 +309,7 @@ public class SpotController {
                                   @RequestParam("idSecteur") int idSecteur,
                                   @RequestParam("spotId") Long spotId,
                                   @RequestParam("email") String email, HttpSession httpSession) {
-
-        log.info("Suppression de la voie " + idVoie + " par " + email);
+        log.info("Suppression de la voie " + idVoie + "du secteur " + idSecteur + " du spot " + spotId + " par " + email);
         spotServiceInterface.supprVoie(idVoie,idSecteur);
         majModel(model,spotId,httpSession);
         Secteur secteur = spotServiceInterface.getSecteur(idSecteur);
@@ -380,8 +379,7 @@ public class SpotController {
                                       @RequestParam("idSecteur") int idSecteur,
                                       @RequestParam("spotId") Long spotId,
                                       @RequestParam("email") String email, HttpSession httpSession) {
-
-        log.info("Suppression e la longueur " + idLongueur + " par " + email);
+        log.info("Suppression de la longueur " + idLongueur + " de la voie " + idVoie + " du secteur " + idSecteur + " du spot " + spotId + " par " + email);
         spotServiceInterface.supprLongueur(idLongueur,idVoie);
         majModel(model,spotId,httpSession);
         model.addAttribute("secteur", spotServiceInterface.getSecteur(idSecteur));

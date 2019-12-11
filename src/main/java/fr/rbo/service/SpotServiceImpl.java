@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.List;
 
+import fr.rbo.controller.SpotController;
 import fr.rbo.model.*;
 import fr.rbo.repository.*;
 import org.slf4j.Logger;
@@ -40,14 +41,18 @@ public class SpotServiceImpl implements SpotServiceInterface{
 
     public Spot saveSpot(Spot spot) {
         // TODO Auto-generated method stub
+        log.debug("*TEST*demande d'enregistrement de spot spot.getNomSpot = " + spot.getNomSpot());
         spot.setDateDeMiseAJour(new Timestamp(System.currentTimeMillis()));
         return spotRepository.save(spot);
     }
 
     public Boolean deleteSpot(Long spotId) {
         // TODO Auto-generated method stub
+        log.debug("*TEST*demande de suppression spotId = " + spotId);
         Spot temp = spotRepository.getOne(spotId);
-        if(temp!=null){
+        log.debug("*TEST*demande de suppression temp.getNomSpot() = " + temp.getNomSpot());
+        if(temp.getNomSpot()!=null)
+        {
             spotRepository.delete(temp);
             return true;
         }

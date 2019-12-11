@@ -15,22 +15,29 @@
 			<pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
-<!--
+
         <logger name="org.springframework" level="ERROR"/>
         <logger name="org.hibernate" level="ERROR"/>
         <logger name="org.postgresql" level="ERROR"/>
         <logger name="com.zaxxer" level="ERROR"/>
--->
-    <!-- project default level -->
-	<logger name="fr.rbo" level="INFO">
-		<appender-ref ref="console" />
-		<appender-ref ref="rollingFile" />
-	</logger>
-<!--
-	<root level="DEBUG">
+
+	<root>
+<!--		<level value="INFO" />-->
+		<level value="DEBUG" />
 		<appender-ref ref="console" />
 		<appender-ref ref="rollingFile" />
 	</root>
+<!--
+        <logger name="fr.rbo" level="INFO">
+            <appender-ref ref="console" />
+            <appender-ref ref="rollingFile" />
+        </logger>
 -->
+<!--
+        <root level="DEBUG">
+            <appender-ref ref="console" />
+            <appender-ref ref="rollingFile" />
+        </root>
+ -->
 
 </configuration>

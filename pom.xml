@@ -8,8 +8,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>Archija</name>
-	<description>Architecture de Base JAVA JEE Spring Boot JPA  Tymeleaf, HTML5, CSS, JS</description>
+	<name>eGrimpe</name>
+	<description>Application eGrimpe : Architecture de Base JAVA JEE Spring Boot JPA  Tymeleaf, HTML5, CSS, JS</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -73,18 +73,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
-<!--
-		 <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>3.3.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-            <version>2.1.4</version>
-        </dependency>
--->
+
 	</dependencies>
 
 	<build>

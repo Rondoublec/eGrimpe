@@ -23,18 +23,22 @@ public class Topo implements Serializable {
     private String nomTopo;
 
     @NotBlank (message = "ERREUR : Le département est obligatoire.")
+    @Size(max = 3, message = "ERREUR : le département ne doit pas faire plus de 3 caractères")
     @Column(name = "departementTopo", length = 3, nullable = false)
     private String departementTopo;
 
     @NotBlank (message = "ERREUR : Le code postal est obligatoire.")
+    @Size(max = 5, message = "ERREUR : le code postal ne doit pas faire plus de 5 caractères")
     @Column(name = "codePostalTopo", length = 5, nullable = false)
     private String codePostalTopo;
 
     @Size(max = 500, message = "ERREUR : La description ne doit pas faire plus de 500 caractères")
+    @Size(max = 500, message = "ERREUR : taille du champs > 500 caractères")
     @Column(name = "descriptionTopo", length = 500)
     private String descriptionTopo;
 
     @Size(max = 40, message = "ERREUR : Le d'auteur ne doit pas faire plus de 40 caractères")
+    @Size(max = 40, message = "ERREUR : taille du champs > 40 caractères")
     @Column(name = "auteurTopo", length = 40)
     private String auteurTopo;
 

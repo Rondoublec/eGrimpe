@@ -122,7 +122,7 @@
                             <td th:utext="${secteur.dateDeMiseAJour}">...</td>
                             <td>
                                 <a th:href="@{/secteur/voies(idSpot=${spot.idSpot},idSecteur=${secteur.id})}">
-                                    <input type="hidden" th:value="${spot.idSpot}" name="Spot"/>
+                                    <input type="hidden" th:value="${spot.idSpot}" name="spotId"/>
                                     <input type="hidden" th:value="${secteur.id}" name="idSecteur"/>
                                     <button type="submit" class="btn-link" title="Afficher" data-toggle="tooltip" data-placement="top">
                                         <span class="glyphicon glyphicon-eye-open"></span></button>

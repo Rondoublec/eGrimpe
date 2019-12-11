@@ -95,11 +95,15 @@ public class TopoController {
     }
 
     @GetMapping("/topo/delete/{topoId}")
-    public String RemoveTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes) {
+    public String RemoveTopo(@PathVariable("topoId") Long topoId,
+                             final RedirectAttributes redirectAttributes) {
+        String email = recupUser().getEmail();
         if (!estMembre(recupUser())) {
+            log.info("ALERTE SECURITE tentative de suppression topo : " + topoId + " par " + email + " NON AUTORISEE");
             redirectAttributes.addFlashAttribute("status","notAuthorize");
             return pageOrigine();
         }
+        log.info("Suppression topo : " + topoId + " par " + email);
         if (topoServiceInterface.deleteTopo(topoId)) {
             redirectAttributes.addFlashAttribute("deletion", "success");
         } else {

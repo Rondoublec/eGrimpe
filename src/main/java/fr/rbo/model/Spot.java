@@ -28,6 +28,7 @@ public class Spot implements Serializable {
     private Date dateDeMiseAJour;
 
     @Column(length = 500)
+    @Size(max = 500, message = "ERREUR : taille du champs > 500 caractères")
     private String presentation;
 
     @Column
@@ -37,33 +38,42 @@ public class Spot implements Serializable {
     private int hauteurMax;
 
     @Column(length = 50)
+    @Size(max = 50, message = "ERREUR : taille du champs > 50 caractères")
     private String roche;
 
     @Column(length = 2)
+    @Size(max = 2, message = "ERREUR : taille du champs > 2 caractères")
     private String cotationMin;
 
     @Column(length = 2)
+    @Size(max = 2, message = "ERREUR : taille du champs > 2 caractères")
     private String cotationMax;
 
     @Column
     private boolean labelAmi;
 
     @Column(length = 5)
+    @Size(max = 5, message = "ERREUR : taille du champs > 5 caractères")
     private String codePostalSpot;
 
     @Column(length = 50)
+    @Size(max = 50, message = "ERREUR : taille du champs > 50 caractères")
     private String communeSpot;
 
     @Column(length = 50)
+    @Size(max = 50, message = "ERREUR : taille du champs > 50 caractères")
     private String massif;
 
     @Column(length = 20)
+    @Size(max = 20, message = "ERREUR : taille du champs > 20 caractères")
     private String orientation;
 
     @Column(length = 50)
+    @Size(max = 50, message = "ERREUR : taille du champs > 50 caractères")
     private String acces;
 
     @Column(length = 50)
+    @Size(max = 50, message = "ERREUR : taille du champs > 50 caractères")
     private String cartographie;
 
     @OneToMany(mappedBy="spot")
