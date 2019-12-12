@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Documenter en premier les classes puis ensuite faire les méthode "non évidentes, ne pas documenter les get / set)
+ * CRUD des spots
  */
 public interface SpotServiceInterface {
 

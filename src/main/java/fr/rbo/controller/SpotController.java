@@ -20,6 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+/**
+ * Controleur de la gestion des Spots / secteurs / voies / longueurs
+ */
 @Controller
 public class SpotController {
 
@@ -30,6 +33,12 @@ public class SpotController {
     @Autowired
     private UserServiceInterface userServiceInterface;
 
+    /**
+     * Appel à la page d'admin
+     * @param model
+     * @param httpSession
+     * @return
+     */
     @GetMapping({"/adm1n", "/adm1n/test"})
     public String Admin(Model model, HttpSession httpSession) {
         log.info("Appel à la Page Adm1n");
@@ -37,6 +46,12 @@ public class SpotController {
         return "adm1n";
     }
 
+    /**
+     * Appel à la liste des spots
+     * @param model
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/spot")
     public String Spot(Model model, HttpSession httpSession) {
         log.debug("recherche-spot-list : Liste des spots complète");
@@ -48,6 +63,13 @@ public class SpotController {
         return "recherche-spot-list";
     }
 
+    /**
+     * Recherche et affiche la liste des sites correspondants aux critèrs de recherche
+     * @param model
+     * @param spotCriteres
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/spot/recherche")
     public String SpoteRecherche (Model model, @ModelAttribute ("spotCriteres") Spot spotCriteres,
                                           HttpSession httpSession) {
@@ -60,6 +82,12 @@ public class SpotController {
         return "recherche-spot-list";
     }
 
+    /**
+     * Appel le formulaire de création d'un spot
+     * @param model
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/spot/add")
     public String addSpot(Model model, HttpSession httpSession) {
         log.debug("spot-form : Ajout d'un spot");
@@ -69,6 +97,12 @@ public class SpotController {
         return "spot-form";
     }
 
+    /**
+     * Supprime le spot correspondant au spotId
+     * @param spotId
+     * @param redirectAttributes
+     * @return
+     */
     @GetMapping("/spot/delete/{spotId}")
     public String RemoveSpot(@PathVariable("spotId") Long spotId,
                              final RedirectAttributes redirectAttributes) {
@@ -87,6 +121,14 @@ public class SpotController {
         return "redirect:/spot";
     }
 
+    /**
+     * Appel le formulaire de modification des informations du spot correspondant au spotId
+     * @param spotId
+     * @param redirectAttributes
+     * @param model
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/spot/edit/{spotId}")
     public String EditSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
                              Model model, HttpSession httpSession) {
@@ -102,6 +144,13 @@ public class SpotController {
         return "redirect:/spot";
     }
 
+    /**
+     * Appel l'affichage des informations des secteurs du spot correspondant au spotId
+     * @param spotId
+     * @param redirectAttributes
+     * @param model
+     * @return
+     */
     @GetMapping("/spot/secteur/{spotId}")
     public String detailSpot(@PathVariable("spotId") Long spotId, final RedirectAttributes redirectAttributes,
                            Model model) {
@@ -135,6 +184,13 @@ public class SpotController {
         }
         return "redirect:/spot";
     }
+
+    /**
+     * Appel le formulaire de création d'un secteur pour le spot correspondant au spotId
+     * @param model
+     * @param idSpot
+     * @return
+     */
     @GetMapping("/spot/addSecteur")
     public String ajoutSecteur(Model model,@RequestParam("idSpot") Long idSpot) {
         /* Création d'un secteur */
@@ -145,6 +201,17 @@ public class SpotController {
 
         return "secteur-form";
     }
+
+    /**
+     * Soumet les informations du secteur à créer
+     * Et appel la création du secteur
+     * @param model
+     * @param secteur
+     * @param result
+     * @param idSpot
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/spot/addSecteur")
     public String proposerSecteurSubmit(Model model, @Valid @ModelAttribute("secteur") Secteur secteur,
                                         BindingResult result, @RequestParam("idSpot") Long idSpot,
@@ -171,6 +238,16 @@ public class SpotController {
 
         }
     }
+
+    /**
+     * Supprime le secteur correspondant à l'idSecteur envoyé dans le formulaire
+     * @param model
+     * @param idSecteur
+     * @param spotId
+     * @param email
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/spot/deleteSecteur")
     public String supprSecteurSubmit(Model model, @RequestParam("idSecteur") int idSecteur,
                                          @RequestParam("spotId") Long spotId,
@@ -183,6 +260,17 @@ public class SpotController {
         return "spot-secteur";
     }
 
+    /**
+     * Enregistre le commentaire de l'utilisateur connecté
+     * pour le spot correspondant à spotId
+     * @param model
+     * @param commentaire
+     * @param bindingResult
+     * @param spotId
+     * @param email
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/spot/addComment")
     public String ajouterCommentaireSubmit(Model model, @Valid @ModelAttribute("commentaire") Commentaire commentaire,
                                            BindingResult bindingResult, @RequestParam("spotId") Long spotId,
@@ -204,6 +292,18 @@ public class SpotController {
         }
         return "spot-secteur";
     }
+
+    /**
+     *      * Met à jour le commentaire par l'utilisateur connecté
+     *      * pour le spot correspondant à spotId
+     * @param model
+     * @param commentaire
+     * @param result
+     * @param spotId
+     * @param email
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/spot/updateComment")
     public String modifCommentaireSubmit(Model model, @Valid @ModelAttribute("commentaire") Commentaire commentaire,
                                          BindingResult result, @RequestParam("spotId") Long spotId,
@@ -223,6 +323,17 @@ public class SpotController {
         }
         return "spot-secteur";
     }
+
+    /**
+     * Supprime le commentaire correspondant à idCommentaire
+     * pour le spot correspondant à spotId
+     * @param model
+     * @param idCommentaire
+     * @param spotId
+     * @param email
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/spot/deleteComment")
     public String supprCommentaireSubmit(Model model, @RequestParam("idCommentaire") int idCommentaire,
                                          @RequestParam("spotId") Long spotId,
@@ -235,6 +346,17 @@ public class SpotController {
         return "spot-secteur";
 
     }
+
+    /**
+     * Enregistre les informations du spot
+     * En création et en modification
+     * @param model
+     * @param spot
+     * @param bindingResult
+     * @param httpSession
+     * @param redirectAttributes
+     * @return
+     */
     @PostMapping("/spot/save")
     public String saveSpot(Model model, @ModelAttribute("spot") @Valid Spot spot,
                            BindingResult bindingResult, HttpSession httpSession,
@@ -254,6 +376,16 @@ public class SpotController {
 
         return "redirect:/spot";
     }
+
+    /**
+     * Appel l'affichage des voies du secteur correspondant à idSecteur
+     * Pour le spot correspondant à idSpot
+     * @param model
+     * @param idSpot
+     * @param idSecteur
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/secteur/voies")
     public String affichelesVoies(Model model, @RequestParam("idSpot") Long idSpot,
                                   @RequestParam("idSecteur") int idSecteur,
@@ -265,6 +397,15 @@ public class SpotController {
         model.addAttribute("secteur", secteur);
         return "secteur-voie";
     }
+
+    /**
+     * Appel le formulaire de création de voie pour le secteur correspondant à idSecteur
+     * Pour le spot correspondant à idSpot
+     * @param model
+     * @param idSpot
+     * @param idSecteur
+     * @return
+     */
     @GetMapping("/secteur/addVoie")
     public String ajoutVoie(Model model,@RequestParam("idSpot") Long idSpot,@RequestParam("idSecteur") int idSecteur) {
         /* Création d'une voie */
@@ -275,6 +416,19 @@ public class SpotController {
         model.addAttribute("voie", voie);
         return "voie-form";
     }
+
+    /**
+     * Soumet les informations de création de la voie pour le secteur correspondant à idSecteur
+     * Pour le spot correspondant à idSpot
+     * Et appel la sauvegarde de la voie
+     * @param model
+     * @param voie
+     * @param result
+     * @param idSpot
+     * @param idSecteur
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/secteur/addVoie")
     public String proposerVoieSubmit(Model model, @Valid @ModelAttribute("voie") Voie voie,
                                      BindingResult result, @RequestParam("idSpot") Long idSpot,
@@ -304,6 +458,18 @@ public class SpotController {
 
         }
     }
+
+    /**
+     * Supprime la voie correspondante à idVoie du secteur correspondant à idSecteur
+     * pour le spot correspondant à idSpot
+     * @param model
+     * @param idVoie
+     * @param idSecteur
+     * @param spotId
+     * @param email
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/secteur/deleteVoie")
     public String supprVoieSubmit(Model model, @RequestParam("idVoie") int idVoie,
                                   @RequestParam("idSecteur") int idSecteur,
@@ -317,11 +483,21 @@ public class SpotController {
         return "secteur-voie";
     }
 
+    /**
+     * Appel l'affichage des informations des longueurs de la voie correspondante à idVoie
+     * du secteur correspondant à idSecteur pour le site correspondant à idSpot
+     * @param model
+     * @param idSpot
+     * @param idSecteur
+     * @param idVoie
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/voie/longueurs")
     public String affichelesLongueurs(Model model, @RequestParam("idSpot") Long idSpot,
                                       @RequestParam("idSecteur") int idSecteur,@RequestParam("idVoie") int idVoie,
                                       HttpSession httpSession) {
-        log.debug("affiche les longuers de la voie");
+        log.debug("affiche les longueurs de la voie");
         Spot spot = spotServiceInterface.findSpot(idSpot);
         Secteur secteur = spotServiceInterface.getSecteur(idSecteur);
         Voie voie = spotServiceInterface.getVoie(idVoie);
@@ -330,6 +506,16 @@ public class SpotController {
         model.addAttribute("voie",voie);
         return "voie-longueur";
     }
+
+    /**
+     * Appel le formulaire de saisie des informations d'une longueurs de la voie correspondante à idVoie
+     * du secteur correspondant à idSecteur pour le site correspondant à idSpot
+     * @param model
+     * @param idSpot
+     * @param idSecteur
+     * @param idVoie
+     * @return
+     */
     @GetMapping("/voie/addLongueur")
     public String ajoutLongueur(Model model,@RequestParam("idSpot") Long idSpot,
                                 @RequestParam("idSecteur") int idSecteur,@RequestParam("idVoie") int idVoie) {
@@ -342,6 +528,20 @@ public class SpotController {
         model.addAttribute("longueur", longueur);
         return "longueur-form";
     }
+
+    /**
+     * Soumet les informations de création de la longueur de la voie correspondante à idVoie
+     * pour le secteur correspondant à idSecteur du spot correspondant à idSpot
+     * Et appel la sauvegarde de la longueur
+     * @param model
+     * @param longueur
+     * @param result
+     * @param idSpot
+     * @param idSecteur
+     * @param idVoie
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/voie/addLongueur")
     public String proposerLongueurSubmit(Model model, @Valid @ModelAttribute("longueur") Longueur longueur,
                                          BindingResult result, @RequestParam("idSpot") Long idSpot,
@@ -373,6 +573,19 @@ public class SpotController {
 
         }
     }
+
+    /**
+     * Supprime la longueur correspondante à idLongueur de la voie correspondante à idVoie
+     * pour le secteur correspondant à idSecteur du spot correspondant à idSpot
+     * @param model
+     * @param idLongueur
+     * @param idVoie
+     * @param idSecteur
+     * @param spotId
+     * @param email
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/voie/deleteLongueur")
     public String supprLongueurSubmit(Model model, @RequestParam("idLongueur") int idLongueur,
                                       @RequestParam("idVoie") int idVoie,

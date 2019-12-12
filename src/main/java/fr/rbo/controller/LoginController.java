@@ -28,7 +28,7 @@ public class LoginController {
 
 
 	/**
-	 *
+	 * Formulaire de d'authentification
 	 * @param model
 	 * @return modelAndView
 	 */
@@ -42,7 +42,7 @@ public class LoginController {
 	}
 
 	/**
-	 *
+	 * Page de création de compte utilisateur
 	 * @return modelAndView
 	 */
 	@RequestMapping(value="/registration", method = RequestMethod.GET)
@@ -57,7 +57,13 @@ public class LoginController {
 		return modelAndView;
 	}
 
-	
+	/**
+	 * Prise en compte des information de création d'un compte utilisateur
+	 * Création du compte utilisateur
+	 * @param user
+	 * @param bindingResult
+	 * @return
+	 */
 	@RequestMapping(value = "/registration", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid User user, BindingResult bindingResult) {
 		log.info("/registration GET : createNewUser");
@@ -79,7 +85,12 @@ public class LoginController {
 		log.info("modelAndView : " + modelAndView.getViewName());
 		return modelAndView;
 	}
-	
+
+	/**
+	 * Appel à la page d'accueil
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value={"/", "/home"}, method = RequestMethod.GET)
 	public ModelAndView home(HttpServletRequest request){
 		String url =  request.getRequestURI();

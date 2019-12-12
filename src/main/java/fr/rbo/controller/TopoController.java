@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+/**
+ * Controleur de la gestion des topos
+ */
 @Controller
 public class TopoController {
 
@@ -32,6 +35,13 @@ public class TopoController {
     @Autowired
     private UserServiceInterface userServiceInterface;
 
+    /**
+     * Affiche le liste de toutes les topos
+     * @param model
+     * @param httpSession
+     * @param request
+     * @return
+     */
     @GetMapping({"/topo", "/lestopos"})
     public String Topo(Model model, HttpSession httpSession, HttpServletRequest request) {
         log.debug("page rechercher les topos");
@@ -53,6 +63,12 @@ public class TopoController {
         return "recherche-topo-list";
     }
 
+    /**
+     * Affiche la liste des topos de l'utilisateur connecté
+     * @param model
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/mestopos")
     public String MesTopos(Model model, HttpSession httpSession) {
         log.debug("page mes topos");
@@ -71,6 +87,13 @@ public class TopoController {
         return "recherche-topo-list";
     }
 
+    /**
+     * Lance une recherche et affiche la liste des topos correspondantes aux critères saisies dans le formulaire
+     * @param model
+     * @param topoCriteres
+     * @param httpSession
+     * @return
+     */
     @PostMapping(value = "/topo/recherche")
     public String TopoeRecherche (Model model, @ModelAttribute ("topoCriteres") Topo topoCriteres,
                                   HttpSession httpSession) {
@@ -86,6 +109,12 @@ public class TopoController {
         return "recherche-topo-list";
     }
 
+    /**
+     * Appel le formulaire de création d'une topo
+     * @param model
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/topo/add")
     public String addTopo(Model model, HttpSession httpSession) {
         Topo addTopo = new Topo();
@@ -94,6 +123,12 @@ public class TopoController {
         return "topo-form";
     }
 
+    /**
+     * Supprime la topo correspondante à topoId
+     * @param topoId
+     * @param redirectAttributes
+     * @return
+     */
     @GetMapping("/topo/delete/{topoId}")
     public String RemoveTopo(@PathVariable("topoId") Long topoId,
                              final RedirectAttributes redirectAttributes) {
@@ -111,7 +146,13 @@ public class TopoController {
         }
         return pageOrigine();
     }
-
+    /**
+     * Met à jour les informations de demande de prêt de la topo correspondante à topoId
+     * Lors de la demande d'emprunt d'une topo
+     * @param topoId
+     * @param redirectAttributes
+     * @return
+     */
     @GetMapping("/topo/demande/{topoId}")
     public String EmprunterTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -124,6 +165,13 @@ public class TopoController {
         return pageOrigine();
     }
 
+    /**
+     * Met à jour les informations de disponibilité de la topo correspondante à topoId
+     * Lors de l'acceptationdu prêt de la topo
+     * @param topoId
+     * @param redirectAttributes
+     * @return
+     */
     @GetMapping("/topo/accepte/{topoId}")
     public String AccepterTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes) {
         if (!proprietaireTopo(topoId)){
@@ -138,6 +186,13 @@ public class TopoController {
         return pageOrigine();
     }
 
+    /**
+     * Met à jour les informations de disponibilité de la topo correspondante à topoId
+     * refus ou restitution de prêt d'un topo
+     * @param topoId
+     * @param redirectAttributes
+     * @return
+     */
     @GetMapping("/topo/annule/{topoId}")
     public String AnnulerTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes) {
         if (!proprietaireTopo(topoId)){
@@ -152,6 +207,15 @@ public class TopoController {
         return pageOrigine();
     }
 
+    /**
+     * Affiche le formulaire de modification des information d'une topo
+     * correspondante à topoId
+     * @param topoId
+     * @param redirectAttributes
+     * @param model
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/topo/edit/{topoId}")
     public String EditTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
                            Model model, HttpSession httpSession) {
@@ -170,6 +234,14 @@ public class TopoController {
         return pageOrigine();
     }
 
+    /**
+     * Affiche les information d'une topo correspondant à topoId
+     * @param topoId
+     * @param redirectAttributes
+     * @param model
+     * @param httpSession
+     * @return
+     */
     @GetMapping("/topo/affiche/{topoId}")
     public String AfficheTopo(@PathVariable("topoId") Long topoId, final RedirectAttributes redirectAttributes,
                            Model model, HttpSession httpSession) {
@@ -184,6 +256,16 @@ public class TopoController {
         return pageOrigine();
     }
 
+    /**
+     * Enregistre les information d'une topo
+     * En création et modification
+     * @param model
+     * @param topo
+     * @param bindingResult
+     * @param httpSession
+     * @param redirectAttributes
+     * @return
+     */
     @PostMapping("/topo/save")
     public String saveTopo(Model model, @ModelAttribute("topo") @Valid Topo topo,
                            BindingResult bindingResult, HttpSession httpSession,
