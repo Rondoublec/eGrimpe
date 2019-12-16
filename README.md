@@ -29,7 +29,7 @@ L'application est livrée avec 2 configurations
 Pour conserver le contenu aux lancements suivants positionnez à **update** la valeur de ce paramètre.
 *Vous devez tout de même au préalable avoir créé la base de données avec son compte de propriétaire -> ces informations seront à mettre à jour dans le fichier application.properties correspondant à la configuration de l'application.*
 
-**Logs :** Par défaut le niveau de log est positionné à "DEBUG", les logs sont quotidiens (hordatés) et se trouvent dans le répèrtoire **logs**, tous ces paramétrages sont dans le fichier **src\main\resources\logback.xml**
+**Logs :** Par défaut le niveau de log est positionné à "DEBUG", les logs sont quotidiens (horodatés) et se trouvent dans le répertoire **logs**, tous ces paramétrages sont dans le fichier **src\main\resources\logback.xml**
 
 **Documentation :** la javadoc peut être consultée en lançant le fichier **docs\index.html**
   
